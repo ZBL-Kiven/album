@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="2dp"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/v_photoView_flImg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <FrameLayout
+            android:id="@+id/v_photoView_flSelected"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#5000"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/v_photoView_tvNum"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_choose_local_media"
+            android:gravity="center"
+            android:textColor="@color/darkBlueGrey"
+            android:textSize="@dimen/medium_text_size" />
+
+        <TextView
+            android:id="@+id/durationView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="4dp"
+            android:drawableStart="@mipmap/ic_video_type"
+            android:drawablePadding="2dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/xxsmall_text_size"
+            android:visibility='gone'
+            tools:visibility="visible" />
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>
