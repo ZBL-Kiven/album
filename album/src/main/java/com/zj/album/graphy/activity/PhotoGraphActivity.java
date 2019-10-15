@@ -36,10 +36,10 @@ import java.util.List;
  * Created by zhaojie on 2017/10/18.
  * <p>
  * the Intent data:
- *
- * @use photoSelectedComplete :when you photo_select completed,you can use this code to notify getData on your activityResult;
- * @use max :the max num you can selected;
- * @use cacheNameCode :the cache name to save for this operate,as a file;
+ * <p>
+ * photoSelectedComplete :when you photo_select completed,you can use this code to notify getData on your activityResult;
+ * max :the max num you can selected;
+ * cacheNameCode :the cache name to save for this operate,as a file;
  * <p>
  * <example>
  * <p>
@@ -48,14 +48,13 @@ import java.util.List;
  * intent.putExtra("max", "")
  * intent.putExtra("cacheNameCode", "")
  * startActivity(intent)
- * @see: to get data:
+ * to get data:
  * <p>
  * 全部图片展示列表页面
  */
 
 public class PhotoGraphActivity extends AppCompatActivity {
 
-    private static final String TAG = PhotoGraphActivity.class.getSimpleName();
     private final int REQUST_OPEN_PREVIEW = 0x21;
     private final int REQUST_OPEN_FOLDER = 0x22;
     private final int REQUEST_VIDEO_PREVIEW = 200;
@@ -104,9 +103,13 @@ public class PhotoGraphActivity extends AppCompatActivity {
 
     private void getBundleData() {
         Bundle bundle = getIntent().getExtras();
-        maxPhotoSize = bundle.getInt("max");
-        cacheNameCode = bundle.getString("cacheNameCode", "defaultCache");
-        findType = bundle.getInt("findType", 0);
+        try {
+            maxPhotoSize = bundle.getInt("max");
+            cacheNameCode = bundle.getString("cacheNameCode", "defaultCache");
+            findType = bundle.getInt("findType", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         PhotographHelper.init(cacheNameCode);
     }
 

@@ -59,18 +59,18 @@ import java.util.List;
 /**
  * Layout manager that allows the user to flip left and right
  * through pages of data.  You supply an implementation of a
- * {@link PagerAdapter} to generate the pages that the view shows.
+ * { PagerAdapter} to generate the pages that the view shows.
  * <p>
- * <p>ViewPager is most often used in conjunction with {@link android.app.Fragment},
+ * <p>ViewPager is most often used in conjunction with { android.app.Fragment},
  * which is a convenient way to supply and manage the lifecycle of each page.
  * There are standard adapters implemented for using fragments with the ViewPager,
  * which cover the most common use cases.  These are
- * {@link android.support.v4.app.FragmentPagerAdapter} and
- * {@link android.support.v4.app.FragmentStatePagerAdapter}; each of these
+ * { android.support.v4.app.FragmentPagerAdapter} and
+ * { android.support.v4.app.FragmentStatePagerAdapter}; each of these
  * classes have simple code showing how to build a full user interface
  * with them.
  * <p>
- * <p>Views which are annotated with the {@link DecorView} annotation are treated as
+ * <p>Views which are annotated with the { DecorView} annotation are treated as
  * part of the view pagers 'decor'. Each decor view's position can be controlled via
  * its {@code android:layout_gravity} attribute. For example:
  * <p>
@@ -202,7 +202,7 @@ public class ViewPager extends ViewGroup {
     private int mActivePointerId = INVALID_POINTER;
     /**
      * Sentinel value for no current active pointer.
-     * Used by {@link #mActivePointerId}.
+     * Used by { #mActivePointerId}.
      */
     private static final int INVALID_POINTER = -1;
 
@@ -302,17 +302,17 @@ public class ViewPager extends ViewGroup {
          * or when it is fully stopped/idle.
          *
          * @param state The new scroll state.
-         * @see ViewPager#SCROLL_STATE_IDLE
-         * @see ViewPager#SCROLL_STATE_DRAGGING
-         * @see ViewPager#SCROLL_STATE_SETTLING
+         *  ViewPager#SCROLL_STATE_IDLE
+         *  ViewPager#SCROLL_STATE_DRAGGING
+         *  ViewPager#SCROLL_STATE_SETTLING
          */
         void onPageScrollStateChanged(int state);
     }
 
     /**
-     * Simple implementation of the {@link OnPageChangeListener} interface with stub
+     * Simple implementation of the { OnPageChangeListener} interface with stub
      * implementations of each method. Extend this if you do not intend to override
-     * every method of {@link OnPageChangeListener}.
+     * every method of { OnPageChangeListener}.
      */
     public static class SimpleOnPageChangeListener implements OnPageChangeListener {
         @Override
@@ -374,7 +374,7 @@ public class ViewPager extends ViewGroup {
      * <p>Views marked with this annotation can be added to the view pager with a layout resource.
      * <p>
      * <p>You can also control whether a view is a decor view but setting
-     * {@link LayoutParams#isDecor} on the child's layout params.</p>
+     * { LayoutParams#isDecor} on the child's layout params.</p>
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
@@ -580,7 +580,7 @@ public class ViewPager extends ViewGroup {
 
     /**
      * Remove a listener that was previously added via
-     * {@link #addOnAdapterChangeListener(OnAdapterChangeListener)}.
+     * { #addOnAdapterChangeListener(OnAdapterChangeListener)}.
      *
      * @param listener listener to remove
      */
@@ -691,11 +691,11 @@ public class ViewPager extends ViewGroup {
 
     /**
      * Set a listener that will be invoked whenever the page changes or is incrementally
-     * scrolled. See {@link OnPageChangeListener}.
+     * scrolled. See { OnPageChangeListener}.
      *
      * @param listener Listener to set
-     * @deprecated Use {@link #addOnPageChangeListener(OnPageChangeListener)}
-     * and {@link #removeOnPageChangeListener(OnPageChangeListener)} instead.
+     * @deprecated Use { #addOnPageChangeListener(OnPageChangeListener)}
+     * and { #removeOnPageChangeListener(OnPageChangeListener)} instead.
      */
     @Deprecated
     public void setOnPageChangeListener(OnPageChangeListener listener) {
@@ -704,10 +704,10 @@ public class ViewPager extends ViewGroup {
 
     /**
      * Add a listener that will be invoked whenever the page changes or is incrementally
-     * scrolled. See {@link OnPageChangeListener}.
+     * scrolled. See { OnPageChangeListener}.
      * <p>
      * <p>Components that add a listener should take care to remove it when finished.
-     * Other components that take ownership of a view may call {@link #clearOnPageChangeListeners()}
+     * Other components that take ownership of a view may call { #clearOnPageChangeListeners()}
      * to remove all attached listeners.</p>
      *
      * @param listener listener to add
@@ -721,7 +721,7 @@ public class ViewPager extends ViewGroup {
 
     /**
      * Remove a listener that was previously added via
-     * {@link #addOnPageChangeListener(OnPageChangeListener)}.
+     * { #addOnPageChangeListener(OnPageChangeListener)}.
      *
      * @param listener listener to remove
      */
@@ -741,19 +741,19 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Sets a {@link PageTransformer} that will be called for each attached page whenever
+     * Sets a { PageTransformer} that will be called for each attached page whenever
      * the scroll position is changed. This allows the application to apply custom property
      * transformations to each page, overriding the default sliding behavior.
      * <p>
      * <p><em>Note:</em> Prior to Android 3.0 the property animation APIs did not exist.
      * As a result, setting a PageTransformer prior to Android 3.0 (API 11) will have no effect.
      * By default, calling this method will cause contained pages to use
-     * {@link ViewCompat#LAYER_TYPE_HARDWARE}. This layer type allows custom alpha transformations,
-     * but it will cause issues if any of your pages contain a {@link android.view.SurfaceView}
-     * and you have not called {@link android.view.SurfaceView#setZOrderOnTop(boolean)} to put that
-     * {@link android.view.SurfaceView} above your app content. To disable this behavior, call
-     * {@link #setPageTransformer(boolean, PageTransformer, int)} and pass
-     * {@link ViewCompat#LAYER_TYPE_NONE} for {@code pageLayerType}.</p>
+     * { ViewCompat#LAYER_TYPE_HARDWARE}. This layer type allows custom alpha transformations,
+     * but it will cause issues if any of your pages contain a { android.view.SurfaceView}
+     * and you have not called { android.view.SurfaceView#setZOrderOnTop(boolean)} to put that
+     * { android.view.SurfaceView} above your app content. To disable this behavior, call
+     * { #setPageTransformer(boolean, PageTransformer, int)} and pass
+     * { ViewCompat#LAYER_TYPE_NONE} for {@code pageLayerType}.</p>
      *
      * @param reverseDrawingOrder true if the supplied PageTransformer requires page views
      *                            to be drawn from last to first instead of first to last.
@@ -764,11 +764,11 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Sets a {@link PageTransformer} that will be called for each attached page whenever
+     * Sets a { PageTransformer} that will be called for each attached page whenever
      * the scroll position is changed. This allows the application to apply custom property
      * transformations to each page, overriding the default sliding behavior.
      * <p>
-     * <p><em>Note:</em> Prior to Android 3.0 ({@link Build.VERSION_CODES#HONEYCOMB API 11}),
+     * <p><em>Note:</em> Prior to Android 3.0 ({ Build.VERSION_CODES#HONEYCOMB API 11}),
      * the property animation APIs did not exist. As a result, setting a PageTransformer prior
      * to API 11 will have no effect.</p>
      *
@@ -776,9 +776,9 @@ public class ViewPager extends ViewGroup {
      *                            to be drawn from last to first instead of first to last.
      * @param transformer         PageTransformer that will modify each page's animation properties
      * @param pageLayerType       View layer type that should be used for ViewPager pages. It should be
-     *                            either {@link ViewCompat#LAYER_TYPE_HARDWARE},
-     *                            {@link ViewCompat#LAYER_TYPE_SOFTWARE}, or
-     *                            {@link ViewCompat#LAYER_TYPE_NONE}.
+     *                            either { ViewCompat#LAYER_TYPE_HARDWARE},
+     *                            { ViewCompat#LAYER_TYPE_SOFTWARE}, or
+     *                            { ViewCompat#LAYER_TYPE_NONE}.
      */
     public void setPageTransformer(boolean reverseDrawingOrder, PageTransformer transformer,
                                    int pageLayerType) {
@@ -840,7 +840,7 @@ public class ViewPager extends ViewGroup {
      * current page in the view hierarchy in an idle state. Defaults to 1.
      *
      * @return How many pages will be kept offscreen on either side
-     * @see #setOffscreenPageLimit(int)
+     *  #setOffscreenPageLimit(int)
      */
     public int getOffscreenPageLimit() {
         return mOffscreenPageLimit;
@@ -879,9 +879,9 @@ public class ViewPager extends ViewGroup {
      * Set the margin between pages.
      *
      * @param marginPixels Distance between adjacent pages in pixels
-     * @see #getPageMargin()
-     * @see #setPageMarginDrawable(Drawable)
-     * @see #setPageMarginDrawable(int)
+     *  #getPageMargin()
+     *  #setPageMarginDrawable(Drawable)
+     *  #setPageMarginDrawable(int)
      */
     public void setPageMargin(int marginPixels) {
         final int oldMargin = mPageMargin;
@@ -948,7 +948,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Like {@link View#scrollBy}, but scroll smoothly instead of immediately.
+     * Like { View#scrollBy}, but scroll smoothly instead of immediately.
      *
      * @param x the number of pixels to scroll by on the X axis
      * @param y the number of pixels to scroll by on the Y axis
@@ -958,7 +958,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Like {@link View#scrollBy}, but scroll smoothly instead of immediately.
+     * Like { View#scrollBy}, but scroll smoothly instead of immediately.
      *
      * @param x        the number of pixels to scroll by on the X axis
      * @param y        the number of pixels to scroll by on the Y axis
@@ -2526,15 +2526,15 @@ public class ViewPager extends ViewGroup {
      * <p>A fake drag can be useful if you want to synchronize the motion of the ViewPager
      * with the touch scrolling of another view, while still letting the ViewPager
      * control the snapping motion and fling behavior. (e.g. parallax-scrolling tabs.)
-     * Call {@link #fakeDragBy(float)} to simulate the actual drag motion. Call
-     * {@link #endFakeDrag()} to complete the fake drag and fling as necessary.
+     * Call { #fakeDragBy(float)} to simulate the actual drag motion. Call
+     * { #endFakeDrag()} to complete the fake drag and fling as necessary.
      * <p>
      * <p>During a fake drag the ViewPager will ignore all touch events. If a real drag
      * is already in progress, this method will return false.
      *
      * @return true if the fake drag began successfully, false if it could not be started.
-     * @see #fakeDragBy(float)
-     * @see #endFakeDrag()
+     *  #fakeDragBy(float)
+     *  #endFakeDrag()
      */
     public boolean beginFakeDrag() {
         if (mIsBeingDragged) {
@@ -2559,8 +2559,8 @@ public class ViewPager extends ViewGroup {
     /**
      * End a fake drag of the pager.
      *
-     * @see #beginFakeDrag()
-     * @see #fakeDragBy(float)
+     *  #beginFakeDrag()
+     *  #fakeDragBy(float)
      */
     public void endFakeDrag() {
         if (!mFakeDragging) {
@@ -2589,11 +2589,11 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Fake drag by an offset in pixels. You must have called {@link #beginFakeDrag()} first.
+     * Fake drag by an offset in pixels. You must have called { #beginFakeDrag()} first.
      *
      * @param xOffset Offset in pixels to drag by.
-     * @see #beginFakeDrag()
-     * @see #endFakeDrag()
+     *  #beginFakeDrag()
+     *  #endFakeDrag()
      */
     public void fakeDragBy(float xOffset) {
         if (!mFakeDragging) {
@@ -2644,9 +2644,9 @@ public class ViewPager extends ViewGroup {
      * Returns true if a fake drag is in progress.
      *
      * @return true if currently in a fake drag, false otherwise.
-     * @see #beginFakeDrag()
-     * @see #fakeDragBy(float)
-     * @see #endFakeDrag()
+     *  #beginFakeDrag()
+     *  #fakeDragBy(float)
+     *  #endFakeDrag()
      */
     public boolean isFakeDragging() {
         return mFakeDragging;
@@ -2793,7 +2793,7 @@ public class ViewPager extends ViewGroup {
      * Handle scrolling in response to a left or right arrow click.
      *
      * @param direction The direction corresponding to the arrow key that was pressed. It should be
-     *                  either {@link View#FOCUS_LEFT} or {@link View#FOCUS_RIGHT}.
+     *                  either { View#FOCUS_LEFT} or { View#FOCUS_RIGHT}.
      * @return Whether the scrolling was handled successfully.
      */
     public boolean arrowScroll(int direction) {
@@ -3129,7 +3129,7 @@ public class ViewPager extends ViewGroup {
         /**
          * Gravity setting for use on decor views only:
          * Where to position the view page within the overall ViewPager
-         * container; constants are defined in {@link Gravity}.
+         * container; constants are defined in { Gravity}.
          */
         public int gravity;
 

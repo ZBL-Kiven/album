@@ -17,7 +17,7 @@ import android.graphics.RectF;
 import android.view.MotionEvent;
 
 /**
- * Interface for implementing a controller that works with {@link ZoomableDraweeView}
+ * Interface for implementing a controller that works with { ZoomableDraweeView}
  * to control the zoom.
  */
 public interface ZoomableController {

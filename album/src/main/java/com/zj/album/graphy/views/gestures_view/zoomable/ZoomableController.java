@@ -17,7 +17,7 @@ import android.graphics.RectF;
 import android.view.MotionEvent;
 
 /**
- * Interface for implementing a controller that works with {@link ZoomableDraweeView}
+ * Interface for implementing a controller that works with { ZoomableDraweeView}
  * to control the zoom.
  */
 public interface ZoomableController {
@@ -44,7 +44,7 @@ public interface ZoomableController {
 
     /**
      * Gets whether the controller is enabled. This should return the last value passed to
-     * {@link #setEnabled}.
+     * { #setEnabled}.
      *
      * @return whether the controller is enabled.
      */
@@ -79,7 +79,7 @@ public interface ZoomableController {
     boolean wasTransformCorrected();
 
     /**
-     * See {@link android.support.v4.view.ScrollingView}.
+     * See { android.support.v4.view.ScrollingView}.
      */
     int computeHorizontalScrollRange();
 
