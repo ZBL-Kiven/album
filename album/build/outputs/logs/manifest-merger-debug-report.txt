@@ -1,0 +1,67 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+	package
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:3:5-27
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:1-19:12
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:2:11-69
+application
+ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:5:5-17:19
+activity#com.zj.album.graphy.activity.PhotoGraphActivity
+ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:6:9-9:52
+	android:screenOrientation
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:9:13-49
+	android:launchMode
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:8:13-42
+	android:name
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:7:13-63
+activity#com.zj.album.graphy.activity.PhotoPreviewActivity
+ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:10:9-13:52
+	android:screenOrientation
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:13:13-49
+	android:launchMode
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:12:13-42
+	android:name
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:11:13-65
+activity#com.zj.album.graphy.activity.FolderActivity
+ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:14:9-68
+	android:name
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:14:19-65
+activity#com.zj.album.graphy.activity.VideoPreviewActivity
+ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:15:9-74
+	android:name
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:15:19-71
+activity#com.zj.album.activity.NFSelectPhotoActivity
+ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:16:9-68
+	android:name
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml:16:19-65
+uses-sdk
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+		ADDED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml
+		INJECTED from /Users/cityfruit-lmg/sunpeople-android/zj_album/src/main/AndroidManifest.xml

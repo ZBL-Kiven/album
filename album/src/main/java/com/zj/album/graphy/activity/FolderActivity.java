@@ -12,7 +12,6 @@ import com.zj.album.graphy.PhotoFileHelper;
 import com.zj.album.graphy.adapter.Pop_ChooseFileAdapter;
 import com.zj.album.graphy.views.IRecyclerAdapter;
 import com.zj.album.interfaces.PhotoEvent;
-import com.zj.album.services.Constancs;
 
 public class FolderActivity extends AppCompatActivity {
 

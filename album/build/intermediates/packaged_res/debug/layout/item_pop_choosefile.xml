@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0.5dp"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:background="#eee" />-->
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/item_cp_ivImg"
+            android:layout_width="@dimen/media_item_image_height"
+            android:layout_height="@dimen/media_item_image_height"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/item_cp_tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/common_problem_search_margin"
+            android:textColor="@color/darkBlueGrey"
+            android:textSize="@dimen/medium_text_size"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
+            app:layout_constraintLeft_toRightOf="@id/item_cp_ivImg"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/item_cp_vSelect"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/photo_selector_tvchoose"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_cp_tvName" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/common_problem_search_margin"
+            android:textColor="@color/greyish"
+            android:textSize="@dimen/small_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/item_cp_ivImg"
+            app:layout_constraintTop_toBottomOf="@id/guideline" />
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

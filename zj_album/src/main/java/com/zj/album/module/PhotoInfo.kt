@@ -6,8 +6,8 @@ data class PhotoInfo(
     val parentFolderPath: String?,
     val path: String,
     val mimeType: MimeType,
-    var useOriginal: Boolean,
-    var duration: Long,
-    var size: Long,
-    var isSelected: Boolean
+    val duration: Long,
+    val size: Long,
+    var isSelected: Boolean,
+    var useOriginal: Boolean
 )
