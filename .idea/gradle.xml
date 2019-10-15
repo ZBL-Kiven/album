@@ -8,8 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/album" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/example_album" />
             <option value="$PROJECT_DIR$/zj_album" />
           </set>
         </option>
