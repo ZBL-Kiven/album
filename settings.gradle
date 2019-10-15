@@ -1,1 +1,1 @@
-include ':app', ':zj_album'
+include ':app', ':example_album', ':zj_album'

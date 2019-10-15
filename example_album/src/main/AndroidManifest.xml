@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zj.album">
+
+    <application>
+        <activity
+            android:name=".graphy.activity.PhotoGraphActivity"
+            android:launchMode="standard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".graphy.activity.PhotoPreviewActivity"
+            android:launchMode="standard"
+            android:screenOrientation="portrait" />
+        <activity android:name=".graphy.activity.FolderActivity" />
+        <activity android:name=".graphy.activity.VideoPreviewActivity" />
+        <activity android:name=".activity.NFSelectPhotoActivity" />
+    </application>
+
+</manifest>
