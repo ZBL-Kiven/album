@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by zhaojie on 2017/10/27.
+ * @author zhaojie
+ * @date 2017/10/27
  * <p>
  * 使用该适配器，可使banner合理管理自己的内存，通过设置一个最大gc尺寸来使用Banner；
  * 适用于大图片或大量图片需要展示的情况，也适配适用于极大批量View的回收加载
@@ -23,7 +24,7 @@ import java.util.List;
 public class BannerItemAdapter implements PreviewBanner.Adapter {
 
     private OnPageChange pageChange;
-    private int old_curPosition, cur_curPosition, cur_nextPosition, displayChange, initPosition;
+    private int oldCurPosition, curCurPosition, curNextPosition, displayChange, initPosition;
     private PreviewBanner banner;
     private int maxGcSize = 3;
     private List<?> datas;
@@ -35,26 +36,29 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
     public void clear() {
         datas.clear();
         for (int i = 0; i < banner.getViewPager().getChildCount(); i++) {
-            if (banner.getViewPager().getChildAt(i) instanceof ViewGroup)
+            if (banner.getViewPager().getChildAt(i) instanceof ViewGroup) {
                 ((ViewGroup) banner.getViewPager().getChildAt(i)).removeAllViews();
+            }
         }
         System.gc();
     }
 
+
     private enum TouchOrientation {
-        left, right
+        left,
+        right
     }
 
-    public BannerItemAdapter(int maxGc_Size, int curSelectPosition, PreviewBanner b, List<?> datas, OnPageChange change) {
+    public BannerItemAdapter(int maxGcSize, int curSelectPosition, PreviewBanner b, List<?> datas, OnPageChange change) {
         this.pageChange = change;
         this.banner = b;
-        this.maxGcSize = Math.max(maxGc_Size, maxGcSize);
+        this.maxGcSize = Math.max(maxGcSize, this.maxGcSize);
         this.curSelectedPosition = initPosition = curSelectPosition;
         this.displayChange = curSelectPosition;
         this.datas = datas;
         boolean isCanScrollAuto = datas.size() > 1;
         if (!isCanScrollAuto) {
-            maxGcSize = datas.size();
+            this.maxGcSize = datas.size();
             banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -64,7 +68,9 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
                 @Override
                 public void onPageSelected(int position) {
                     displayChange = position;
-                    if (pageChange != null) pageChange.onDisplayChange(position);
+                    if (pageChange != null) {
+                        pageChange.onDisplayChange(position);
+                    }
                 }
 
                 @Override
@@ -75,7 +81,9 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
             banner.setAdapter(new PreviewBanner.Adapter() {
                 @Override
                 public void fillBannerItem(PreviewBanner banner, View view, Object model, int position) {
-                    if (pageChange != null) pageChange.onChange(position, view);
+                    if (pageChange != null) {
+                        pageChange.onChange(position, view);
+                    }
                 }
             });
             banner.setData(R.layout.banner_preview_item2, datas);
@@ -99,7 +107,7 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
                 }
             });
             List<String> lst = new ArrayList<>();
-            for (int i = 0; i < maxGcSize; i++) {
+            for (int i = 0; i < this.maxGcSize; i++) {
                 lst.add("asd  " + i);
             }
             banner.setData(R.layout.banner_preview_item2, lst);
@@ -108,8 +116,9 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
         //配置一个动画
         banner.setTransitionEffect(TransitionEffect.Zoom);
         banner.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        if (change != null)
+        if (change != null) {
             change.onDisplayChange(curSelectPosition);
+        }
         banner.setPageMargin(DisplayUtils.dip2px(banner.getContext(), 10));
 
         banner.setAllowUserScrollable(isCanScrollAuto);
@@ -120,11 +129,17 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
         if (isFirst) {
             if (pageChange != null) {
                 int offset = 0;
-                if (position != 0)
+                if (position != 0) {
                     offset = position == maxGcSize - 1 ? -1 : 2;
+                }
                 curSelectedPosition += offset;
-                if (curSelectedPosition < 0) curSelectedPosition = datas.size() - 1;
-                if (curSelectedPosition >= datas.size()) curSelectedPosition -= datas.size();
+                if (curSelectedPosition < 0) {
+                    curSelectedPosition = datas.size() - 1;
+                }
+
+                if (curSelectedPosition >= datas.size()) {
+                    curSelectedPosition -= datas.size();
+                }
                 pageChange.onChange(curSelectedPosition, banner.getItemView(position));
             }
             if (position == 1) {
@@ -132,7 +147,7 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
                 curSelectedPosition = initPosition;
             }
         } else {
-            cur_nextPosition = position;
+            curNextPosition = position;
         }
     }
 
@@ -143,17 +158,23 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
     }
 
     private void getRealPosition(int position) {
-        cur_curPosition = position;
+        curCurPosition = position;
         //划到0时，next为最大值，载入banner最后一个视图，但是展示的是实际数据的前一个
-        if (maxGcSize == datas.size()) curSelectedPosition = cur_curPosition;
-        boolean isRightOver = (cur_curPosition == maxGcSize - 1) && (old_curPosition == 0);//右边划到头了，加载左边第一个的时候
-        boolean isLeftOver = (cur_curPosition == 0 && old_curPosition == maxGcSize - 1);//左边划到头了，加载最后一个
+        if (maxGcSize == datas.size()) {
+            curSelectedPosition = curCurPosition;
+        }
+
+        //右边划到头了，加载左边第一个的时候
+        boolean isRightOver = (curCurPosition == maxGcSize - 1) && (oldCurPosition == 0);
+
+        //左边划到头了，加载最后一个
+        boolean isLeftOver = (curCurPosition == 0 && oldCurPosition == maxGcSize - 1);
         /*
          * @param curOrientation 在此之后有效
          * @param curSelectedPosition 在此之后有效
          * */
-        if (cur_curPosition != old_curPosition) {
-            if ((cur_curPosition > old_curPosition || isLeftOver) && !isRightOver) {
+        if (curCurPosition != oldCurPosition) {
+            if ((curCurPosition > oldCurPosition || isLeftOver) && !isRightOver) {
                 //向左滑，需要加载的应该是下一个
                 curOrientation = TouchOrientation.left;
             } else {
@@ -176,16 +197,20 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
             if (curSelectedPosition < 0) {
                 curSelectedPosition = datas.size() + curSelectedPosition;
             }
-            if (displayChange >= datas.size()) displayChange = 0;
-            if (displayChange < 0) displayChange = datas.size() - 1;
+            if (displayChange >= datas.size()) {
+                displayChange = 0;
+            }
+            if (displayChange < 0) {
+                displayChange = datas.size() - 1;
+            }
         }
         //这里载入实际index的下一个，可能在前也可能在后
         if (pageChange != null) {
-            pageChange.onChange(curSelectedPosition, banner.getItemView(cur_nextPosition));
+            pageChange.onChange(curSelectedPosition, banner.getItemView(curNextPosition));
             pageChange.onDisplayChange(displayChange);
         }
         //数据倒换,position在此之后不作参考
-        old_curPosition = cur_curPosition;
+        oldCurPosition = curCurPosition;
     }
 
     public int getDisplayPosition() {

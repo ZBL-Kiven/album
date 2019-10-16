@@ -8,18 +8,26 @@
         android:minSdkVersion="24"
         android:targetSdkVersion="29" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application>
         <activity
             android:name="com.zj.album.graphy.activity.PhotoGraphActivity"
             android:launchMode="standard"
+            android:process=":cf_album"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.zj.album.graphy.activity.PhotoPreviewActivity"
             android:launchMode="standard"
+            android:process=":cf_album"
             android:screenOrientation="portrait" />
-        <activity android:name="com.zj.album.graphy.activity.FolderActivity" />
-        <activity android:name="com.zj.album.graphy.activity.VideoPreviewActivity" />
-        <activity android:name="com.zj.album.activity.NFSelectPhotoActivity" />
+        <activity
+            android:name="com.zj.album.graphy.activity.FolderActivity"
+            android:process=":cf_album" />
+        <activity
+            android:name="com.zj.album.graphy.activity.VideoPreviewActivity"
+            android:process=":cf_album" />
     </application>
 
 </manifest>

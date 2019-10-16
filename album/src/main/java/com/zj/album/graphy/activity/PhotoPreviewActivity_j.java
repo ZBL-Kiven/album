@@ -1,9 +1,8 @@
 package com.zj.album.graphy.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,37 +15,28 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.image.ImageInfo;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.zj.album.R;
+import com.zj.album.entity.SelectionSpec;
 import com.zj.album.graphy.PhotographHelper;
 import com.zj.album.graphy.adapter.BannerItemAdapter;
 import com.zj.album.graphy.adapter.PreviewAdapter;
 import com.zj.album.graphy.module.LocalMedia;
 import com.zj.album.graphy.views.IRecyclerAdapter;
-import com.zj.album.graphy.views.gestures_view.zoomable.DoubleTapGestureListener;
-import com.zj.album.graphy.views.gestures_view.zoomable.ZoomableDraweeView;
+import com.zj.album.imageloader.utils.ImageEvaluate;
 import com.zj.album.interfaces.PhotoEvent;
 import com.zj.album.preview_banner.PreviewBanner;
-import com.zj.album.utils.DisplayUtils;
 import com.zj.album.utils.ToastUtils;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.sephiroth.android.library.imagezoom.ImageViewTouch;
+
 
 /**
- * @author zhaojie
- * @date 2017/10/19
+ * @author yangji
  */
-
-public class PhotoPreviewActivity extends AppCompatActivity {
+public class PhotoPreviewActivity_j extends AppCompatActivity {
 
     private View.OnClickListener onClickListener;
     private FrameLayout flScreen;
@@ -61,19 +51,14 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     private int maxPhotoSize;
     private String curImgUri;
     private boolean isSelected;
-    //最大GC数量，View将在这个值内复用
-    @SuppressWarnings("FieldCanBeLocal")
-    private final int bannerHackSize = 3;
+    private static final int bannerHackSize = 3;
     private BannerItemAdapter bannerItemAdapter;
     private AlphaAnimation alphaAnimationIn, alphaAnimationOut;
-    private WeakReference<Context> weakReference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_preview_photo);
-//        if (!Fresco.hasBeenInitialized()) Fresco.initialize(getApplicationContext());
-        weakReference = new WeakReference<Context>(this);
         getIntentData();
         initView();
         initData();
@@ -103,15 +88,14 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         rvSelectedPhotos = findViewById(R.id.dl_preview_lvSelect);
         previewBanner = findViewById(R.id.dl_preview_bgaBanner);
         tvComplete.setSelected(isSelected);
-        //todo 默認原圖
         vCheck.setChecked(true);
     }
 
     private void initData() {
         alphaAnimationIn = new AlphaAnimation(0.2f, 1.0f);
         alphaAnimationOut = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimationIn.setDuration(800);
-        alphaAnimationOut.setDuration(800);
+        alphaAnimationIn.setDuration(400);
+        alphaAnimationOut.setDuration(400);
         adapter = new PreviewAdapter(new IRecyclerAdapter.OnItemCLickListener() {
             @Override
             public void onItemClick(int postion, View view) {
@@ -136,7 +120,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     private void initListener() {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 finish();
             }
         });
@@ -145,9 +129,9 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 boolean state = !tvComplete.isSelected();
                 if (state && PhotographHelper.getHelper().curSelectedSize() >= maxPhotoSize) {
-                    ToastUtils.show(PhotoPreviewActivity.this, getString(R.string.im_at_best, "" + maxPhotoSize));
+                    ToastUtils.show(PhotoPreviewActivity_j.this, PhotoPreviewActivity_j.this.getString(R.string.im_at_best, "" + maxPhotoSize));
                 } else {
-                    selectImg(state);
+                    PhotoPreviewActivity_j.this.selectImg(state);
                 }
             }
         });
@@ -177,7 +161,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked && PhotographHelper.getHelper().curSelectedSize() == 0) {
-                    selectImg(true);
+                    PhotoPreviewActivity_j.this.selectImg(true);
                 }
             }
         });
@@ -229,24 +213,34 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     }
 
     private void initBannerAdapter(int curSelectPosition) {
+
+        if (bannerItemAdapter != null) {
+            int current = previewBanner.getViewPager().getCurrentItem();
+            if (current % datas.size() == curSelectPosition) {
+                return;
+            } else {
+                int index = (current / datas.size()) + curSelectPosition;
+                previewBanner.getViewPager().setCurrentItem(index);
+            }
+//            previewBanner.setCurrentItem(curSelectPosition);
+            System.out.println("curSelectPosition:" + curSelectPosition);
+            return;
+        }
         bannerItemAdapter = new BannerItemAdapter(bannerHackSize, curSelectPosition, previewBanner, datas, new BannerItemAdapter.OnPageChange() {
             @Override
             public void onChange(int position, View v) {
                 String uri = datas.get(position).getFileUri();
-                if (v instanceof ZoomableDraweeView) {
-                    if (v.getTag() == null) {
-                        initZoomView((ZoomableDraweeView) v);
-                        v.setTag(true);
-                    }
-                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(uri))
-                            .setResizeOptions(new ResizeOptions(DisplayUtils.dip2px(weakReference.get(), 200), DisplayUtils.dip2px(weakReference.get(), 200)))
-                            .build();
-                    DraweeController controller = Fresco.newDraweeControllerBuilder()
-                            .setImageRequest(request)
-                            .setOldController(((ZoomableDraweeView) v).getController())
-                            .setControllerListener(new BaseControllerListener<ImageInfo>())
-                            .build();
-                    ((ZoomableDraweeView) v).setController(controller);
+                if (v instanceof ImageViewTouch) {
+                    final ImageViewTouch it = (ImageViewTouch) v;
+                    Point size = ImageEvaluate.getBitmapSize(uri);
+                    SelectionSpec.INSTANCE.getImageLoader().loadImage(it, size.x, size.y, uri);
+                    it.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
+                        @Override
+                        public void onSingleTapConfirmed() {
+                            onClickListener.onClick(it);
+                        }
+                    });
+
                 }
             }
 
@@ -257,17 +251,13 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         });
     }
 
-    private void initZoomView(ZoomableDraweeView hackyView) {
-        hackyView.setAllowTouchInterceptionWhileZoomed(true);
-        hackyView.setIsLongpressEnabled(false);
-        hackyView.setTapListener(new DoubleTapGestureListener(hackyView, (new WeakReference<>(onClickListener).get())));
-    }
-
     /**
      * 设置显示情景
      */
     private void updateDisplayView(int position) {
-        if (datas == null || datas.size() <= 0) return;
+        if (datas == null || datas.size() <= 0) {
+            return;
+        }
         List<LocalMedia> infos = PhotographHelper.getHelper().getCurSelectedPhotos();
         refreshTvComplete(datas.get(position));
         //选择数据发生改变的话，更新下面显示
@@ -283,8 +273,6 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             datas.clear();
             datas = null;
         }
-        if (weakReference != null) weakReference.clear();
-        if (weakReference != null) weakReference.clear();
         super.onDestroy();
     }
 }

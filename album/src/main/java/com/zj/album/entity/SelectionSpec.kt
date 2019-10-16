@@ -3,6 +3,8 @@ package com.zj.album.entity
 import android.app.Activity
 import android.content.Intent
 import com.zj.album.MimeType
+import com.zj.album.imageloader.ImageLoader
+import com.zj.album.imageloader.impl.GlideLoader
 
 internal object SelectionSpec {
 
@@ -15,6 +17,7 @@ internal object SelectionSpec {
     var mimeTypes: Set<MimeType> = MimeType.ofAll()
     var onOpenCameraClick: ((Activity, Int) -> Unit)? = null
     var onResult: ((Intent?) -> Unit)? = null
+    var imageLoader: ImageLoader = GlideLoader();
 
     fun reset() {
         maxVideoDuration = Integer.MAX_VALUE
@@ -27,4 +30,6 @@ internal object SelectionSpec {
         onOpenCameraClick = null
         onResult = null
     }
+
+
 }

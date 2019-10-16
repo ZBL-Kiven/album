@@ -13,6 +13,9 @@ import com.zj.album.graphy.adapter.Pop_ChooseFileAdapter;
 import com.zj.album.graphy.views.IRecyclerAdapter;
 import com.zj.album.interfaces.PhotoEvent;
 
+/**
+ * @author yangji
+ */
 public class FolderActivity extends AppCompatActivity {
 
     private Pop_ChooseFileAdapter adapter;
@@ -25,7 +28,7 @@ public class FolderActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        adapter = new Pop_ChooseFileAdapter(this, new IRecyclerAdapter.OnItemCLickListener() {
+        adapter = new Pop_ChooseFileAdapter(new IRecyclerAdapter.OnItemCLickListener() {
             @Override
             public void onItemClick(int postion, View view) {
                 adapter.notifyDataSetChanged();

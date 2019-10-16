@@ -1,6 +1,9 @@
 package com.zj.album.graphy.adapter;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,28 +13,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zj.album.R;
+import com.zj.album.entity.SelectionSpec;
 import com.zj.album.graphy.PhotographHelper;
 import com.zj.album.graphy.module.LocalMedia;
 import com.zj.album.graphy.views.IBaseRecyclerAdapter;
 import com.zj.album.graphy.views.RecyclerHolder;
 import com.zj.album.utils.ImageLoaderUtils;
+import com.zj.album.utils.TimeConversionUtils;
 import com.zj.album.utils.ToastUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-/**
- * Created by zhaojie on 2017/10/19.
- */
 
+/**
+ * @author zjj/yangji
+ * @date 2019年10月16日
+ */
 public class PhotoGraphAdapter extends IBaseRecyclerAdapter<LocalMedia, PhotoGraphAdapter.PhotoHolder> {
 
     private LayoutInflater inflater;
     private ChangeListener listener;
+    private int mImageResize = 0;
+    private RecyclerView mRecyclerView;
 
     public PhotoGraphAdapter(ChangeListener listener) {
         super(null);
@@ -41,7 +47,10 @@ public class PhotoGraphAdapter extends IBaseRecyclerAdapter<LocalMedia, PhotoGra
     @NonNull
     @Override
     public PhotoHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        if (inflater == null) inflater = LayoutInflater.from(parent.getContext());
+        this.mRecyclerView = (RecyclerView) parent;
+        if (inflater == null) {
+            inflater = LayoutInflater.from(parent.getContext());
+        }
         View view = inflater.inflate(R.layout.v_photoselected, parent, false);
         return new PhotoHolder(view);
     }
@@ -56,13 +65,13 @@ public class PhotoGraphAdapter extends IBaseRecyclerAdapter<LocalMedia, PhotoGra
             @Override
             public void onClick(View view) {
                 if (listener != null) {
-                    if (!state)
+                    if (!state) {
                         if (listener.canSelected(PhotographHelper.getHelper().curSelectedSize())) {
                             changeSelected(true);
                         } else {
                             listener.onFailedSelected();
                         }
-                    else {
+                    } else {
                         changeSelected(false);
                     }
                 } else {
@@ -90,45 +99,67 @@ public class PhotoGraphAdapter extends IBaseRecyclerAdapter<LocalMedia, PhotoGra
                 holder.selectedView.setVisibility(state ? VISIBLE : GONE);
             }
         });
-        holder.fl_Img.setOnClickListener(new View.OnClickListener() {
+        holder.flImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (listener != null) listener.onImgClick(state, media);
+                if (listener != null) {
+                    listener.onImgClick(state, media);
+                }
             }
         });
     }
 
-    public static class PhotoHolder extends RecyclerHolder {
+    class PhotoHolder extends RecyclerHolder {
         private FrameLayout selectedView;
-        private ImageView fl_Img;
+        private ImageView flImg;
         private TextView tvNum, tvDuration;
 
         PhotoHolder(View v) {
             super(v);
             selectedView = v.findViewById(R.id.v_photoView_flSelected);
-            fl_Img = v.findViewById(R.id.v_photoView_flImg);
+            flImg = v.findViewById(R.id.v_photoView_flImg);
             tvNum = v.findViewById(R.id.v_photoView_tvNum);
             tvDuration = v.findViewById(R.id.durationView);
         }
 
-        public void initData(LocalMedia media) {
+        private void initData(LocalMedia media) {
             if (media.isVideo()) {
                 tvNum.setVisibility(GONE);
                 tvDuration.setVisibility(VISIBLE);
-                tvDuration.setText(getDuration(media.duration));
+                tvDuration.setText(TimeConversionUtils.getDuration(media.duration));
             }
             selectedView.setVisibility(media.isSelector ? VISIBLE : GONE);
             tvNum.setSelected(media.isSelector);
-            ImageLoaderUtils.load(fl_Img, media.getFileUri());
+
+            SelectionSpec.INSTANCE.getImageLoader().loadThumbnail(
+                    flImg,
+                    getImageResize(),
+                    R.color.gray,
+                    media.getFileUri()
+            );
+
+            ImageLoaderUtils.load(flImg, media.getFileUri());
             tvNum.setText(media.isSelector ? String.valueOf(PhotographHelper.getHelper().isContainInSelected(media.uri)[1]) : "");
         }
 
-        private String getDuration(long mediaDuration) {
-            long duration = mediaDuration / 1000;
-            long minute = duration / 60;
-            long second = duration % 60;
-            return String.format(Locale.getDefault(), "%d:%d", minute, second);
+    }
+
+    /**
+     * 获取图片缩略图长宽
+     *
+     * @return 图片长宽
+     */
+    private int getImageResize() {
+        if (this.mImageResize == 0) {
+            RecyclerView.LayoutManager lm = mRecyclerView.getLayoutManager();
+            assert lm != null;
+            int spanCount = ((GridLayoutManager) lm).getSpanCount();
+            int screenWidth = mRecyclerView.getResources().getDisplayMetrics().widthPixels;
+            mImageResize = screenWidth / spanCount;
+            //0.5 图片缩放比例 为了节省内存
+            mImageResize = (int) (mImageResize * 0.6f);
         }
+        return mImageResize;
     }
 
     public interface ChangeListener {

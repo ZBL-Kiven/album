@@ -42,11 +42,10 @@ import java.util.List;
 
 
 /**
- * @author zhaojie
- * @date 2017/10/19
+ * Created by zhaojie on 2017/10/19.
  */
 
-public class PhotoPreviewActivity extends AppCompatActivity {
+public class PhotoPreviewActivity_old extends AppCompatActivity {
 
     private View.OnClickListener onClickListener;
     private FrameLayout flScreen;
@@ -65,7 +64,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     @SuppressWarnings("FieldCanBeLocal")
     private final int bannerHackSize = 3;
     private BannerItemAdapter bannerItemAdapter;
-    private AlphaAnimation alphaAnimationIn, alphaAnimationOut;
+    private AlphaAnimation alphaAnimation_in, alphaAnimation_out;
     private WeakReference<Context> weakReference;
 
     @Override
@@ -108,10 +107,10 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        alphaAnimationIn = new AlphaAnimation(0.2f, 1.0f);
-        alphaAnimationOut = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimationIn.setDuration(800);
-        alphaAnimationOut.setDuration(800);
+        alphaAnimation_in = new AlphaAnimation(0.2f, 1.0f);
+        alphaAnimation_out = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimation_in.setDuration(800);
+        alphaAnimation_out.setDuration(800);
         adapter = new PreviewAdapter(new IRecyclerAdapter.OnItemCLickListener() {
             @Override
             public void onItemClick(int postion, View view) {
@@ -145,7 +144,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 boolean state = !tvComplete.isSelected();
                 if (state && PhotographHelper.getHelper().curSelectedSize() >= maxPhotoSize) {
-                    ToastUtils.show(PhotoPreviewActivity.this, getString(R.string.im_at_best, "" + maxPhotoSize));
+                    ToastUtils.show(PhotoPreviewActivity_old.this, getString(R.string.im_at_best, "" + maxPhotoSize));
                 } else {
                     selectImg(state);
                 }
@@ -165,10 +164,10 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean isVisible = flScreen.getVisibility() == View.VISIBLE;
-                if (alphaAnimationIn != null && alphaAnimationOut != null) {
-                    alphaAnimationIn.cancel();
-                    alphaAnimationOut.cancel();
-                    flScreen.startAnimation(isVisible ? alphaAnimationOut : alphaAnimationIn);
+                if (alphaAnimation_in != null && alphaAnimation_out != null) {
+                    alphaAnimation_in.cancel();
+                    alphaAnimation_out.cancel();
+                    flScreen.startAnimation(isVisible ? alphaAnimation_out : alphaAnimation_in);
                 }
                 flScreen.setVisibility(isVisible ? View.GONE : View.VISIBLE);
             }

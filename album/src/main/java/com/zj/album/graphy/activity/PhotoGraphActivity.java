@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.zj.album.MimeType;
 import com.zj.album.R;
 import com.zj.album.entity.SelectionSpec;
@@ -33,7 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by zhaojie on 2017/10/18.
+ * @author zhaojie
+ * @date 2017/10/18
  * <p>
  * the Intent data:
  * <p>
@@ -92,6 +95,9 @@ public class PhotoGraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Fresco.initialize(this.getApplicationContext());
+
         setContentView(R.layout.activity_photograph);
         Utils.context = this.getApplicationContext();
         getBundleData();
@@ -294,6 +300,9 @@ public class PhotoGraphActivity extends AppCompatActivity {
         event = null;
         context.clear();
         context = null;
+        Fresco.shutDown();
+        Glide.get(getApplicationContext()).clearMemory();
+        android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
     }
 
@@ -333,4 +342,5 @@ public class PhotoGraphActivity extends AppCompatActivity {
             }
         }
     }
+
 }

@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference
  * @author xxj
  * @date 2019/08/20
  */
-class PhotoAlbum private constructor(activity: Activity? = null, fragment: Fragment? = null) {
+class PhotoAlbum(activity: Activity? = null, fragment: Fragment? = null) {
 
     private val mActivity: WeakReference<Activity?> = WeakReference(activity)
     private val mFragment: WeakReference<Fragment?> = WeakReference(fragment)
