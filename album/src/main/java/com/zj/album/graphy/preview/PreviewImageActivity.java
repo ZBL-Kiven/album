@@ -35,6 +35,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
     private boolean mIsFullPreview = false;
     private PreviewDataSource dataSource;
 
+    private PreviewImageAdapter previewAdapter ;
     private LandscapeAdapter mLandscapeAdapter;
 
     private IRecyclerAdapter.OnItemCLickListener mOnItemCLickListener = new IRecyclerAdapter.OnItemCLickListener() {
@@ -91,6 +92,9 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
 
             @Override
             public void onPageSelected(int currentItem) {
+                previewAdapter.reset(currentItem);
+
+
 
                 updateTopSelected(currentItem);
             }
@@ -119,7 +123,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
         updateLandscapeAdapter();
         updateSelectCount();
 
-        PreviewImageAdapter previewAdapter = new PreviewImageAdapter(this);
+        previewAdapter = new PreviewImageAdapter(this);
         previewAdapter.setItems(dataSource.getPath());
         viewPager.setAdapter(previewAdapter);
         indexOf("");
@@ -150,7 +154,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
         if (index == -1) {
             index = 0;
         }
-        viewPager.setCurrentItem(index);
+        viewPager.setCurrentItem(index, false);
     }
 
     private void updateSelectCount() {
