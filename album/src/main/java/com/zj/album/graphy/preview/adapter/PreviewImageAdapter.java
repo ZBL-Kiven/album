@@ -14,6 +14,7 @@ import com.zj.album.imageloader.utils.ImageEvaluate;
 import com.zj.album.widget.image.ImageViewTouch;
 import com.zj.album.widget.image.ImageViewTouchBase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ import java.util.List;
 public class PreviewImageAdapter extends PagerAdapter implements ImageViewTouch.OnImageViewTouchSingleTapListener {
 
 
+    private List<ImageViewTouch> imageViews = new ArrayList<>();
     private final FullPreviewListener listener;
     private List<String> paths;
 

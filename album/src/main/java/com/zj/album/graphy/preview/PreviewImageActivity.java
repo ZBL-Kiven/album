@@ -33,7 +33,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
     private TextView dlPreviewTvSelected;
 
     private boolean mIsFullPreview = false;
-    private PreviewDataSoucre dataSoucre;
+    private PreviewDataSource dataSource;
 
     private LandscapeAdapter mLandscapeAdapter;
 
@@ -50,7 +50,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_previce);
-        dataSoucre = new PreviewDataSoucre();
+        dataSource = new PreviewDataSource();
 
         initView();
         initListener();
@@ -83,7 +83,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
 
 
     private void initListener() {
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
 
@@ -91,6 +91,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
 
             @Override
             public void onPageSelected(int currentItem) {
+
                 updateTopSelected(currentItem);
             }
 
@@ -104,7 +105,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
             @Override
             public void onClick(View v) {
                 int currentItem = viewPager.getCurrentItem();
-                dataSoucre.switchover(currentItem);
+                dataSource.switchover(currentItem);
                 updateTopSelected(currentItem);
                 updateLandscapeAdapter();
                 updateSelectCount();
@@ -119,7 +120,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
         updateSelectCount();
 
         PreviewImageAdapter previewAdapter = new PreviewImageAdapter(this);
-        previewAdapter.setItems(dataSoucre.getPath());
+        previewAdapter.setItems(dataSource.getPath());
         viewPager.setAdapter(previewAdapter);
         indexOf("");
     }
@@ -130,12 +131,12 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
      * @param path
      */
     private void indexOf(String path) {
-        setCurrentItem(dataSoucre.getPath().indexOf(path));
+        setCurrentItem(dataSource.getPath().indexOf(path));
     }
 
     void updateTopSelected(int currentItem) {
-        String item = dataSoucre.getPath().get(currentItem);
-        int selectIndex = dataSoucre.getSelectIndex(item) + 1;
+        String item = dataSource.getPath().get(currentItem);
+        int selectIndex = dataSource.getSelectIndex(item) + 1;
         if (selectIndex > 0) {
             dlPreviewTvSelected.setSelected(true);
             //更新里面的内容
@@ -153,7 +154,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
     }
 
     private void updateSelectCount() {
-        int selectedCount = dataSoucre.getSelectCount();
+        int selectedCount = dataSource.getSelectCount();
         if (selectedCount == 0) {
             selectCountView.setVisibility(View.GONE);
         } else {
@@ -164,7 +165,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
 
     private void updateLandscapeAdapter() {
         mLandscapeAdapter.clear();
-        mLandscapeAdapter.add(dataSoucre.getSelected());
+        mLandscapeAdapter.add(dataSource.getSelected());
         mLandscapeAdapter.notifyDataSetChanged();
     }
 

@@ -9,8 +9,8 @@
     <com.zj.album.widget.JViewPager
             android:id="@+id/dl_preview_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_preview3" />
 
     <RelativeLayout
             android:id="@+id/rl_preview_top"
