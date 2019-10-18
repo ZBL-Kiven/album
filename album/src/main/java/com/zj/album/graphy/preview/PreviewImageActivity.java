@@ -93,9 +93,6 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
             @Override
             public void onPageSelected(int currentItem) {
                 previewAdapter.reset(currentItem);
-
-
-
                 updateTopSelected(currentItem);
             }
 
