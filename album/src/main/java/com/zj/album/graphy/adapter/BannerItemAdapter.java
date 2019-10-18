@@ -86,7 +86,7 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
                     }
                 }
             });
-            banner.setData(R.layout.banner_preview_item2, datas);
+            banner.setData(R.layout.banner_preview_item3, datas);
         } else {
             banner.setAdapter(this);
             banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -110,7 +110,7 @@ public class BannerItemAdapter implements PreviewBanner.Adapter {
             for (int i = 0; i < this.maxGcSize; i++) {
                 lst.add("asd  " + i);
             }
-            banner.setData(R.layout.banner_preview_item2, lst);
+            banner.setData(R.layout.banner_preview_item3, lst);
         }
         banner.setAutoPlayInterval(0);
         //配置一个动画

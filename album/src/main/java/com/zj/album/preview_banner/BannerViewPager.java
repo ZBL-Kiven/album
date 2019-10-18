@@ -8,10 +8,11 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 
+import com.zj.album.widget.image.ImageViewTouch;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 /**
  *

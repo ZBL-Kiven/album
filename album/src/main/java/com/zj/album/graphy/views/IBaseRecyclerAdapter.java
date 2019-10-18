@@ -1,5 +1,6 @@
 package com.zj.album.graphy.views;
 
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import org.jetbrains.annotations.NotNull;

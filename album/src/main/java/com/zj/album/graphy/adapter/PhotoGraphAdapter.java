@@ -138,7 +138,7 @@ public class PhotoGraphAdapter extends IBaseRecyclerAdapter<LocalMedia, PhotoGra
                     media.getFileUri()
             );
 
-            ImageLoaderUtils.load(flImg, media.getFileUri());
+//            ImageLoaderUtils.load(flImg, media.getFileUri());
             tvNum.setText(media.isSelector ? String.valueOf(PhotographHelper.getHelper().isContainInSelected(media.uri)[1]) : "");
         }
 
