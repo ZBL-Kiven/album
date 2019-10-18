@@ -19,7 +19,7 @@
             android:layout_marginLeft="@dimen/sun_toolbar_margin"
             android:layout_marginRight="@dimen/sun_toolbar_margin"
             android:padding="@dimen/sun_toolbar_padding"
-            android:text="@string/im_cancel"
+            android:text="@string/pg_str_cancel"
             android:textColor="@color/white" />
 
         <ImageView

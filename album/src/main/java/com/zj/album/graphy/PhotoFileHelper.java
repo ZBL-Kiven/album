@@ -18,8 +18,8 @@ public class PhotoFileHelper {
     private static PhotoFileHelper helper;
     private static String cacheNameCode;
 
-    private PhotoFileHelper(String cacheNameCode) {
-        this.cacheNameCode = cacheNameCode;
+    private PhotoFileHelper(String cCode) {
+        cacheNameCode = cCode;
     }
 
     public static PhotoFileHelper getInstance() {
@@ -33,7 +33,7 @@ public class PhotoFileHelper {
         return helper;
     }
 
-    public static void init(String cacheNameCode) {
+    private static void init(String cacheNameCode) {
         helper = new PhotoFileHelper(cacheNameCode);
     }
 

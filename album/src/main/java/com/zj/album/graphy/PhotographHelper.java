@@ -36,7 +36,7 @@ public class PhotographHelper {
 
     public static void init(String cacheNameCode) {
         helper = new PhotographHelper(cacheNameCode);
-        PhotoFileHelper.init(cacheNameCode);
+//        PhotoFileHelper.init(cacheNameCode);
     }
 
     //当前文件夹内所有的图片

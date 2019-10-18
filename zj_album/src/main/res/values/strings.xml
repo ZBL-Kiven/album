@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">zj_album</string>
+    <string name="pg_str_all">全部</string>
 </resources>

@@ -1,58 +1,79 @@
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
+
 package com.zj.album
 
 import android.app.Activity
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
-import android.support.v4.app.Fragment
-import com.zj.album.graphy.PhotoTemporaryCache
-import com.zj.album.graphy.module.LocalMedia
-import java.lang.ref.WeakReference
+import android.os.Bundle
+import com.zj.album.graphy.activity.PhotoGraphActivity
+import com.zj.album.nHelpers.GraphDataHelper
+import com.zj.album.nutils.Constance
+import java.util.*
 
-/**
- * 相册启动入口
- * @author xxj
- * @date 2019/08/20
- */
-class PhotoAlbum private constructor(activity: Activity? = null, fragment: Fragment? = null) {
+object PhotoAlbum {
 
-    private val mActivity: WeakReference<Activity?> = WeakReference(activity)
-    private val mFragment: WeakReference<Fragment?> = WeakReference(fragment)
-
-    companion object {
-        const val CATCH_NAME = "PhotoAlbum"
-
-        @JvmStatic
-        fun from(activity: Activity): PhotoAlbum {
-            return PhotoAlbum(activity = activity)
-        }
-
-        @JvmStatic
-        fun from(fragment: Fragment): PhotoAlbum {
-            return PhotoAlbum(activity = fragment.activity, fragment = fragment)
-        }
-
-        @JvmStatic
-        fun obtainPathResult(data: Intent?): List<String> {
-            val infos: List<LocalMedia>? = PhotoTemporaryCache.getCacheImages(CATCH_NAME)
-            PhotoTemporaryCache.removeChoosePhotos(CATCH_NAME)
-            return infos?.map { it.uri } ?: arrayListOf()
-        }
+    fun startPhotoGraphActivity(
+        act: Activity,
+        req: Int,
+        selectedUris: Collection<Pair<String, Boolean>>?,
+        maxSelectSize: Int = Int.MAX_VALUE,
+        mimeType: EnumSet<MimeType>? = pairOf(ofImage(), ofVideo()),
+        useOriginDefault: Boolean = false,
+        ignorePaths: Array<String>? = arrayOf(),
+        minSize: Long,
+        sortWithDesc: Boolean = false
+    ) {
+        GraphDataHelper.init(mimeType, sortWithDesc, minSize, selectedUris, ignorePaths)
+        appContext = act.applicationContext
+        val b = Bundle()
+        b.putInt(Constance.REQUEST_CODE, req)
+        b.putInt(Constance.MAX_SELECT_COUNT, maxSelectSize)
+        b.putBoolean(Constance.USE_ORIGINAL_DEFAULT, useOriginDefault)
+        act.startActivityForResult(Intent(act, PhotoGraphActivity::class.java), req, b)
     }
 
-    /**
-     * [mimeTypes] MIME types set user can choose from.
-     * [mediaTypeExclusive] Whether can choose images and videos at the same time during one single choosing
-     *                      process. true corresponds to not being able to choose images and videos at the same
-     *                      time, and false corresponds to being able to do this.
-     */
-    fun choose(mimeTypes: Set<MimeType>, mediaTypeExclusive: Boolean = true): SelectionCreator {
-        return SelectionCreator(this, mimeTypes, mediaTypeExclusive)
+    private var appContext: Context? = null
+
+    fun getString(id: Int): String {
+        return appContext?.getString(id) ?: ""
     }
 
-    internal fun getActivity(): Activity? {
-        return mActivity.get()
+    fun getContentResolver(): ContentResolver? {
+        return appContext?.contentResolver
     }
 
-    internal fun getFragment(): Fragment? {
-        return mFragment.get()
+    fun getContext(): Context? {
+        return appContext
+    }
+
+    fun ofImage(): EnumSet<MimeType> {
+        return EnumSet.of(MimeType.JPEG, MimeType.PNG, MimeType.GIF)
+    }
+
+    fun ofStaticImage(): EnumSet<MimeType> {
+        return EnumSet.of(MimeType.JPEG, MimeType.PNG)
+    }
+
+    fun ofVideo(): EnumSet<MimeType> {
+        return EnumSet.of(MimeType.JPEG, MimeType.PNG, MimeType.GIF)
+    }
+
+    fun ofAll(): EnumSet<MimeType> {
+        return EnumSet.allOf(MimeType::class.java)
+    }
+
+    fun pairOf(vararg types: MimeType): EnumSet<MimeType> {
+        return EnumSet.copyOf(setOf(*types))
+    }
+
+    fun pairOf(vararg types: EnumSet<MimeType>): EnumSet<MimeType>? {
+        if (types.isEmpty()) return null
+        var requestSet: EnumSet<MimeType>? = null
+        types.forEach {
+            requestSet?.addAll(it) ?: { requestSet = EnumSet.copyOf(it) }.invoke()
+        }
+        return requestSet
     }
 }

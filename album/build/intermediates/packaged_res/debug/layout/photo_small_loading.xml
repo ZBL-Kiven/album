@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="@color/photo_colorPrimary"
-            android:textSize="12dp"
-            tools:text="@string/im_loading_waiting" />
+            android:textSize="12sp"
+            tools:text="@string/pg_str_loading_waiting" />
     </LinearLayout>
 
 
@@ -46,8 +46,8 @@
             android:paddingRight="6dp"
             android:paddingTop="4dp"
             android:textColor="@color/photo_colorPrimary"
-            android:textSize="12dp"
-            tools:text="@string/im_update_error" />
+            android:textSize="12sp"
+            tools:text="@string/pg_str_update_error" />
     </LinearLayout>
 </FrameLayout>
 

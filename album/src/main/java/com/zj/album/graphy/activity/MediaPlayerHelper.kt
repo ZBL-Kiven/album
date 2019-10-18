@@ -20,7 +20,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.zj.album.utils.Utils
+import com.zj.album.PhotoAlbum
 import java.util.*
 
 //视频播放
@@ -47,7 +47,7 @@ class MediaPlayerHelper {
      * @param listener 播放中事件的回调
      */
     fun ready(playerView: PlayerView, uri: Uri, listener: VideoPlayEventListener) {
-        val context = Utils.context
+        val context = PhotoAlbum.getContext()
         val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, "SunPeople"), bandwidthMeter)
         val videoSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
 

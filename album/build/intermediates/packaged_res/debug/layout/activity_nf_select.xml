@@ -19,7 +19,7 @@
             android:layout_marginLeft="@dimen/sun_toolbar_margin"
             android:layout_marginRight="@dimen/sun_toolbar_margin"
             android:padding="@dimen/sun_toolbar_padding"
-            android:text="@string/im_cancel"
+            android:text="@string/pg_str_cancel"
             android:textColor="@color/white" />
 
         <TextView
@@ -65,7 +65,7 @@
             android:background="@color/paleBlue"
             android:enabled="false"
             android:gravity="center"
-            android:text="@string/im_preview"
+            android:text="@string/pg_str_preview"
             android:textColor="@color/greyish"
             android:textSize="@dimen/medium_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -79,7 +79,7 @@
             android:background="@color/paleBlue"
             android:enabled="false"
             android:gravity="center"
-            android:text="@string/im_send"
+            android:text="@string/pg_str_send"
             android:textColor="@color/greyish"
             android:textSize="@dimen/medium_text_size"
             app:layout_constraintBottom_toBottomOf="parent"

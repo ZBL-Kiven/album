@@ -66,7 +66,7 @@ public class PhotoGraphAdapter extends IBaseRecyclerAdapter<LocalMedia, PhotoGra
                         changeSelected(false);
                     }
                 } else {
-                    ToastUtils.show(view.getContext(), holder.itemView.getContext().getResources().getString(R.string.im_data_error));
+                    ToastUtils.show(view.getContext(), holder.itemView.getContext().getResources().getString(R.string.pg_str_data_error));
                 }
             }
 

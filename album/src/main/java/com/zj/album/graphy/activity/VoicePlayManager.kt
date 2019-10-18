@@ -12,8 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.text.TextUtils
-import com.zj.album.utils.SPStroage
-import com.zj.album.utils.Utils
+import com.zj.album.PhotoAlbum
 import java.io.File
 import java.util.*
 
@@ -35,7 +34,7 @@ object VoicePlayManager {
     /**
      * 用于管理音频焦点和播放通道
      */
-    private val audioManager = Utils.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val audioManager = PhotoAlbum.getContext()?.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     private val onAudioFocusChangeListener = AudioManager.OnAudioFocusChangeListener {}
 
@@ -43,8 +42,10 @@ object VoicePlayManager {
      * 请求音频焦点，会暂停其他地方的播放
      */
     fun requestAudioFocus() {
-        audioManager.requestAudioFocus(onAudioFocusChangeListener,
-                AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+        audioManager.requestAudioFocus(
+            onAudioFocusChangeListener,
+            AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+        )
     }
 
     /**
@@ -68,7 +69,7 @@ object VoicePlayManager {
     /**
      * 用于控制距离感应器
      */
-    private val sensorManager = Utils.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    private val sensorManager = PhotoAlbum.getContext()?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
     private val proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
 
@@ -151,7 +152,14 @@ object VoicePlayManager {
      * @param processByUser 是否是用户操作
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    fun play(file: File?, msgKey: String?, listener: VoiceMsgPlayEventListener?, isReplay: Boolean, progress: Int, processByUser: Boolean) {
+    fun play(
+        file: File?,
+        msgKey: String?,
+        listener: VoiceMsgPlayEventListener?,
+        isReplay: Boolean,
+        progress: Int,
+        processByUser: Boolean
+    ) {
         if (file == null || msgKey == null || listener == null) {
             return
         }
@@ -172,7 +180,10 @@ object VoicePlayManager {
                 return
             }
 
-            isVoicePlaying || (!TextUtils.isEmpty(currentPlayMsgKey) && !TextUtils.equals(currentPlayMsgKey, msgKey)) -> {
+            isVoicePlaying || (!TextUtils.isEmpty(currentPlayMsgKey) && !TextUtils.equals(
+                currentPlayMsgKey,
+                msgKey
+            )) -> {
                 playLog(file.name, msgKey, "stop and start")
                 stop()
             }
@@ -182,15 +193,15 @@ object VoicePlayManager {
 
         currentPlayMsgKey = msgKey
         currentPlayFile = file
-        isEarpieceMode = SPStroage.earpieceMode
+//        isEarpieceMode = SPStroage.earpieceMode
 
         voiceMsgPlayEventListener = listener
 
         mediaPlayer = MediaPlayer()
         mediaPlayer.setAudioStreamType(if (isEarpieceMode || isReplay || (isPlayNextVoice && !isEarpieceMode)) AudioManager.STREAM_VOICE_CALL else AudioManager.STREAM_MUSIC)
-        mediaPlayer.setDataSource(Utils.context, Uri.fromFile(file))
+        mediaPlayer.setDataSource(PhotoAlbum.getContext() ?: return, Uri.fromFile(file))
         mediaPlayer.setOnPreparedListener { startOrResume(true, progress) }
-        mediaPlayer.setWakeMode(Utils.context, PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)
+        mediaPlayer.setWakeMode(PhotoAlbum.getContext(), PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)
         mediaPlayer.setOnCompletionListener { onCompletion(false) }
         mediaPlayer.prepareAsync()
         if (!isReplay && !isPlayNextVoice) {
@@ -291,7 +302,10 @@ object VoicePlayManager {
         progressTimer?.schedule(object : TimerTask() {
             override fun run() {
                 if (isVoicePlaying) {
-                    getCurrentListener()?.onProgress((mediaPlayer.currentPosition * 1.0 / getDuration() * 100).toInt(), currentPlayMsgKey)
+                    getCurrentListener()?.onProgress(
+                        (mediaPlayer.currentPosition * 1.0 / getDuration() * 100).toInt(),
+                        currentPlayMsgKey
+                    )
                 }
             }
         }, 0, 500)

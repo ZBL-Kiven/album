@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="im_cancel">取消</string>
-    <string name="im_album">相册</string>
+    <string name="pg_str_cancel">取消</string>
+    <string name="pg_str_album">相册</string>
     <string name="album_camera">相片</string>
-    <string name="im_preview">預覽</string>
-    <string name="im_send">傳送</string>
-    <string name="im_full_images_tip">原圖</string>
-    <string name="im_ok">確定</string>
-    <string name="im_images_choose_tip_message">不可以同時選取圖片和視頻文件</string>
-    <string name="im_file_exceeds">文件大小或時長超出限制。 \\n大小最多500MB，當前為：%1$dMB\\n時長最多300秒，當前為：%2$d秒</string>
-    <string name="im_file_is_too_large">文件過大</string>
-    <string name="im_data_error">数据异常，请重新选择</string>
-    <string name="im_update_error">信息更新失败，点击重试</string>
-    <string name="im_loading_waiting">载入中，请稍候…</string>
-    <string name="im_please_select_at_least_one_image">请至少选择一张图片</string>
-    <string name="im_at_best">最多只能选择%1$s张</string>
-    <string name="im_the_album_failed_to_read">相册读取失败</string>
-    <string name="im_no_picture">暂时还没有图片喔！</string>
-    <string name="im_all">全部</string>
-    <string name="im_redo">重做</string>
-    <string name="video_duration_err">文件時長超出限制</string>
-    <string name="nf_video_max_time">暫不支持超過30秒的視頻</string>
+    <string name="pg_str_preview">預覽</string>
+    <string name="pg_str_send">傳送</string>
+    <string name="pg_str_full_images_tip">原圖</string>
+    <string name="pg_str_ok">確定</string>
+    <string name="pg_str_images_choose_tip_message">不可以同時選取圖片和視頻文件</string>
+    <string name="pg_str_data_error">数据异常，请重新选择</string>
+    <string name="pg_str_update_error">信息更新失败，点击重试</string>
+    <string name="pg_str_loading_waiting">载入中，请稍候…</string>
+    <string name="pg_str_please_select_at_least_one_image">请至少选择一张图片</string>
+    <string name="pg_str_at_best">最多只能选择%1$d张</string>
+    <string name="pg_str_the_album_failed_to_read">相册读取失败</string>
+    <string name="pg_str_no_picture">没有找到可以展示的图片</string>
+    <string name="pg_str_all">全部</string>
 
 </resources>

@@ -30,7 +30,7 @@
             android:paddingTop="@dimen/search_padding"
             android:paddingRight="30dp"
             android:paddingBottom="@dimen/search_padding"
-            android:text="@string/im_send"
+            android:text="@string/pg_str_send"
             android:textColor="@color/gray"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -43,7 +43,7 @@
             android:paddingTop="@dimen/search_padding"
             android:paddingRight="30dp"
             android:paddingBottom="@dimen/search_padding"
-            android:text="@string/im_cancel"
+            android:text="@string/pg_str_cancel"
             android:textColor="@color/gray" />
 
         <ImageView

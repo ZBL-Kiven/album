@@ -30,7 +30,7 @@
                 android:layout_marginLeft="@dimen/sun_toolbar_margin"
                 android:layout_marginRight="@dimen/sun_toolbar_margin"
                 android:padding="@dimen/sun_toolbar_padding"
-                android:text="@string/im_cancel"
+                android:text="@string/pg_str_cancel"
                 android:textColor="@color/white" />
 
             <TextView
@@ -80,7 +80,7 @@
                     android:id="@+id/sendFullImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/im_full_images_tip"
+                    android:text="@string/pg_str_full_images_tip"
                     app:layout_constraintLeft_toLeftOf="parent" />
 
                 <LinearLayout
@@ -95,7 +95,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="5dp"
                         android:gravity="center"
-                        android:text="@string/im_ok"
+                        android:text="@string/pg_str_ok"
                         android:textColor="@color/black"
                         android:textSize="@dimen/medium_text_size" />
 

@@ -80,8 +80,8 @@ class VideoPreviewActivity : AppCompatActivity() {
 //        val videoDuration = getVideoDuration(file.path)
 //        val fileSize = (file.length() / 1024 / 1024).toInt()
 //        if (fileSize > 500 || videoDuration > 60 * 5) {
-//            getSimpleDialog(this, getString(R.string.im_file_exceeds, fileSize, videoDuration),
-//                    getString(R.string.im_file_is_too_large)).setPositiveButton(R.string.im_ok, null).show()
+//            getSimpleDialog(this, getString(R.string.pg_str_file_exceeds, fileSize, videoDuration),
+//                    getString(R.string.pg_str_file_is_too_large)).setPositiveButton(R.string.pg_str_ok, null).show()
 //            return@OnClickListener
 //        }
         intent.putExtra("uri", file.path)

@@ -145,7 +145,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 boolean state = !tvComplete.isSelected();
                 if (state && PhotographHelper.getHelper().curSelectedSize() >= maxPhotoSize) {
-                    ToastUtils.show(PhotoPreviewActivity.this, getString(R.string.im_at_best, "" + maxPhotoSize));
+                    ToastUtils.show(PhotoPreviewActivity.this, getString(R.string.pg_str_at_best, "" + maxPhotoSize));
                 } else {
                     selectImg(state);
                 }
