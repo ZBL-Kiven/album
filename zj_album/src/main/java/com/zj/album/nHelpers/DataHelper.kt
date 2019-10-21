@@ -1,5 +1,7 @@
 package com.zj.album.nHelpers
 
+import com.zj.album.PhotoAlbum
+import com.zj.album.R
 import com.zj.album.interfaces.EventHub
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.FolderInfo
@@ -10,9 +12,9 @@ private var mData: MutableList<FolderInfo>? = null
         return field
     }
 
-private var selectedPaths: MutableMap<String, FileInfo>? = null
+private var selectedPaths: MutableList<FileInfo>? = null
     get() {
-        if (field == null) field = mutableMapOf();return field
+        if (field == null) field = mutableListOf();return field
     }
 
 private val dataListeners: MutableMap<String, EventHub>? = mutableMapOf()
@@ -22,32 +24,67 @@ private var curDisplayFolder: FolderInfo? = null
 
 sealed class DataHelper {
 
+    private fun getFormSelectedPaths(path: String): FileInfo? {
+        return selectedPaths?.firstOrNull { it.path == path }
+    }
+
+    fun findIsInSelectedPaths(path: String): Boolean {
+        return getFormSelectedPaths(path) != null
+    }
+
+    fun getIndexOfSelected(path: String): Int {
+        return selectedPaths?.indexOfFirst { it.path == path } ?: -1
+    }
+
+    fun putSelectedPath(info: FileInfo?) {
+        if (info != null) {
+            val selectedIndex = getIndexOfSelected(info.path)
+            if (selectedIndex >= 0) selectedPaths?.add(info)
+            else selectedPaths?.set(selectedIndex, info)
+            selectedPaths?.sortBy { it.lastModifyTs }
+        }
+    }
+
+    private fun removeFormSelectedPaths(path: String) {
+        selectedPaths?.removeAll {
+            it.path == path
+        }
+    }
+
+    private fun getSelectedCount(): Int {
+        return selectedPaths?.size ?: 0
+    }
+
     fun setData(data: FolderInfo?) {
         data?.files?.forEach {
             val path = it.path
-            if (selectedPaths?.containsKey(path) == true) {
-                it.isSelected = true
-                it.useOriginal = selectedPaths?.get(path)?.useOriginal ?: false
-                selectedPaths?.put(path, it)
+            if (findIsInSelectedPaths(path)) {
+                it.setSelected(true)
+                it.useOriginal = getFormSelectedPaths(path)?.useOriginal ?: false
+                putSelectedPath(it)
             }
         }
         curDisplayFolder = data
     }
 
-    fun onSelectedChanged(fileInfo: FileInfo) {
+    fun onSelectedChanged(fileInfo: FileInfo): Boolean {
         if (fileInfo.isSelected) {
-            selectedPaths?.put(fileInfo.path, fileInfo)
+            if (getSelectedCount() >= PhotoAlbum.maxSelectSize) {
+                PhotoAlbum.toastLong(PhotoAlbum.getString(R.string.pg_str_at_best, PhotoAlbum.maxSelectSize))
+                return false
+            } else putSelectedPath(fileInfo)
         } else {
-            selectedPaths?.remove(fileInfo.path)
+            removeFormSelectedPaths(fileInfo.path)
         }
         curDisplayFolder?.files?.firstOrNull {
             it.path == fileInfo.path
         }?.apply {
             if (this.isSelected != fileInfo.isSelected) {
-                this.isSelected = fileInfo.isSelected
+                this.setSelected(fileInfo.isSelected)
                 this.useOriginal = fileInfo.useOriginal
             }
         }
+        return true
     }
 
     fun clear() {
@@ -62,7 +99,7 @@ object DataProxy : DataHelper() {
     fun init(selected: Collection<Pair<String, Boolean>>?) {
         selectedPaths?.clear()
         selected?.forEach {
-            selectedPaths?.put(it.first, FileInfo("", it.first, "", 0, it.second))
+            putSelectedPath(FileInfo("", it.first, "", 0, it.second))
         }
     }
 
@@ -92,10 +129,8 @@ object DataStore : DataHelper() {
     }
 
     @JvmStatic
-    fun getCurSelectedData(): ArrayList<FileInfo>? {
-        return curDisplayFolder?.files?.filterTo(arrayListOf()) {
-            isSelected(it.path)
-        }
+    fun getCurSelectedData(): List<FileInfo>? {
+        return selectedPaths
     }
 
     @JvmStatic
@@ -105,7 +140,12 @@ object DataStore : DataHelper() {
 
     @JvmStatic
     fun isSelected(path: String): Boolean {
-        return selectedPaths?.containsKey(path) ?: false
+        return findIsInSelectedPaths(path)
+    }
+
+    @JvmStatic
+    fun indexOfSelected(path: String): Int {
+        return getIndexOfSelected(path)
     }
 
     @JvmStatic

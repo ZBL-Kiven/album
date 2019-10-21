@@ -17,20 +17,27 @@ data class FileInfo(
     var size: Long,
     internal var useOriginal: Boolean = false
 ) : Serializable {
-    private var lastModifyTs: Long = 0
+    var lastModifyTs: Long = 0; private set
 
     var duration: Long = 0
         internal set(value) {
             field = value
         }
-    var isSelected: Boolean = false
-        internal set(value) {
-            if (value != field) {
-                field = value
-                lastModifyTs = if (value) System.currentTimeMillis() else 0
-                DataStore.onSelectedChanged(this)
-            }
+
+    val isVideo: Boolean; get() = isVideo(mimeType)
+
+    internal var isSelected: Boolean = false
+        private set
+        get() = DataStore.isSelected(path)
+
+    internal fun setSelected(selected: Boolean): Boolean {
+        if (isSelected != selected && DataStore.onSelectedChanged(this)) {
+            isSelected = selected
+            lastModifyTs = if (isSelected) System.currentTimeMillis() else 0
+            return true
         }
+        return false
+    }
 
     companion object {
 
