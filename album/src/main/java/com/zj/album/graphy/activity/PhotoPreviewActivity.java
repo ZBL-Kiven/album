@@ -1,61 +1,57 @@
 package com.zj.album.graphy.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.image.ImageInfo;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.tmall.ultraviewpager.UltraViewPager;
 import com.zj.album.R;
+import com.zj.album.entity.SelectionSpec;
 import com.zj.album.graphy.PhotographHelper;
 import com.zj.album.graphy.adapter.BannerItemAdapter;
 import com.zj.album.graphy.adapter.PreviewAdapter;
 import com.zj.album.graphy.module.LocalMedia;
-import com.zj.album.graphy.views.gestures_view.zoomable.DoubleTapGestureListener;
-import com.zj.album.graphy.views.gestures_view.zoomable.ZoomableDraweeView;
-import com.zj.album.interfaces.PhotoEvent;
-import com.zj.album.preview_banner.PreviewBanner;
-import com.zj.album.utils.DisplayUtils;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.zj.album.graphy.views.IRecyclerAdapter;
+import com.zj.album.imageloader.utils.ImageEvaluate;
+import com.zj.album.interfaces.PhotoEvent;
 import com.zj.album.utils.ToastUtils;
+import com.zj.album.widget.image.ImageViewTouch;
+import com.zj.album.widget.image.ImageViewTouchBase;
 
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Created by zhaojie on 2017/10/19.
+ * @author zhaojie
+ * @date 2017/10/19
  */
 
 public class PhotoPreviewActivity extends AppCompatActivity {
 
-    private View.OnClickListener onClickListener;
     private FrameLayout flScreen;
     private View vSend;
     private View ivBack;
     private CheckBox vCheck;
     private RecyclerView rvSelectedPhotos;
     private TextView tvComplete, tvSelectCount;
-    private PreviewBanner previewBanner;
+    private UltraViewPager viewPager;
     private PreviewAdapter adapter;
     private List<LocalMedia> datas = new ArrayList<>();
     private int maxPhotoSize;
@@ -64,16 +60,12 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     //最大GC数量，View将在这个值内复用
     @SuppressWarnings("FieldCanBeLocal")
     private final int bannerHackSize = 3;
-    private BannerItemAdapter bannerItemAdapter;
-    private AlphaAnimation alphaAnimation_in, alphaAnimation_out;
-    private WeakReference<Context> weakReference;
+    private AlphaAnimation alphaAnimationIn, alphaAnimationOut;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_preview_photo);
-//        if (!Fresco.hasBeenInitialized()) Fresco.initialize(getApplicationContext());
-        weakReference = new WeakReference<Context>(this);
         getIntentData();
         initView();
         initData();
@@ -101,17 +93,17 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         tvSelectCount = findViewById(R.id.selectCountView);
         flScreen = findViewById(R.id.dl_preview_flScreen);
         rvSelectedPhotos = findViewById(R.id.dl_preview_lvSelect);
-        previewBanner = findViewById(R.id.dl_preview_bgaBanner);
+        viewPager = findViewById(R.id.dl_preview_viewpager);
         tvComplete.setSelected(isSelected);
         //todo 默認原圖
         vCheck.setChecked(true);
     }
 
     private void initData() {
-        alphaAnimation_in = new AlphaAnimation(0.2f, 1.0f);
-        alphaAnimation_out = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimation_in.setDuration(800);
-        alphaAnimation_out.setDuration(800);
+        alphaAnimationIn = new AlphaAnimation(0.2f, 1.0f);
+        alphaAnimationOut = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimationIn.setDuration(300);
+        alphaAnimationOut.setDuration(300);
         adapter = new PreviewAdapter(new IRecyclerAdapter.OnItemCLickListener() {
             @Override
             public void onItemClick(int postion, View view) {
@@ -161,18 +153,7 @@ public class PhotoPreviewActivity extends AppCompatActivity {
                 finish();
             }
         });
-        onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean isVisible = flScreen.getVisibility() == View.VISIBLE;
-                if (alphaAnimation_in != null && alphaAnimation_out != null) {
-                    alphaAnimation_in.cancel();
-                    alphaAnimation_out.cancel();
-                    flScreen.startAnimation(isVisible ? alphaAnimation_out : alphaAnimation_in);
-                }
-                flScreen.setVisibility(isVisible ? View.GONE : View.VISIBLE);
-            }
-        };
+
         vCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -184,12 +165,12 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     }
 
     private void selectImg(boolean state) {
-        PhotographHelper.getHelper().onSelectedChanged(state, datas.get(bannerItemAdapter.getDisplayPosition()).uri, new PhotoEvent() {
-            @Override
-            public void onEvent(int code, boolean isValidate) {
-                updateDisplayView(bannerItemAdapter.getDisplayPosition());
-            }
-        });
+//        PhotographHelper.getHelper().onSelectedChanged(state, datas.get(bannerItemAdapter.getDisplayPosition()).uri, new PhotoEvent() {
+//            @Override
+//            public void onEvent(int code, boolean isValidate) {
+//                updateDisplayView(bannerItemAdapter.getDisplayPosition());
+//            }
+//        });
     }
 
     /**
@@ -200,7 +181,6 @@ public class PhotoPreviewActivity extends AppCompatActivity {
         for (int i = 0; i < datas.size(); i++) {
             LocalMedia info = datas.get(i);
             if (info.uri.equals(curImgUri)) {
-                previewBanner.setCurrentItem(i);
                 curSelectPosition = i;
                 refreshTvComplete(info);
                 break;
@@ -229,38 +209,58 @@ public class PhotoPreviewActivity extends AppCompatActivity {
     }
 
     private void initBannerAdapter(int curSelectPosition) {
-        bannerItemAdapter = new BannerItemAdapter(bannerHackSize, curSelectPosition, previewBanner, datas, new BannerItemAdapter.OnPageChange() {
-            @Override
-            public void onChange(int position, View v) {
-                String uri = datas.get(position).getFileUri();
-                if (v instanceof ZoomableDraweeView) {
-                    if (v.getTag() == null) {
-                        initZoomView((ZoomableDraweeView) v);
-                        v.setTag(true);
-                    }
-                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(uri))
-                            .setResizeOptions(new ResizeOptions(DisplayUtils.dip2px(weakReference.get(), 200), DisplayUtils.dip2px(weakReference.get(), 200)))
-                            .build();
-                    DraweeController controller = Fresco.newDraweeControllerBuilder()
-                            .setImageRequest(request)
-                            .setOldController(((ZoomableDraweeView) v).getController())
-                            .setControllerListener(new BaseControllerListener<ImageInfo>())
-                            .build();
-                    ((ZoomableDraweeView) v).setController(controller);
-                }
-            }
 
-            @Override
-            public void onDisplayChange(int position) {
-                updateDisplayView(position);
-            }
-        });
+        if (viewPager.getAdapter() == null) {
+            viewPager.setAdapter(new PagerAdapter() {
+                @Override
+                public int getCount() {
+                    return datas.size();
+                }
+
+                @NonNull
+                @Override
+                public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                    LayoutInflater inflater = LayoutInflater.from(container.getContext());
+
+                    String uri = datas.get(position).getFileUri();
+                    View view = inflater.inflate(R.layout.banner_preview_item3, container, false);
+                    ImageViewTouch it = view.findViewById(R.id.imageViewTouch);
+                    it.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+                    it.resetMatrix();
+                    Point size = ImageEvaluate.getBitmapSize(uri);
+                    SelectionSpec.INSTANCE.getImageLoader().loadImage(it, size.x, size.y, uri);
+                    it.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
+                        @Override
+                        public void onSingleTapConfirmed() {
+                            switchView();
+                        }
+                    });
+
+                    return view;
+                }
+
+                @Override
+                public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                    container.removeView((View) object);
+                }
+
+                @Override
+                public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
+                    return view == o;
+                }
+            });
+        }
+        viewPager.setCurrentItem(curSelectPosition);
     }
 
-    private void initZoomView(ZoomableDraweeView hackyView) {
-        hackyView.setAllowTouchInterceptionWhileZoomed(true);
-        hackyView.setIsLongpressEnabled(false);
-        hackyView.setTapListener(new DoubleTapGestureListener(hackyView, (new WeakReference<>(onClickListener).get())));
+    private void switchView() {
+        boolean isVisible = flScreen.getVisibility() == View.VISIBLE;
+        if (alphaAnimationIn != null && alphaAnimationOut != null) {
+            alphaAnimationIn.cancel();
+            alphaAnimationOut.cancel();
+            flScreen.startAnimation(isVisible ? alphaAnimationOut : alphaAnimationIn);
+        }
+        flScreen.setVisibility(isVisible ? View.GONE : View.VISIBLE);
     }
 
     /**
@@ -283,8 +283,6 @@ public class PhotoPreviewActivity extends AppCompatActivity {
             datas.clear();
             datas = null;
         }
-        if (weakReference != null) weakReference.clear();
-        if (weakReference != null) weakReference.clear();
         super.onDestroy();
     }
 }

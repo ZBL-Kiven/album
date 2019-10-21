@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_16"
+            android:background="@color/darkBlueGrey">
+
+        <TextView
+                android:id="@+id/folder_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawablePadding="4dp"
+                android:layout_gravity="start|center_vertical"
+                android:drawableStart="@mipmap/ic_back_white"
+                android:textSize="@dimen/small_text_size"
+                android:gravity="center"
+                android:text="@string/pg_str_cancel"
+                android:textColor="@color/white"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pg_str_all_files"
+                android:textColor="@color/white"
+                android:textSize="@dimen/medium_text_size"
+                android:layout_gravity="center"/>
+    </FrameLayout>
+
+
+    <com.zj.album.ui.base.list.views.EmptyRecyclerView
+            android:id="@+id/folder_lv_file"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:background="#fff"
+            android:clipToPadding="false"
+            android:divider="@null"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            tools:listitem="@layout/folder_item_choose_file"/>
+</LinearLayout>

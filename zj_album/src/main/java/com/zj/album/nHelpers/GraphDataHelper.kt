@@ -17,7 +17,7 @@ object GraphDataHelper {
         selectedPaths: Collection<Pair<String, Boolean>>? = null,
         ignorePaths: Array<String>? = arrayOf()
     ) {
-        DataHelper.init(selectedPaths)
+        DataProxy.init(selectedPaths)
         initData(enumSet, useDesc, minSize, ignorePaths)
     }
 
@@ -34,7 +34,7 @@ object GraphDataHelper {
         if (executors != null && !executors.isShutdown && !executors.isTerminated) {
             val future = executors.submit(LocalDataExecute(enumSet, useDesc, minSize, ignorePaths))
             val data = future.get()
-            if (!data.isNullOrEmpty()) DataHelper.setData(data)
+            if (!data.isNullOrEmpty()) DataProxy.setLocalData(data)
         } else {
             isRunning = false
             executors?.shutdown()

@@ -1,11 +1,13 @@
 package com.zj.album.interfaces
 
-interface EventHub{
+import com.zj.album.nModule.FileInfo
+
+interface EventHub {
 
     fun onSelectedChanged()
 
-    fun onDataGot()
+    fun onDataGot(data: List<FileInfo>?)
 
-    fun onOriginalCheckedChanged()
+    fun onOriginalCheckedChanged(useOriginal: Boolean)
 
 }

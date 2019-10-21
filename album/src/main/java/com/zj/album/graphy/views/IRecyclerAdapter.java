@@ -1,6 +1,7 @@
 package com.zj.album.graphy.views;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import java.util.ArrayList;

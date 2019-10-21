@@ -6,11 +6,16 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
+
+import com.zj.album.widget.image.ImageViewTouch;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+
 /**
+ *
  */
 public class BannerViewPager extends ViewPager {
     private boolean mAllowUserScrollable = true;
@@ -159,5 +164,13 @@ public class BannerViewPager extends ViewPager {
 
     public interface AutoPlayDelegate {
         void handleAutoPlayActionUpOrCancel(float xVelocity);
+    }
+
+    @Override
+    protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
+        if (v instanceof ImageViewTouch) {
+            return ((ImageViewTouch) v).canScroll(dx) || super.canScroll(v, checkV, dx, x, y);
+        }
+        return super.canScroll(v, checkV, dx, x, y);
     }
 }

@@ -3,8 +3,9 @@ package com.zj.album.nModule
 import android.database.Cursor
 import android.provider.MediaStore
 import com.zj.album.isVideo
-import com.zj.album.nHelpers.DataHelper
+import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.runWithTryCatch
+import java.io.Serializable
 
 /*
 * Created by ZJJ on 2019/10/16
@@ -15,7 +16,7 @@ data class FileInfo(
     val mimeType: String,
     var size: Long,
     internal var useOriginal: Boolean = false
-) {
+) : Serializable {
     private var lastModifyTs: Long = 0
 
     var duration: Long = 0
@@ -27,8 +28,8 @@ data class FileInfo(
             if (value != field) {
                 field = value
                 lastModifyTs = if (value) System.currentTimeMillis() else 0
+                DataStore.onSelectedChanged(this)
             }
-            DataHelper.onSelectedChanged(this)
         }
 
     companion object {

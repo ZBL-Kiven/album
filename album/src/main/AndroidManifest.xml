@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zj.album">
+        package="com.zj.album">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application>
         <activity
-            android:name=".graphy.activity.PhotoGraphActivity"
-            android:launchMode="standard"
-            android:screenOrientation="portrait" />
+                android:name=".graphy.activity.PhotoGraphActivity"
+                android:launchMode="standard"
+                android:process=":cf_album"
+                android:screenOrientation="portrait" />
         <activity
-            android:name=".graphy.activity.PhotoPreviewActivity"
-            android:launchMode="standard"
-            android:screenOrientation="portrait" />
-        <activity android:name=".graphy.activity.FolderActivity" />
-        <activity android:name=".graphy.activity.VideoPreviewActivity" />
-        <activity android:name=".activity.NFSelectPhotoActivity" />
+                android:name=".graphy.activity.PhotoPreviewActivity"
+                android:launchMode="standard"
+                android:process=":cf_album"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".graphy.activity.FolderActivity"
+                android:process=":cf_album" />
+        <activity
+                android:name=".graphy.activity.VideoPreviewActivity"
+                android:process=":cf_album" />
+        <activity android:name=".graphy.preview.PreviewImageActivity" />
     </application>
 
 </manifest>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        tools:layout_height="match_parent">
+
+    <ImageView
+            android:id="@+id/graph_item_iv_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription"/>
+
+    <FrameLayout
+            android:id="@+id/graph_item_fl_selected"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#5000"
+            android:visibility="gone"/>
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/photo_bottom_slide_bar">
+        <TextView
+                android:id="@+id/graph_item_tv_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="3dp"
+                android:minWidth="24dp"
+                android:minHeight="24dp"
+                android:background="@drawable/bg_choose_local_media"
+                android:gravity="center"
+                android:textColor="@color/darkBlueGrey"
+                android:textSize="@dimen/x_small_text_size"/>
+
+        <TextView
+                android:id="@+id/graph_item_tv_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="3dp"
+                android:drawableStart="@mipmap/ic_video_type"
+                android:drawablePadding="2dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/xxsmall_text_size"
+                android:visibility='gone'
+                tools:visibility="visible"/>
+    </FrameLayout>
+</FrameLayout>

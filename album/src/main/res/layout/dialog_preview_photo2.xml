@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000">
+
+    <com.zj.album.widget.JViewPager
+            android:id="@+id/dl_preview_bgaBanner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+
+    <FrameLayout
+            android:id="@+id/dl_preview_flScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@color/darkBlueGrey">
+
+            <TextView
+                    android:id="@+id/dl_preview_ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/sun_toolbar_margin"
+                    android:layout_marginRight="@dimen/sun_toolbar_margin"
+                    android:padding="@dimen/sun_toolbar_padding"
+                    android:text="@string/im_cancel"
+                    android:textColor="@color/white" />
+
+            <TextView
+                    android:id="@+id/dl_preview_tvSelected"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/bg_choose_local_media"
+                    android:gravity="center"
+                    android:textColor="@color/darkBlueGrey"
+                    android:textSize="@dimen/medium_text_size" />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:src="@mipmap/ic_sun_people" />
+        </RelativeLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="#000"
+                android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/dl_preview_lvSelect"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    tools:listitem="@layout/item_preview_rv" />
+
+            <android.support.constraint.ConstraintLayout
+                    android:id="@+id/cl_bottom_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/paleBlue"
+                    android:padding="10dp">
+
+                <CheckBox
+                        android:id="@+id/sendFullImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/im_full_images_tip"
+                        app:layout_constraintLeft_toLeftOf="parent" />
+
+                <LinearLayout
+                        android:id="@+id/photo_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:layout_constraintRight_toRightOf="parent">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:gravity="center"
+                            android:text="@string/im_ok"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium_text_size" />
+
+                    <TextView
+                            android:id="@+id/selectCountView"
+                            android:layout_width="@dimen/recent_msg_count_min_height"
+                            android:layout_height="@dimen/recent_msg_count_min_height"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="@dimen/recent_avatar_padding"
+                            android:background="@drawable/bg_blue_dot"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/xsmall_text_size" />
+                </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

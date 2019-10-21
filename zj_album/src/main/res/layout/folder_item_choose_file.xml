@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+    <ImageView
+            android:id="@+id/folder_item_iv_img"
+            android:layout_width="@dimen/media_item_image_size"
+            android:layout_height="@dimen/media_item_image_size"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" tools:ignore="ContentDescription"/>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/folder_item_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                tools:text="folder name"
+                android:textColor="@color/darkBlueGrey"
+                android:textSize="@dimen/medium_text_size"/>
+
+        <TextView
+                android:id="@+id/folder_item_tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                tools:text="1212"
+                android:textColor="@color/grayish"
+                android:textSize="@dimen/small_text_size"/>
+        <View
+                android:id="@+id/folder_item_select"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/photo_selector_tv_choose"
+                android:layout_gravity="center_vertical|end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/item_cp_tvName"/>
+
+    </FrameLayout>
+</LinearLayout>

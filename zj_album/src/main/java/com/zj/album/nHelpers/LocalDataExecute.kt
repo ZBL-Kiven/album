@@ -4,6 +4,7 @@ import android.database.Cursor
 import android.provider.MediaStore
 import com.zj.album.*
 import com.zj.album.nModule.FileInfo
+import com.zj.album.nModule.FolderInfo
 import com.zj.album.nutils.log
 import java.io.File
 import java.util.*
@@ -15,7 +16,7 @@ internal class LocalDataExecute(
     useDesc: Boolean,
     minSize: Long,
     private val ignorePaths: Array<String>?
-) : Callable<ArrayList<FileInfo>?> {
+) : Callable<ArrayList<FolderInfo>?> {
 
     private var isDesc = false
     private var fileMinSize = 1L
@@ -35,7 +36,7 @@ internal class LocalDataExecute(
         MediaStore.Video.VideoColumns.DURATION
     )
 
-    override fun call(): ArrayList<FileInfo>? {
+    override fun call(): ArrayList<FolderInfo>? {
         var mCursor: Cursor? = null
         try {
             val resolver = PhotoAlbum.getContentResolver()
@@ -56,7 +57,7 @@ internal class LocalDataExecute(
         return null
     }
 
-    private fun subGroupOfImage(cursor: Cursor): ArrayList<FileInfo>? {
+    private fun subGroupOfImage(cursor: Cursor): ArrayList<FolderInfo>? {
         return try {
             val allInfo = arrayListOf<FileInfo>()
             while (cursor.moveToNext()) {
@@ -75,10 +76,39 @@ internal class LocalDataExecute(
                 }
                 if (!isIgnoreCase(file.path)) allInfo.add(media)
             }
-            allInfo
+            getFoldersData(allInfo)
         } catch (e: Exception) {
             null
         }
+    }
+
+    private fun getFoldersData(mData: List<FileInfo>?): ArrayList<FolderInfo>? {
+        val files = ArrayList(mData ?: return null)
+        val groupData = files.groupByTo(mutableMapOf()) {
+            val file = File(it.path)
+            if (file.exists()) {
+                file.parentFile?.name ?: "other"
+            } else {
+                "other"
+            }
+        }
+        if (groupData.isNullOrEmpty()) return null
+        val list = ArrayList<FolderInfo>()
+        val allInfo = FolderInfo(true)
+        allInfo.files = files
+        allInfo.imageCounts = allInfo.files?.size ?: 0
+        allInfo.topImgUri = allInfo.files?.get(0)?.path ?: ""
+        allInfo.parentName = PhotoAlbum.getString(R.string.pg_str_all)
+        list.add(allInfo)
+        groupData.forEach { (s, lst) ->
+            val fInfo = FolderInfo(false)
+            fInfo.files = lst
+            fInfo.imageCounts = fInfo.files?.size ?: 0
+            fInfo.topImgUri = fInfo.files?.get(0)?.path ?: ""
+            fInfo.parentName = s
+            list.add(allInfo)
+        }
+        return list
     }
 
     private fun getRange(limit: Int, offset: Int): String {

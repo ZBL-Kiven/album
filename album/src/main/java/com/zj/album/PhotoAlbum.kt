@@ -6,11 +6,36 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+<<<<<<< HEAD
 import android.os.Bundle
 import com.zj.album.graphy.activity.PhotoGraphActivity
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nutils.Constance
 import java.util.*
+=======
+import android.support.v4.app.Fragment
+import com.zj.album.graphy.PhotoTemporaryCache
+import com.zj.album.graphy.module.LocalMedia
+import java.lang.ref.WeakReference
+
+/**
+ * 相册启动入口
+ * @author xxj
+ * @date 2019/08/20
+ */
+class PhotoAlbum(activity: Activity? = null, fragment: Fragment? = null) {
+
+    private val mActivity: WeakReference<Activity?> = WeakReference(activity)
+    private val mFragment: WeakReference<Fragment?> = WeakReference(fragment)
+
+    companion object {
+        const val CATCH_NAME = "PhotoAlbum"
+
+        @JvmStatic
+        fun from(activity: Activity): PhotoAlbum {
+            return PhotoAlbum(activity = activity)
+        }
+>>>>>>> 4cfdc68bb75f1ccb7dd3befcbcb022256016d9de
 
 object PhotoAlbum {
 
