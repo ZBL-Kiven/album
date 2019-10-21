@@ -1,7 +1,7 @@
 package com.zj.album.ui.preview;
 
+import android.app.Activity;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,33 +78,38 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
 
     @Override
     public void initListener() {
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
+        viewPager.addOnPageChangeListener(new JViewPager.PageChangeListener() {
             @Override
             public void onPageSelected(int currentItem) {
                 previewAdapter.reset(currentItem);
                 updateTopSelected(previewAdapter.getItem(currentItem));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
             }
         });
 
         dlPreviewFlSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //设置选中
                 int currentItem = viewPager.getCurrentItem();
                 FileInfo info = previewAdapter.getItem(currentItem);
-                info.setSelected$zj_album_debug(info.isSelected());
+                info.setSelected$zj_album_debug(info.isSelected$zj_album_debug());
                 updateTopSelected(info);
                 updateLandscapeAdapter();
                 updateSelectCount();
+            }
+        });
+
+        findViewById(R.id.rv_select_img).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });
+
+        findViewById(R.id.photo_send).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commit();
             }
         });
     }
@@ -120,19 +125,30 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
      * 全预览
      */
     private void indexOf(FileInfo info) {
-        setCurrentItem(dataSource.getPath().indexOf(path));
+        setCurrentItem(DataStore.indexOfSelected(info.getPath()));
     }
 
-    void updateTopSelected(FileInfo info) {
-        if (info.isSelected()) {
+
+    /**
+     * 更新当前图片是否选中，选中下标
+     *
+     * @param info
+     */
+    private void updateTopSelected(FileInfo info) {
+        if (info.isSelected$zj_album_debug()) {
             dlPreviewTvSelected.setSelected(true);
             //更新里面的内容
-            dlPreviewTvSelected.setText(String.valueOf(1));
+            dlPreviewTvSelected.setText(DataStore.indexOfSelected(info.getPath()));
         } else {
             dlPreviewTvSelected.setSelected(false);
         }
     }
 
+    /**
+     * 跳转到选中位置
+     *
+     * @param index 选中的下标
+     */
     private void setCurrentItem(int index) {
         if (index == -1) {
             index = 0;
@@ -140,6 +156,9 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
         viewPager.setCurrentItem(index, false);
     }
 
+    /**
+     * 更新当前选中数量
+     */
     private void updateSelectCount() {
         int selectedCount = DataStore.getCurSelectedData().size();
         if (selectedCount == 0) {
@@ -150,12 +169,26 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
         }
     }
 
+    /**
+     * 更新横向选中预览
+     */
     private void updateLandscapeAdapter() {
         mLandscapeAdapter.clear();
         mLandscapeAdapter.add(DataStore.getCurSelectedData());
         mLandscapeAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onDataGot(@Nullable List<FileInfo> data) {
+        super.onDataGot(data);
+        previewAdapter = new PreviewImageAdapter(this);
+        viewPager.setAdapter(previewAdapter);
+        previewAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 全屏
+     */
     @Override
     public void onFull() {
         if (mIsFullPreview) {
@@ -184,13 +217,20 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
         mIsFullPreview = !mIsFullPreview;
     }
 
+    /**
+     * 取消
+     */
+    private void cancel() {
+        setResult(Activity.RESULT_CANCELED);
+        finish();
+    }
 
-    @Override
-    public void onDataGot(@Nullable List<FileInfo> data) {
-        super.onDataGot(data);
-        previewAdapter = new PreviewImageAdapter(this);
-        viewPager.setAdapter(previewAdapter);
-        previewAdapter.notifyDataSetChanged();
+    /**
+     * 提交
+     */
+    private void commit() {
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
 }

@@ -16,6 +16,19 @@ import com.zj.album.widget.image.ImageViewTouch;
  */
 public class JViewPager extends ViewPager {
 
+    public abstract static class PageChangeListener implements OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    }
+
     private boolean mLooper = true;
     private int mInfiniteRatio = 500;
 
