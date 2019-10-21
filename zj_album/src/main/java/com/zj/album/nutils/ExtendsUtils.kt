@@ -8,6 +8,7 @@ import android.util.Log
 import com.zj.album.BuildConfig
 import java.io.Serializable
 import java.lang.IllegalArgumentException
+import java.util.*
 
 fun <T> runWithTryCatch(block: () -> T?): T? {
     return try {
@@ -83,4 +84,11 @@ inline fun <reified T : Serializable> Bundle.getValueBySafe(name: String, defaul
 
 fun log(s: String) {
     if (BuildConfig.DEBUG) Log.e("ZJJ ----- ", s)
+}
+
+fun getDuration(mediaDuration: Long): String {
+    val duration = mediaDuration / 1000
+    val minute = duration / 60
+    val second = duration % 60
+    return String.format(Locale.getDefault(), "%d:%d", minute, second)
 }

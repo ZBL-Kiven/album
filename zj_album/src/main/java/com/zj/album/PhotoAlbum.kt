@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.ui.photograph.PhotoGraphActivity
 import java.util.*
@@ -48,6 +49,14 @@ object PhotoAlbum {
     @JvmStatic
     fun getContentResolver(): ContentResolver? {
         return appContext?.contentResolver
+    }
+
+    fun toastLong(str: String) {
+        Toast.makeText(appContext, str, Toast.LENGTH_LONG).show()
+    }
+
+    fun toastShort(str: String) {
+        Toast.makeText(appContext, str, Toast.LENGTH_SHORT).show()
     }
 
     @JvmStatic
