@@ -1,6 +1,7 @@
 package com.zj.album.ui.base
 
 import android.os.Bundle
+import android.support.annotation.CallSuper
 import android.support.v7.app.AppCompatActivity
 import com.zj.album.interfaces.EventHub
 import com.zj.album.nHelpers.DataProxy
@@ -14,6 +15,7 @@ internal abstract class BaseActivity : AppCompatActivity(), EventHub {
     open fun initData() {}
     open fun initListener() {}
 
+    private var curAccessKey: String = ""
     private val regKey = UUID.randomUUID().toString()
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,15 +25,23 @@ internal abstract class BaseActivity : AppCompatActivity(), EventHub {
         initListener()
     }
 
-    override fun onDataGot(data: List<FileInfo>?) {}
+    @CallSuper
+    override fun onDataGot(data: List<FileInfo>?, curAccessKey: String) {
+        this.curAccessKey = curAccessKey
+    }
 
-    override fun onOriginalCheckedChanged(useOriginal: Boolean) {}
+    @CallSuper
+    override fun onOriginalCheckedChanged(useOriginal: Boolean, curAccessKey: String) {
+        this.curAccessKey = curAccessKey
+    }
 
-    override fun onSelectedChanged() {}
+    override fun onSelectedChanged(count: Int) {
+
+    }
 
     override fun onResume() {
         super.onResume()
-        DataProxy.register(regKey, this)
+        DataProxy.register(regKey, curAccessKey, this)
     }
 
     override fun onStop() {

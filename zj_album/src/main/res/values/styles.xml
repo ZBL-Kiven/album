@@ -1,7 +1,25 @@
 <resources>
 
+    <declare-styleable name="BaseLoadingView">
+        <attr name="backgroundFill" format="color" />
+        <attr name="backgroundOnAct" format="color" />
+        <attr name="loadingRes" format="reference" />
+        <attr name="noDataRes" format="reference" />
+        <attr name="noNetworkRes" format="reference" />
+        <attr name="hintColor" format="color|reference" />
+        <attr name="refreshTextColor" format="color|reference" />
+    </declare-styleable>
+
+    <style name="mProgress_circle">
+        <!--<item name="android:indeterminateDrawable">@drawable/progressbar_loading</item>-->
+        <item name="android:minWidth">20dp</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxWidth">100dp</item>
+        <item name="android:maxHeight">100dp</item>
+    </style>
+
     <style name="photo_mProgress_circle">
-        <item name="android:indeterminateDrawable">@drawable/photo_progressbar_loading</item>
+        <item name="android:indeterminateDrawable">@drawable/loading_progressbar</item>
         <item name="android:minWidth">20dp</item>
         <item name="android:minHeight">20dp</item>
         <item name="android:maxWidth">100dp</item>

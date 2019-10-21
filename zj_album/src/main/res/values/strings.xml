@@ -1,10 +1,15 @@
 <resources>
+    <string name="loading_no_data">暫無數據</string>
+    <string name="loading_no_network">网络链接失败</string>
+    <string name="loading_progress">加载中，请稍候</string>
+    <string name="loading_refresh">轻触屏幕以刷新</string>
+
     <string name="app_name">zj_album</string>
     <string name="pg_str_all">全部</string>
     <string name="pg_str_cancel">返回</string>
     <string name="pg_str_album">文件夾</string>
     <string name="pg_str_all_files">所有類別</string>
-    <string name="pg_str_picture_count">共 %s$d 個文件</string>
+    <string name="pg_str_picture_count">共 %1$d 個文件</string>
     <string name="pg_str_preview">預覽</string>
     <string name="pg_str_send">完成</string>
     <string name="pg_str_full_images_tip">原圖</string>
@@ -14,7 +19,7 @@
     <string name="pg_str_update_error">信息更新失败，点击重试</string>
     <string name="pg_str_loading_waiting">载入中，请稍候…</string>
     <string name="pg_str_please_select_at_least_one_image">请至少选择一张图片</string>
-    <string name="pg_str_at_best">最多只能选择%1$d张</string>
+    <string name="pg_str_at_best">最多只能选择 %1$d 张圖片</string>
     <string name="pg_str_the_album_failed_to_read">相册读取失败</string>
     <string name="pg_str_no_picture">没有找到可以展示的图片</string>
 </resources>
