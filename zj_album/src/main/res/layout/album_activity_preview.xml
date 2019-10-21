@@ -9,8 +9,7 @@
     <com.zj.album.widget.JViewPager
             android:id="@+id/dl_preview_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_preview3" />
+            android:layout_height="match_parent" />
 
     <RelativeLayout
             android:id="@+id/rl_preview_top"
@@ -25,10 +24,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="@dimen/sun_toolbar_padding"
-                android:paddingLeft="@dimen/sun_toolbar_margin"
-                android:paddingRight="@dimen/sun_toolbar_margin"
-                android:text="@string/im_cancel"
+                android:padding="12dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:text="@string/pg_str_cacel"
                 android:textColor="@color/white" />
 
         <FrameLayout
@@ -49,13 +48,6 @@
                     android:textSize="@dimen/medium_text_size" />
         </FrameLayout>
 
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:src="@mipmap/ic_sun_people" />
     </RelativeLayout>
 
     <LinearLayout
@@ -69,12 +61,12 @@
             android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-                android:id="@+id/dl_preview_lvSelect"
+                android:id="@+id/rv_select_img"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:overScrollMode="never"
                 android:scrollbars="none"
-                tools:listitem="@layout/item_preview_rv" />
+                tools:listitem="@layout/album_item_preview" />
 
         <android.support.constraint.ConstraintLayout
                 android:id="@+id/cl_bottom_tab"
@@ -110,7 +102,7 @@
                         android:textSize="@dimen/medium_text_size" />
 
                 <TextView
-                        android:id="@+id/selectCountView"
+                        android:id="@+id/tv_select_count"
                         android:layout_width="@dimen/recent_msg_count_min_height"
                         android:layout_height="@dimen/recent_msg_count_min_height"
                         android:layout_gravity="center_vertical"
