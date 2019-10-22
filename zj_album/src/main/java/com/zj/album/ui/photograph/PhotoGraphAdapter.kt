@@ -13,6 +13,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.AlphaAnimation
 import android.widget.ImageView
+import com.zj.album.PhotoAlbum
 import com.zj.album.imageloader.impl.GlideLoader
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.getDuration
@@ -20,12 +21,17 @@ import com.zj.album.nutils.getDuration
 class PhotoGraphAdapter : BaseAdapter<FileInfo>(R.layout.graph_item_selected) {
 
     override fun initData(holder: BaseViewHolder, position: Int, data: FileInfo, payloads: List<Any>?) {
+        val isVideo = data.isVideo
+        val simultaneousSelection = PhotoAlbum.simultaneousSelection
         val tvNum = holder.getView<TextView>(R.id.graph_item_tv_num)
-        tvNum.visibility = if (data.isVideo) GONE else VISIBLE
+        tvNum.setBackgroundResource(if (isVideo && simultaneousSelection) R.drawable.bg_choose_local_video else R.drawable.bg_choose_local_media)
         val isSelected = data.isSelected()
         tvNum.isSelected = isSelected
         val index = DataStore.indexOfSelected(data.path)
-        tvNum.text = "${if (index >= 0) index + 1 else ""}"
+
+        if (!isVideo || simultaneousSelection) {
+            tvNum.text = "${if (index >= 0) index + 1 else ""}"
+        }
         val flMark = holder.getView<View>(R.id.graph_item_fl_selected)
         if (payloads?.firstOrNull()?.toString() == "$position") {
             flMark.clearAnimation()
@@ -39,20 +45,20 @@ class PhotoGraphAdapter : BaseAdapter<FileInfo>(R.layout.graph_item_selected) {
                 flMark.startAnimation(animation)
             }
         }
-        flMark.visibility = if (!data.isVideo && data.isSelected()) VISIBLE else GONE
+        flMark.visibility = if ((!isVideo || simultaneousSelection) && data.isSelected()) VISIBLE else GONE
         if (!payloads.isNullOrEmpty()) {
             return
         }
         val tvDuration = holder.getView<TextView>(R.id.graph_item_tv_duration)
-        tvDuration.visibility = if (data.isVideo) VISIBLE else GONE
+        tvDuration.visibility = if (isVideo) VISIBLE else GONE
         val iv = holder.getView<ImageView>(R.id.graph_item_iv_img)
         GlideLoader().loadThumbnail(iv, iv.measuredWidth / 2, R.drawable.loading_corner_bg, data.path)
-        if (data.isVideo) tvDuration.text = getDuration(data.duration)
+        if (isVideo) tvDuration.text = getDuration(data.duration)
         tvNum.setOnClickListener {
             val nextStatus = !data.isSelected()
             data.setSelected(nextStatus).let {
                 if (it) {
-                    notifyItemRangeChanged(0, maxPosition, position)
+                    notifyItemRangeChanged(0, itemCount, position)
                 }
             }
         }

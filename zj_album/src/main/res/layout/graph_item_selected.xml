@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
+        android:padding="1dp"
         tools:layout_height="match_parent">
 
     <com.zj.album.ui.views.SquareImageView
@@ -35,7 +35,6 @@
                 android:layout_margin="3dp"
                 android:minWidth="24dp"
                 android:minHeight="24dp"
-                android:background="@drawable/bg_choose_local_media"
                 android:gravity="center"
                 android:textColor="@color/darkBlueGrey"
                 android:textSize="@dimen/x_small_text_size"/>

@@ -10,13 +10,7 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-internal class LocalDataExecute(
-    private val enumSet: EnumSet<MimeType>?,
-    useDesc: Boolean,
-    minSize: Long,
-    private val ignorePaths: Array<String>?,
-    private val onDataGot: (ArrayList<FolderInfo>?) -> Unit
-) : Runnable {
+internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, private val ignorePaths: Array<String>?, private val onDataGot: (ArrayList<FolderInfo>?) -> Unit) : Runnable {
 
     private var isDesc = false
     private var fileMinSize = 1L
@@ -29,16 +23,10 @@ internal class LocalDataExecute(
     private val sortOrder: String; get() = MediaStore.Files.FileColumns.DATE_MODIFIED + if (isDesc) " DESC " else " ASC "
     private val searchUri = MediaStore.Files.getContentUri("external")
     @Suppress("DEPRECATION")
-    private val projection = arrayOf(
-        MediaStore.Files.FileColumns.DATA,
-        MediaStore.Files.FileColumns.DATE_MODIFIED,
-        MediaStore.Files.FileColumns.MIME_TYPE,
-        MediaStore.Files.FileColumns.SIZE,
-        MediaStore.Video.VideoColumns.DURATION
-    )
+    private val projection = arrayOf(MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DATE_MODIFIED, MediaStore.Files.FileColumns.MIME_TYPE, MediaStore.Files.FileColumns.SIZE, MediaStore.Video.VideoColumns.DURATION)
 
     override fun run() {
-        Thread.sleep(300)
+        Thread.sleep(3000)
         onDataGot(running())
     }
 
@@ -47,10 +35,7 @@ internal class LocalDataExecute(
         try {
             val resolver = PhotoAlbum.getContentResolver()
             val selectionAndArgs = getSelectionAndArgs(enumSet)
-            mCursor = resolver?.query(
-                searchUri, projection, selectionAndArgs.first,
-                selectionAndArgs.second, sortOrder + getRange(0, 0)
-            )
+            mCursor = resolver?.query(searchUri, projection, selectionAndArgs.first, selectionAndArgs.second, sortOrder + getRange(0, 0))
             if (mCursor == null) {
                 return null
             }
@@ -73,15 +58,16 @@ internal class LocalDataExecute(
                 if (!file.exists() || file.isDirectory || !file.canRead() || file.length() <= fileMinSize) {
                     continue
                 }
-                fun isIgnoreCase(path: String): Boolean {
-                    ignorePaths?.forEach {
-                        if (it.contains(path) || path.contains(it)) {
-                            return true
-                        }
-                    }
-                    return false
-                }
-                if (!isIgnoreCase(file.path)) allInfo.add(media)
+                //                fun isIgnoreCase(path: String): Boolean {
+                //                    ignorePaths?.forEach {
+                //                        if (it.contains(path) || path.contains(it)) {
+                //                            return true
+                //                        }
+                //                    }
+                //                    return false
+                //                }
+                //                if (!isIgnoreCase(file.path))
+                allInfo.add(media)
             }
             getFoldersData(allInfo)
         } catch (e: Exception) {
@@ -156,14 +142,26 @@ internal class LocalDataExecute(
             var index = 1
             for (mime in enumSet) {
                 selection.append(MediaStore.Files.FileColumns.MIME_TYPE).append("=? ")
-                if (index != enumSet.size) {
+                if (index < enumSet.size) {
                     selection.append("OR ")
                 }
                 index++
                 args.add(mime.mMimeTypeName)
             }
             selection.append(") ")
+            ignorePaths?.let {
+                selection.append("AND (")
+                it.forEachIndexed { index, ignore ->
+                    @Suppress("DEPRECATION") selection.append(MediaStore.Files.FileColumns.DATA).append(" NOT LIKE ? ")
+                    if (index < it.lastIndex) {
+                        selection.append("AND ")
+                    }
+                    args.add("%$ignore%")
+                }
+                selection.append(") ")
+            }
         }
+        log(selection.toString())
         return Pair(selection.toString(), args.toTypedArray())
     }
 }

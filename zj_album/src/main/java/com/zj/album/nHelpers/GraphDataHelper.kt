@@ -9,7 +9,7 @@ import java.util.concurrent.Executors
 
 object GraphDataHelper {
 
-    private var isRunning = false
+    var isRunning = false; private set
 
     fun init(
         enumSet: EnumSet<MimeType>?,
@@ -35,8 +35,8 @@ object GraphDataHelper {
         if (executors != null && !executors.isShutdown && !executors.isTerminated) {
             executors.execute(LocalDataExecute(enumSet, useDesc, minSize, ignorePaths) {
                 Handler(Looper.getMainLooper()).post {
-                    DataProxy.setLocalData(it)
                     isRunning = false
+                    DataProxy.setLocalData(it)
                 }
             })
         } else {

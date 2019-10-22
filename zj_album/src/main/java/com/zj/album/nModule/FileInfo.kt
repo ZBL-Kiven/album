@@ -3,6 +3,7 @@ package com.zj.album.nModule
 import android.database.Cursor
 import android.provider.MediaStore
 import com.zj.album.isVideo
+import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.runWithTryCatch
 import java.io.Serializable
@@ -10,12 +11,7 @@ import java.io.Serializable
 /*
 * Created by ZJJ on 2019/10/16
 * */
-data class FileInfo(
-    val path: String,
-    val mimeType: String,
-    var size: Long,
-    internal var useOriginal: Boolean = false
-) : Serializable {
+data class FileInfo(val path: String, val mimeType: String, var size: Long) : Serializable {
     var lastModifyTs: Long = 0; private set
 
     var duration: Long = 0
@@ -30,7 +26,7 @@ data class FileInfo(
     }
 
     internal fun setSelected(selected: Boolean, ignoreMaxCount: Boolean = false): Boolean {
-        lastModifyTs = if (DataStore.onSelectedChanged(selected, this, ignoreMaxCount)) {
+        lastModifyTs = if (DataProxy.onSelectedChanged(selected, this, ignoreMaxCount)) {
             if (selected) System.currentTimeMillis()
             return true
         } else 0

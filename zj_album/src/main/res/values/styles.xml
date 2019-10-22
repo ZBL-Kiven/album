@@ -1,13 +1,19 @@
 <resources>
 
     <declare-styleable name="BaseLoadingView">
-        <attr name="backgroundFill" format="color" />
-        <attr name="backgroundOnAct" format="color" />
-        <attr name="loadingRes" format="reference" />
-        <attr name="noDataRes" format="reference" />
-        <attr name="noNetworkRes" format="reference" />
-        <attr name="hintColor" format="color|reference" />
-        <attr name="refreshTextColor" format="color|reference" />
+        <attr name="backgroundFill" format="color"/>
+        <attr name="backgroundOnAct" format="color"/>
+        <attr name="loadingRes" format="reference"/>
+        <attr name="noDataRes" format="reference"/>
+        <attr name="noNetworkRes" format="reference"/>
+        <attr name="hintColor" format="color|reference"/>
+        <attr name="refreshTextColor" format="color|reference"/>
+        <attr name="loadingText" format="string"/>
+        <attr name="noDataText" format="string"/>
+        <attr name="networkErrorText" format="string"/>
+        <attr name="refreshText" format="string"/>
+        <attr name="showOnActDefault" format="boolean"/>
+        <attr name="refreshEnable" format="boolean"/>
     </declare-styleable>
 
     <style name="mProgress_circle">

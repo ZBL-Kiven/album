@@ -9,6 +9,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        PhotoAlbum.startPhotoGraphActivity(this, 0, 9, 0)
+        PhotoAlbum.options(this,0).maxSelectedCount(9).ignorePaths("Camera").start()
     }
 }

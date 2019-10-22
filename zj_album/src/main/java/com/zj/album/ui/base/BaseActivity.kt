@@ -1,10 +1,10 @@
 package com.zj.album.ui.base
 
 import android.os.Bundle
-import android.support.annotation.CallSuper
 import android.support.v7.app.AppCompatActivity
 import com.zj.album.interfaces.EventHub
 import com.zj.album.nHelpers.DataProxy
+import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nModule.FileInfo
 import java.util.*
 
@@ -15,7 +15,8 @@ internal abstract class BaseActivity : AppCompatActivity(), EventHub {
     open fun initData() {}
     open fun initListener() {}
 
-    private var curAccessKey: String = ""
+    private var curDataAccessKey: String = ""
+    private var curSelectedAccessKey: String = ""
     private val regKey = UUID.randomUUID().toString()
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,23 +26,27 @@ internal abstract class BaseActivity : AppCompatActivity(), EventHub {
         initListener()
     }
 
-    @CallSuper
-    override fun onDataGot(data: List<FileInfo>?, curAccessKey: String) {
-        this.curAccessKey = curAccessKey
+    final override fun onDataGot(data: List<FileInfo>?, dataAccessKey: String) {
+        this.curDataAccessKey = dataAccessKey
+        onDataDispatch(data, GraphDataHelper.isRunning)
     }
 
-    @CallSuper
-    override fun onOriginalCheckedChanged(useOriginal: Boolean, curAccessKey: String) {
-        this.curAccessKey = curAccessKey
+    final override fun onSelectedChanged(count: Int, selectedAccessKey: String) {
+        this.curSelectedAccessKey = selectedAccessKey
+        onSelectedStateChange(count)
     }
 
-    override fun onSelectedChanged(count: Int) {
+    open fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
+
+    }
+
+    open fun onSelectedStateChange(count: Int) {
 
     }
 
     override fun onResume() {
         super.onResume()
-        DataProxy.register(regKey, curAccessKey, this)
+        DataProxy.register(regKey, curDataAccessKey, curSelectedAccessKey, this)
     }
 
     override fun onStop() {

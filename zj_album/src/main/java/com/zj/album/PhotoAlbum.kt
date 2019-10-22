@@ -7,90 +7,71 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.ui.photograph.PhotoGraphActivity
-import java.util.*
 
 object PhotoAlbum {
 
-    @JvmStatic
-    fun startPhotoGraphActivity(
-        act: Activity,
-        req: Int,
-        maxSelectSize: Int = Int.MAX_VALUE,
-        minSize: Long,
-        sortWithDesc: Boolean = false,
-        useOriginDefault: Boolean = false,
-        selectedUris: Collection<Pair<String, Boolean>>? = null,
-        ignorePaths: Array<String>? = arrayOf(),
-        mimeType: EnumSet<MimeType>? = pairOf(ofImage(), ofVideo())
-    ) {
+    fun options(act: Activity, requestCode: Int): Options {
         this.appContext = act.applicationContext
-        this.maxSelectSize = maxSelectSize
-        this.useOriginDefault = useOriginDefault
-        this.requestCode = req
-        act.startActivityForResult(Intent(act, PhotoGraphActivity::class.java), req)
-        GraphDataHelper.init(mimeType, sortWithDesc, minSize, selectedUris, ignorePaths)
+        return Options(requestCode) {
+            this.options = it
+            this.maxSelectSize = it.maxSelectSize
+            DataProxy.setUseOriginal(it.useOriginDefault)
+            this.simultaneousSelection = it.simultaneousSelection
+            act.startActivityForResult(Intent(act, PhotoGraphActivity::class.java), it.req)
+            loadData()
+        }
+    }
+
+    private fun initGraph(it: Options) {
+        GraphDataHelper.init(it.mimeType, it.sortWithDesc, it.minSize, it.selectedUris, it.ignorePaths)
+    }
+
+    private var options: Options? = null
+
+    internal fun loadData() {
+        options?.let { initGraph(it) }
     }
 
     @JvmStatic
-    var requestCode: Int = 0
+    internal var maxSelectSize = Int.MAX_VALUE
     @JvmStatic
-    var maxSelectSize = Int.MAX_VALUE
-    @JvmStatic
-    var useOriginDefault = false
+    internal var simultaneousSelection = false
 
     private var appContext: Context? = null
+
     @JvmStatic
-    fun getString(id: Int, vararg args: Any): String {
+    internal fun getString(id: Int, vararg args: Any): String {
         return appContext?.getString(id, *args) ?: ""
     }
 
     @JvmStatic
-    fun getContentResolver(): ContentResolver? {
+    internal fun getContentResolver(): ContentResolver? {
         return appContext?.contentResolver
     }
 
-    fun toastLong(str: String) {
+    internal fun toastLong(str: String) {
         Toast.makeText(appContext, str, Toast.LENGTH_LONG).show()
     }
 
-    fun toastShort(str: String) {
+    internal fun toastShort(str: String) {
         Toast.makeText(appContext, str, Toast.LENGTH_SHORT).show()
     }
 
-    @JvmStatic
-    fun ofImage(): EnumSet<MimeType> {
-        return EnumSet.of(MimeType.JPEG, MimeType.PNG, MimeType.GIF)
+    internal fun toastLong(sid: Int, vararg args: Any) {
+        val str = getString(sid, args)
+        Toast.makeText(appContext, str, Toast.LENGTH_LONG).show()
     }
 
-    @JvmStatic
-    fun ofStaticImage(): EnumSet<MimeType> {
-        return EnumSet.of(MimeType.JPEG, MimeType.PNG)
+    internal fun toastShort(sid: Int, vararg args: Any) {
+        val str = getString(sid, args)
+        Toast.makeText(appContext, str, Toast.LENGTH_SHORT).show()
     }
 
-    @JvmStatic
-    fun ofVideo(): EnumSet<MimeType> {
-        return EnumSet.of(MimeType.JPEG, MimeType.PNG, MimeType.GIF)
-    }
-
-    @JvmStatic
-    fun ofAll(): EnumSet<MimeType> {
-        return EnumSet.allOf(MimeType::class.java)
-    }
-
-    @JvmStatic
-    fun pairOf(vararg types: MimeType): EnumSet<MimeType> {
-        return EnumSet.copyOf(setOf(*types))
-    }
-
-    @JvmStatic
-    fun pairOf(vararg types: EnumSet<MimeType>): EnumSet<MimeType>? {
-        if (types.isEmpty()) return null
-        var requestSet: EnumSet<MimeType>? = null
-        types.forEach {
-            requestSet?.addAll(it) ?: { requestSet = EnumSet.copyOf(it) }.invoke()
-        }
-        return requestSet
+    internal fun clear() {
+        appContext = null
+        options = null
     }
 }

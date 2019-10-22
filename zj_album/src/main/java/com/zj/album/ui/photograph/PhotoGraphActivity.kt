@@ -13,6 +13,7 @@ import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nModule.FileInfo
 import com.zj.album.ui.base.BaseActivity
+import com.zj.album.ui.base.list.listeners.ItemClickListener
 import com.zj.album.ui.folders.FolderActivity
 import com.zj.album.ui.views.BaseLoadingView
 
@@ -59,29 +60,41 @@ internal class PhotoGraphActivity : BaseActivity() {
         vOk?.setOnClickListener {
             doneAndFinish()
         }
-        cbOriginal?.setOnClickListener {
-            PhotoAlbum.useOriginDefault = cbOriginal?.isChecked ?: false
+        cbOriginal?.setOnCheckedChangeListener { _, checked ->
+            DataProxy.setUseOriginal(checked)
+        }
+        loadingView?.setRefreshListener {
+            loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
+            PhotoAlbum.loadData()
+        }
+        photoGraphAdapter?.setOnItemClickListener(object : ItemClickListener<FileInfo>() {
+
+            override fun onItemClick(position: Int, v: View?, m: FileInfo?) {
+                m?.let { data ->
+                    if (data.isVideo) {
+
+                    } else {
+
+                    }
+                }
+            }
+        })
+    }
+
+    override fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
+        when {
+            isQueryTaskRunning -> loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
+            data.isNullOrEmpty() -> loadingView?.setMode(BaseLoadingView.DisplayMode.noData)
+            else -> {
+                loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
+                tvTitle?.text = DataStore.getCurData()?.parentName
+                photoGraphAdapter?.change(data)
+            }
         }
     }
 
-    override fun onDataGot(data: List<FileInfo>?, curAccessKey: String) {
-        super.onDataGot(data, curAccessKey)
-        if (data != null) loadingView?.setMode(
-            BaseLoadingView.DisplayMode.normal,
-            "", false
-        )
-        else loadingView?.setMode(
-            BaseLoadingView.DisplayMode.noData,
-            PhotoAlbum.getString(R.string.loading_no_data),
-            false
-        )
-        tvTitle?.text = DataStore.getCurData()?.parentName
-        photoGraphAdapter?.change(data)
-    }
-
     @SuppressLint("SetTextI18n")
-    override fun onSelectedChanged(count: Int) {
-        super.onSelectedChanged(count)
+    override fun onSelectedStateChange(count: Int) {
         vOk?.isEnabled = count > 0
         val s = if (count <= 0) "" else "($count)"
         vOk?.text = "${PhotoAlbum.getString(R.string.pg_str_send)}$s"
@@ -89,14 +102,19 @@ internal class PhotoGraphActivity : BaseActivity() {
 
     private fun doneAndFinish() {
         val intent = Intent()
-        intent.putExtra("data", "")//DataStore.getCurSelectedData()
+        intent.putExtra("data", "") //DataStore.getCurSelectedData()
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
-    override fun finish() {
-        DataProxy.clear()
-        super.finish()
+    override fun onResume() {
+        super.onResume()
+        cbOriginal?.isChecked = DataStore.isOriginalUsed()
     }
 
+    override fun finish() {
+        DataProxy.clear()
+        PhotoAlbum.clear()
+        super.finish()
+    }
 }

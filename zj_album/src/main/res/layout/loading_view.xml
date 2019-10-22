@@ -14,8 +14,8 @@
         android:paddingTop="10dp">
 
     <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_marginBottom="8dp">
 
         <ProgressBar
@@ -24,22 +24,20 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:indeterminateDuration="1200"/>
+                android:indeterminateDuration="1500"/>
 
         <View
                 android:id="@+id/blv_vNoData"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@mipmap/loading_nodata"
                 android:visibility="gone"/>
 
         <View
                 android:id="@+id/blv_vNoNetwork"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@mipmap/loading_nonetwork"
                 android:visibility="gone"/>
 
     </FrameLayout>
@@ -49,8 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="150dp"
-            android:text="@string/loading_progress"
-            android:textColor="@color/darkBlueGrey"
+            android:textColor="@color/black"
             android:textSize="14sp"/>
 
     <TextView
@@ -58,9 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/loading_refresh"
-            android:textColor="#e6e6e6"
+            android:textColor="@color/gray"
             android:textSize="12sp"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
 
 </LinearLayout>
