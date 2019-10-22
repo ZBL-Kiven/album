@@ -63,6 +63,7 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
 
 
         viewPager = findViewById(R.id.dl_preview_viewpager);
+        viewPager.setLooper(true);
         viewPager.setPageTransformer(true, new ZoomPageTransformer());
 
         RecyclerView rvSelectImg = findViewById(R.id.rv_select_img);
@@ -94,10 +95,10 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
                 //设置选中
                 int currentItem = viewPager.getCurrentItem();
                 FileInfo info = previewAdapter.getItem(currentItem);
-                info.setSelected$zj_album_debug(info.isSelected$zj_album_debug(), false);
+                info.setSelected$zj_album_debug(!info.isSelected$zj_album_debug(), false);
                 updateTopSelected(info);
                 updateLandscapeAdapter();
-                updateSelectCount();
+//                updateSelectCount();
             }
         });
 
@@ -120,16 +121,15 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
     @Override
     public void initData() {
         updateLandscapeAdapter();
-        updateSelectCount();
+//        updateSelectCount();
     }
 
     /**
      * 全预览
      */
     private void indexOf(FileInfo info) {
-        setCurrentItem(DataStore.indexOfSelected(info.getPath()));
+        setCurrentItem(previewAdapter.getItemPosition(info));
     }
-
 
     /**
      * 更新当前图片是否选中，选中下标
@@ -140,7 +140,7 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
         if (info.isSelected$zj_album_debug()) {
             dlPreviewTvSelected.setSelected(true);
             //更新里面的内容
-            dlPreviewTvSelected.setText(DataStore.indexOfSelected(info.getPath()));
+            dlPreviewTvSelected.setText(String.valueOf(1 + DataStore.indexOfSelected(info.getPath())));
         } else {
             dlPreviewTvSelected.setSelected(false);
         }
@@ -161,13 +161,13 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
     /**
      * 更新当前选中数量
      */
-    private void updateSelectCount() {
-        int selectedCount = DataStore.getCurSelectedData().size();
-        if (selectedCount == 0) {
+    @Override
+    public void onSelectedChanged(int count) {
+        if (count == 0) {
             tvSelectCount.setVisibility(View.GONE);
         } else {
             tvSelectCount.setVisibility(View.VISIBLE);
-            tvSelectCount.setText(String.valueOf(selectedCount));
+            tvSelectCount.setText(String.valueOf(count + 1));
         }
     }
 
@@ -183,7 +183,8 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
     @Override
     public void onDataGot(@Nullable List<FileInfo> data, @NotNull String curAccessKey) {
         super.onDataGot(data, curAccessKey);
-        previewAdapter = new PreviewImageAdapter(this);
+        previewAdapter = new PreviewImageAdapter(true,this);
+        previewAdapter.setItems(data);
         viewPager.setAdapter(previewAdapter);
         previewAdapter.notifyDataSetChanged();
     }

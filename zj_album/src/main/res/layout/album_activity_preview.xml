@@ -112,7 +112,7 @@
                         android:background="@drawable/m_album_bg_blue_dot"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/medium_text_size" />
+                        android:textSize="@dimen/x_small_text_size" />
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

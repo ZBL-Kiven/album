@@ -137,12 +137,8 @@ public class JViewPager extends ViewPager {
         //真实位置
         int relIndex = current % size;
 
-        if (relIndex == item) {
-            //位置相同 不做处理
-        } else if (relIndex > item) {
-            super.setCurrentItem(getRelCurrentItem() - 1, smoothScroll);
-        } else {
-            super.setCurrentItem(getRelCurrentItem() + 1, smoothScroll);
+        if (relIndex != item) {
+            super.setCurrentItem(item + (size * mInfiniteRatio / 2), false);
         }
 
     }

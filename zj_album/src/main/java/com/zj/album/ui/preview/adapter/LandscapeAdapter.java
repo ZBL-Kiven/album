@@ -2,6 +2,7 @@ package com.zj.album.ui.preview.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.zj.album.R;
 import com.zj.album.imageloader.impl.GlideLoader;
@@ -29,7 +30,7 @@ public class LandscapeAdapter extends BaseAdapter<FileInfo> {
     @Override
     protected void initData(BaseViewHolder holder, final int position, FileInfo data, @Nullable List<Object> payloads) {
 
-        ImageViewTouch iv = holder.getView(R.id.album_iv_preview);
+        ImageView iv = holder.getView(R.id.album_iv_preview);
 
         new GlideLoader().loadThumbnail(iv, holder.itemView.getLayoutParams().width, 0, data.getPath());
 

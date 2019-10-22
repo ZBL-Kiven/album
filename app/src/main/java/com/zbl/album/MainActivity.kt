@@ -23,6 +23,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startPreview(view: View) {
-        VideoPreviewActivity.start(this, "/sdcard/DCIM/Camera/VID_20191015_113817.mp4", 200)
+        VideoPreviewActivity.start(this, "/sdcard/DCIM/Camera/20191021_185822.mp4", 200)
     }
 }

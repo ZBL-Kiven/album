@@ -51,7 +51,12 @@ public class PreviewImageAdapter extends PagerAdapter implements ImageViewTouch.
 
     @Override
     public int getCount() {
-        return paths.size();
+        return paths == null ? 0 : paths.size();
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return paths.indexOf(object);
     }
 
     @Override

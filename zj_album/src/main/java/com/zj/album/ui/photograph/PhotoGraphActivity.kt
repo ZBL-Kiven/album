@@ -14,6 +14,7 @@ import com.zj.album.nHelpers.DataStore
 import com.zj.album.nModule.FileInfo
 import com.zj.album.ui.base.BaseActivity
 import com.zj.album.ui.folders.FolderActivity
+import com.zj.album.ui.preview.PreviewImageActivity
 import com.zj.album.ui.views.BaseLoadingView
 
 internal class PhotoGraphActivity : BaseActivity() {
@@ -61,6 +62,9 @@ internal class PhotoGraphActivity : BaseActivity() {
         }
         cbOriginal?.setOnClickListener {
             PhotoAlbum.useOriginDefault = cbOriginal?.isChecked ?: false
+        }
+        vPreview?.setOnClickListener {
+            startActivity(Intent(this, PreviewImageActivity::class.java))
         }
     }
 
