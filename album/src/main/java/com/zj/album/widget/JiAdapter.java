@@ -11,14 +11,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yangji
  */
-public class JAdapter extends PagerAdapter {
+public class JiAdapter extends PagerAdapter {
 
     private PagerAdapter mAdapter;
     private boolean looper = true;
     private SparseArray<View> viewArray;
     private int infiniteRatio = 500;
 
-    public JAdapter(PagerAdapter adapter) {
+    public JiAdapter(PagerAdapter adapter) {
         this.mAdapter = adapter;
         viewArray = new SparseArray<>();
     }

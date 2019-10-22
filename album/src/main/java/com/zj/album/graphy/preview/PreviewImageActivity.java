@@ -1,6 +1,7 @@
 package com.zj.album.graphy.preview;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -12,11 +13,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zj.album.R;
+import com.zj.album.graphy.PhotographHelper;
+import com.zj.album.graphy.module.LocalMedia;
 import com.zj.album.graphy.preview.adapter.LandscapeAdapter;
 import com.zj.album.graphy.preview.adapter.PreviewImageAdapter;
 import com.zj.album.graphy.preview.listener.FullPreviewListener;
 import com.zj.album.graphy.views.IRecyclerAdapter;
 import com.zj.album.widget.JViewPager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yangji
@@ -35,7 +41,7 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
     private boolean mIsFullPreview = false;
     private PreviewDataSource dataSource;
 
-    private PreviewImageAdapter previewAdapter ;
+    private PreviewImageAdapter previewAdapter;
     private LandscapeAdapter mLandscapeAdapter;
 
     private IRecyclerAdapter.OnItemCLickListener mOnItemCLickListener = new IRecyclerAdapter.OnItemCLickListener() {
@@ -45,14 +51,11 @@ public class PreviewImageActivity extends AppCompatActivity implements FullPrevi
         }
     };
 
-
-    @SuppressLint("SdCardPath")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_previce);
         dataSource = new PreviewDataSource();
-
         initView();
         initListener();
         initData();

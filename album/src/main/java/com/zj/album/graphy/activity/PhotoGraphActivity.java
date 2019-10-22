@@ -12,6 +12,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import com.zj.album.graphy.preview.PreviewImageActivity;
 
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -307,7 +308,8 @@ public class PhotoGraphActivity extends AppCompatActivity {
     }
 
     private void startPreviewActivity(boolean isSelected, boolean isAll, String uri) {
-        Intent intent = new Intent(context.get(), PhotoPreviewActivity.class);
+        //Intent intent = new Intent(context.get(), PhotoPreviewActivity.class);
+        Intent intent = new Intent(context.get(), PreviewImageActivity.class);
         intent.putExtra("curImgUri", uri);
         intent.putExtra("isSelected", isSelected);
         intent.putExtra("maxPhotoSize", maxPhotoSize);

@@ -37,12 +37,12 @@ public class JViewPager extends ViewPager {
 
     @Override
     public void setAdapter(PagerAdapter adapter) {
-        JAdapter jAdapter;
+        JiAdapter jiAdapter;
         if (adapter != null) {
-            jAdapter = new JAdapter(adapter);
-            jAdapter.setInfiniteRatio(mInfiniteRatio);
-            jAdapter.setLooper(mLooper);
-            super.setAdapter(jAdapter);
+            jiAdapter = new JiAdapter(adapter);
+            jiAdapter.setInfiniteRatio(mInfiniteRatio);
+            jiAdapter.setLooper(mLooper);
+            super.setAdapter(jiAdapter);
         } else {
             super.setAdapter(adapter);
         }
@@ -137,7 +137,7 @@ public class JViewPager extends ViewPager {
     @Nullable
     @Override
     public PagerAdapter getAdapter() {
-        return super.getAdapter() == null ? null : ((JAdapter) super.getAdapter()).getAdapter();
+        return super.getAdapter() == null ? null : ((JiAdapter) super.getAdapter()).getAdapter();
     }
 
     public void setLooper(boolean mLooper) {

@@ -22,7 +22,8 @@
         <activity
                 android:name=".graphy.activity.VideoPreviewActivity"
                 android:process=":cf_album" />
-        <activity android:name=".graphy.preview.PreviewImageActivity" />
+        <activity android:name=".graphy.preview.PreviewImageActivity"
+                android:process=":cf_album" />
     </application>
 
 </manifest>
