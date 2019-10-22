@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="photo_colorPrimary">#459DF6</color>
-    <color name="photo_colorPrimaryDark">#459DF6</color>
-    <color name="photo_colorAccent">#459DF6</color>
-    <color name="photo_background">#e6e6e6</color>
-    <color name="photo_colorText_666">#666666</color>
-    <color name="photo_color_green">#60d136</color>
-    <color name="photo_button_false">#bbbbbb</color>
     <color name="darkBlueGrey">#36485E</color>
     <color name="white">#FFFFFF</color>
     <color name="paleBlue">#EDF0F7</color>
@@ -15,4 +8,7 @@
     <color name="gray">#F5F5F5</color>
     <color name="black">#181F2A</color>
     <color name="black50">#7f181F2A</color>
+
+    <color name="loading_color_background_float">#30000000</color>
+    <color name="loading_color_background">#fff4f4f4</color>
 </resources>

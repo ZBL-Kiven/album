@@ -17,13 +17,13 @@ object PhotoAlbum {
     fun startPhotoGraphActivity(
         act: Activity,
         req: Int,
-        selectedUris: Collection<Pair<String, Boolean>>?,
         maxSelectSize: Int = Int.MAX_VALUE,
-        mimeType: EnumSet<MimeType>? = pairOf(ofImage(), ofVideo()),
-        useOriginDefault: Boolean = false,
-        ignorePaths: Array<String>? = arrayOf(),
         minSize: Long,
-        sortWithDesc: Boolean = false
+        sortWithDesc: Boolean = false,
+        useOriginDefault: Boolean = false,
+        selectedUris: Collection<Pair<String, Boolean>>? = null,
+        ignorePaths: Array<String>? = arrayOf(),
+        mimeType: EnumSet<MimeType>? = pairOf(ofImage(), ofVideo())
     ) {
         this.appContext = act.applicationContext
         this.maxSelectSize = maxSelectSize

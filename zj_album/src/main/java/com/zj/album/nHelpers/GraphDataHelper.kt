@@ -1,10 +1,11 @@
 package com.zj.album.nHelpers
 
+import android.os.Handler
+import android.os.Looper
 import com.zj.album.MimeType
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
 
 object GraphDataHelper {
 
@@ -32,9 +33,12 @@ object GraphDataHelper {
         var executors = e
         isRunning = true
         if (executors != null && !executors.isShutdown && !executors.isTerminated) {
-            val future = executors.submit(LocalDataExecute(enumSet, useDesc, minSize, ignorePaths))
-            val data = future.get()
-            if (!data.isNullOrEmpty()) DataProxy.setLocalData(data)
+            executors.execute(LocalDataExecute(enumSet, useDesc, minSize, ignorePaths) {
+                Handler(Looper.getMainLooper()).post {
+                    DataProxy.setLocalData(it)
+                    isRunning = false
+                }
+            })
         } else {
             isRunning = false
             executors?.shutdown()

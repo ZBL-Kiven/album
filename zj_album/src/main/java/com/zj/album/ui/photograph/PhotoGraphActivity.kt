@@ -1,5 +1,6 @@
 package com.zj.album.ui.photograph
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -10,10 +11,10 @@ import com.zj.album.PhotoAlbum
 import com.zj.album.R
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.DataStore
-import com.zj.album.nModule.FolderInfo
+import com.zj.album.nModule.FileInfo
 import com.zj.album.ui.base.BaseActivity
-import com.zj.album.nutils.Constance
 import com.zj.album.ui.folders.FolderActivity
+import com.zj.album.ui.views.BaseLoadingView
 
 internal class PhotoGraphActivity : BaseActivity() {
 
@@ -21,16 +22,16 @@ internal class PhotoGraphActivity : BaseActivity() {
         return R.layout.graph_activity_photograph
     }
 
-    private var curDisplayFolder: FolderInfo? = null
-
     private var tvTitle: TextView? = null
     private var tvFile: TextView? = null
     private var rvGraph: RecyclerView? = null
     private var vBack: View? = null
     private var vPreview: View? = null
-    private var vOk: View? = null
+    private var vOk: TextView? = null
     private var cbOriginal: CheckBox? = null
+    private var loadingView: BaseLoadingView? = null
 
+    private var photoGraphAdapter: PhotoGraphAdapter? = null
 
     override fun initView() {
         tvTitle = findViewById(R.id.photo_tv_tittle)
@@ -40,11 +41,12 @@ internal class PhotoGraphActivity : BaseActivity() {
         vPreview = findViewById(R.id.photo_tv_preview)
         vOk = findViewById(R.id.photo_tv_done)
         cbOriginal = findViewById(R.id.photo_cb_original)
+        loadingView = findViewById(R.id.photo_loading)
     }
 
     override fun initData() {
-        val data = DataStore.getCurData()
-        tvTitle?.text = data?.parentName
+        photoGraphAdapter = PhotoGraphAdapter()
+        rvGraph?.adapter = photoGraphAdapter
     }
 
     override fun initListener() {
@@ -52,7 +54,7 @@ internal class PhotoGraphActivity : BaseActivity() {
             finish()
         }
         tvFile?.setOnClickListener {
-            startActivityForResult(Intent(this, FolderActivity::class.java), Constance.REQUEST_OPEN_FOLDER)
+            startActivity(Intent(this, FolderActivity::class.java))
         }
         vOk?.setOnClickListener {
             doneAndFinish()
@@ -62,33 +64,33 @@ internal class PhotoGraphActivity : BaseActivity() {
         }
     }
 
-    private fun setData(folder: FolderInfo?) {
-
+    override fun onDataGot(data: List<FileInfo>?, curAccessKey: String) {
+        super.onDataGot(data, curAccessKey)
+        if (data != null) loadingView?.setMode(
+            BaseLoadingView.DisplayMode.normal,
+            "", false
+        )
+        else loadingView?.setMode(
+            BaseLoadingView.DisplayMode.noData,
+            PhotoAlbum.getString(R.string.loading_no_data),
+            false
+        )
+        tvTitle?.text = DataStore.getCurData()?.parentName
+        photoGraphAdapter?.change(data)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            Constance.REQUEST_OPEN_FOLDER -> {
-                curDisplayFolder?.let {
-                    if (DataStore.isCurDisplayFolder(it.id)) {
-                        setData(DataStore.getCurData())
-                    }
-                }
-            }
-            Constance.REQUEST_OPEN_PREVIEW -> {
-
-            }
-            Constance.REQUEST_VIDEO_PREVIEW -> {
-
-            }
-        }
+    @SuppressLint("SetTextI18n")
+    override fun onSelectedChanged(count: Int) {
+        super.onSelectedChanged(count)
+        vOk?.isEnabled = count > 0
+        val s = if (count <= 0) "" else "($count)"
+        vOk?.text = "${PhotoAlbum.getString(R.string.pg_str_send)}$s"
     }
 
     private fun doneAndFinish() {
-        val i = Intent()
-        i.putExtra("data", DataStore.getCurSelectedData())
-        setResult(Activity.RESULT_OK, i)
+        val intent = Intent()
+        intent.putExtra("data", "")//DataStore.getCurSelectedData()
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

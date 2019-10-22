@@ -18,6 +18,8 @@ import com.zj.album.ui.preview.adapter.PreviewImageAdapter;
 import com.zj.album.ui.preview.listener.FullPreviewListener;
 import com.zj.album.widget.JViewPager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -92,7 +94,7 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
                 //设置选中
                 int currentItem = viewPager.getCurrentItem();
                 FileInfo info = previewAdapter.getItem(currentItem);
-                info.setSelected$zj_album_debug(info.isSelected$zj_album_debug());
+                info.setSelected$zj_album_debug(info.isSelected$zj_album_debug(), false);
                 updateTopSelected(info);
                 updateLandscapeAdapter();
                 updateSelectCount();
@@ -179,8 +181,8 @@ public class PreviewImageActivity extends BaseActivity implements FullPreviewLis
     }
 
     @Override
-    public void onDataGot(@Nullable List<FileInfo> data) {
-        super.onDataGot(data);
+    public void onDataGot(@Nullable List<FileInfo> data, @NotNull String curAccessKey) {
+        super.onDataGot(data, curAccessKey);
         previewAdapter = new PreviewImageAdapter(this);
         viewPager.setAdapter(previewAdapter);
         previewAdapter.notifyDataSetChanged();

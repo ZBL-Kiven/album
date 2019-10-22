@@ -4,10 +4,9 @@ import com.zj.album.nModule.FileInfo
 
 interface EventHub {
 
-    fun onSelectedChanged()
+    fun onDataGot(data: List<FileInfo>?, curAccessKey: String)
 
-    fun onDataGot(data: List<FileInfo>?)
+    fun onOriginalCheckedChanged(useOriginal: Boolean, curAccessKey: String)
 
-    fun onOriginalCheckedChanged(useOriginal: Boolean)
-
+    fun onSelectedChanged(count: Int)
 }

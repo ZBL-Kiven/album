@@ -8,15 +8,15 @@ import com.zj.album.nModule.FolderInfo
 import com.zj.album.nutils.log
 import java.io.File
 import java.util.*
-import java.util.concurrent.Callable
 import kotlin.collections.ArrayList
 
 internal class LocalDataExecute(
     private val enumSet: EnumSet<MimeType>?,
     useDesc: Boolean,
     minSize: Long,
-    private val ignorePaths: Array<String>?
-) : Callable<ArrayList<FolderInfo>?> {
+    private val ignorePaths: Array<String>?,
+    private val onDataGot: (ArrayList<FolderInfo>?) -> Unit
+) : Runnable {
 
     private var isDesc = false
     private var fileMinSize = 1L
@@ -28,15 +28,21 @@ internal class LocalDataExecute(
 
     private val sortOrder: String; get() = MediaStore.Files.FileColumns.DATE_MODIFIED + if (isDesc) " DESC " else " ASC "
     private val searchUri = MediaStore.Files.getContentUri("external")
+    @Suppress("DEPRECATION")
     private val projection = arrayOf(
-        MediaStore.Files.FileColumns.RELATIVE_PATH,
+        MediaStore.Files.FileColumns.DATA,
         MediaStore.Files.FileColumns.DATE_MODIFIED,
         MediaStore.Files.FileColumns.MIME_TYPE,
         MediaStore.Files.FileColumns.SIZE,
         MediaStore.Video.VideoColumns.DURATION
     )
 
-    override fun call(): ArrayList<FolderInfo>? {
+    override fun run() {
+        Thread.sleep(300)
+        onDataGot(running())
+    }
+
+    private fun running(): ArrayList<FolderInfo>? {
         var mCursor: Cursor? = null
         try {
             val resolver = PhotoAlbum.getContentResolver()
@@ -51,6 +57,7 @@ internal class LocalDataExecute(
             return subGroupOfImage(mCursor)
         } catch (e: Exception) {
             log("album loaded fail!")
+            e.printStackTrace()
         } finally {
             mCursor?.close()
         }
@@ -106,7 +113,7 @@ internal class LocalDataExecute(
             fInfo.imageCounts = fInfo.files?.size ?: 0
             fInfo.topImgUri = fInfo.files?.get(0)?.path ?: ""
             fInfo.parentName = s
-            list.add(allInfo)
+            list.add(fInfo)
         }
         return list
     }

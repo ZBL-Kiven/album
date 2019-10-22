@@ -10,6 +10,10 @@ import com.zj.album.ui.base.list.adapters.BaseAdapter;
 import com.zj.album.ui.base.list.holders.BaseViewHolder;
 import com.zj.album.widget.image.ImageViewTouch;
 
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
 
 /**
  * @author yangji
@@ -23,11 +27,11 @@ public class LandscapeAdapter extends BaseAdapter<FileInfo> {
     }
 
     @Override
-    protected void initData(BaseViewHolder holder, final int position, FileInfo info) {
+    protected void initData(BaseViewHolder holder, final int position, FileInfo data, @Nullable List<Object> payloads) {
 
         ImageViewTouch iv = holder.getView(R.id.album_iv_preview);
 
-        new GlideLoader().loadThumbnail(iv, holder.itemView.getLayoutParams().width, 0, info.getPath());
+        new GlideLoader().loadThumbnail(iv, holder.itemView.getLayoutParams().width, 0, data.getPath());
 
         iv.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -24,6 +24,7 @@ import java.util.List;
 public class EmptyRecyclerView<T> extends RecyclerView {
 
     private BaseAdapter<T> adapter;
+    private BaseAdapterDataSet<T> mAdapterDataSet;
 
     public void canScroll(boolean isAllow) {
         setNestedScrollingEnabled(isAllow);
@@ -54,15 +55,16 @@ public class EmptyRecyclerView<T> extends RecyclerView {
         if (adapter != null) adapter.change(data);
     }
 
-    public void setData(@LayoutRes int itemViewId, boolean isLoadMore, @Nullable List<T> data, @Nullable final BaseAdapterDataSet<T> adapterDataSet) {
+    public void setData(@LayoutRes int itemViewId, boolean isLoadMore, @Nullable List<T> data, @Nullable BaseAdapterDataSet<T> adapterDataSet) {
+        this.mAdapterDataSet = adapterDataSet;
         setOverScrollMode(OVER_SCROLL_NEVER);
         if (getLayoutManager() == null)
             setLayoutManager(new LinearLayoutManager(getContext()));
         if (adapter == null) {
             adapter = new BaseAdapter<T>(itemViewId) {
                 @Override
-                protected void initData(BaseViewHolder holder, int position, T data) {
-                    if (adapterDataSet != null) adapterDataSet.initData(holder, position, data);
+                protected void initData(BaseViewHolder holder, int position, T data, List<Object> payLoads) {
+                    if (mAdapterDataSet != null) mAdapterDataSet.initData(holder, position, data, payLoads);
                 }
             };
             setAdapter(adapter);
@@ -70,12 +72,12 @@ public class EmptyRecyclerView<T> extends RecyclerView {
                 adapter.setOnItemClickListener(new ItemClickListener<T>() {
                     @Override
                     public void onItemClick(int position, View v, @Nullable T m) {
-                        adapterDataSet.onItemClick(position, v, m);
+                        mAdapterDataSet.onItemClick(position, v, m);
                     }
 
                     @Override
                     public void onItemLongClick(int position, View v, @Nullable T m) {
-                        adapterDataSet.onItemLongClick(position, v, m);
+                        mAdapterDataSet.onItemLongClick(position, v, m);
                     }
                 });
             }

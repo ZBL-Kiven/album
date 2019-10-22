@@ -1,1 +1,18 @@
-<manifest package="com.zj.album"/>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.zj.album">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application>
+        <activity
+                android:name="com.zj.album.ui.photograph.PhotoGraphActivity"
+                android:launchMode="singleTask" />
+        <activity android:name="com.zj.album.ui.folders.FolderActivity" />
+        <activity android:name="com.zj.album.ui.preview.VideoPreviewActivity" />
+        <activity android:name="com.zj.album.ui.preview.PreviewImageActivity" />
+
+    </application>
+
+</manifest>
