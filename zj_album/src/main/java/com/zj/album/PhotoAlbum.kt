@@ -61,12 +61,12 @@ object PhotoAlbum {
     }
 
     internal fun toastLong(sid: Int, vararg args: Any) {
-        val str = getString(sid, args)
+        val str = getString(sid, *args)
         Toast.makeText(appContext, str, Toast.LENGTH_LONG).show()
     }
 
     internal fun toastShort(sid: Int, vararg args: Any) {
-        val str = getString(sid, args)
+        val str = getString(sid, *args)
         Toast.makeText(appContext, str, Toast.LENGTH_SHORT).show()
     }
 

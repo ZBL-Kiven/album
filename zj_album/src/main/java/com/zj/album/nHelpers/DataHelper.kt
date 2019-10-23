@@ -125,6 +125,7 @@ object DataProxy : DataHelper() {
         }
 
         val canSelect = when {
+            !select -> true
             PhotoAlbum.simultaneousSelection -> isNotMaxSized // not supported simultaneous selection
             selectedCount <= 0 -> true
             isNotMaxSized -> {

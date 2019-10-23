@@ -15,6 +15,8 @@ import com.zj.album.nModule.FileInfo
 import com.zj.album.ui.base.BaseActivity
 import com.zj.album.ui.base.list.listeners.ItemClickListener
 import com.zj.album.ui.folders.FolderActivity
+import com.zj.album.ui.preview.PreviewImageActivity
+import com.zj.album.ui.preview.VideoPreviewActivity
 import com.zj.album.ui.views.BaseLoadingView
 
 internal class PhotoGraphActivity : BaseActivity() {
@@ -72,9 +74,9 @@ internal class PhotoGraphActivity : BaseActivity() {
             override fun onItemClick(position: Int, v: View?, m: FileInfo?) {
                 m?.let { data ->
                     if (data.isVideo) {
-
+                        VideoPreviewActivity.start(this@PhotoGraphActivity, data.path, 200)
                     } else {
-
+                        startActivity(Intent(this@PhotoGraphActivity, PreviewImageActivity::class.java))
                     }
                 }
             }
@@ -98,6 +100,14 @@ internal class PhotoGraphActivity : BaseActivity() {
         vOk?.isEnabled = count > 0
         val s = if (count <= 0) "" else "($count)"
         vOk?.text = "${PhotoAlbum.getString(R.string.pg_str_send)}$s"
+        photoGraphAdapter?.let {
+            it.notifyItemRangeChanged(0, it.itemCount, "selected")
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cbOriginal?.isChecked = DataStore.isOriginalUsed()
     }
 
     private fun doneAndFinish() {
@@ -105,11 +115,6 @@ internal class PhotoGraphActivity : BaseActivity() {
         intent.putExtra("data", "") //DataStore.getCurSelectedData()
         setResult(Activity.RESULT_OK, intent)
         finish()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        cbOriginal?.isChecked = DataStore.isOriginalUsed()
     }
 
     override fun finish() {

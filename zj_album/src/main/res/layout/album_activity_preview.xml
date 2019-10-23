@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000">
+
+    <com.zj.album.widget.JViewPager
+            android:id="@+id/dl_preview_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    <RelativeLayout
+            android:id="@+id/rl_preview_top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/darkBlueGrey"
+            android:clickable="true"
+            android:focusable="true">
+
+        <TextView
+                android:id="@+id/dl_preview_ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="12dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:text="@string/pg_str_cacel"
+                android:textColor="@color/white" />
+
+        <FrameLayout
+                android:id="@+id/dl_preview_fl_selected"
+                android:layout_width="@dimen/toolbar_height"
+                android:layout_height="@dimen/toolbar_height"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+
+            <TextView
+                    android:id="@+id/dl_preview_tv_selected"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_choose_local_media"
+                    android:gravity="center"
+                    android:textColor="@color/darkBlueGrey"
+                    android:textSize="@dimen/medium_text_size" />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/rl_preview_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#3000"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_select_img"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                tools:listitem="@layout/album_item_preview" />
+
+        <FrameLayout
+                android:id="@+id/cl_bottom_tab"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@color/paleBlue">
+
+            <CheckBox
+                    android:id="@+id/sendFullImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/pg_str_full_images_tip"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                    android:id="@+id/photo_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:gravity="center"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center"
+                        android:text="@string/pg_str_send"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium_text_size" />
+
+                <TextView
+                        android:id="@+id/tv_select_count"
+                        android:layout_width="@dimen/recent_msg_count_min_height"
+                        android:layout_height="@dimen/recent_msg_count_min_height"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/recent_avatar_padding"
+                        android:background="@drawable/m_album_bg_blue_dot"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/x_small_text_size" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -58,15 +58,6 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
                 if (!file.exists() || file.isDirectory || !file.canRead() || file.length() <= fileMinSize) {
                     continue
                 }
-                //                fun isIgnoreCase(path: String): Boolean {
-                //                    ignorePaths?.forEach {
-                //                        if (it.contains(path) || path.contains(it)) {
-                //                            return true
-                //                        }
-                //                    }
-                //                    return false
-                //                }
-                //                if (!isIgnoreCase(file.path))
                 allInfo.add(media)
             }
             getFoldersData(allInfo)

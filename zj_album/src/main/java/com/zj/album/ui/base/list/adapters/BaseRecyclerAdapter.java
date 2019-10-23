@@ -17,7 +17,7 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder, T> extends 
         data = new ArrayList<>();
     }
 
-    public ItemClickListener onClickListener;
+    public ItemClickListener<T> onClickListener;
 
     public void setOnItemClickListener(ItemClickListener<T> listener) {
         this.onClickListener = listener;

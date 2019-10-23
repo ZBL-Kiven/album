@@ -2,7 +2,9 @@ package com.zbl.album
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.zj.album.PhotoAlbum
+import com.zj.album.ui.preview.VideoPreviewActivity
 
 class MainActivity : AppCompatActivity() {
 
