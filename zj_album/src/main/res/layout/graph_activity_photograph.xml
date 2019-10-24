@@ -62,7 +62,6 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:overScrollMode="never"
-                    android:background="#acc"
                     app:layoutManager="android.support.v7.widget.GridLayoutManager"
                     app:spanCount="3"
                     tools:listitem="@layout/graph_item_selected"/>

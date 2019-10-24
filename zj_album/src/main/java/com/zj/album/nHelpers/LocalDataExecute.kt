@@ -35,7 +35,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
         try {
             val resolver = PhotoAlbum.getContentResolver()
             val selectionAndArgs = getSelectionAndArgs(enumSet)
-            mCursor = resolver?.query(searchUri, projection, selectionAndArgs.first, selectionAndArgs.second, sortOrder + getRange(0, 0))
+            mCursor = resolver?.query(searchUri, projection, selectionAndArgs, null, sortOrder + getRange(0, 0))
             if (mCursor == null) {
                 return null
             }
@@ -106,9 +106,8 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
         return builder.toString()
     }
 
-    private fun getSelectionAndArgs(enumSet: EnumSet<MimeType>?): Pair<String, Array<String>> {
+    private fun getSelectionAndArgs(enumSet: EnumSet<MimeType>?): String {
         val selection = StringBuilder()
-        val args = ArrayList<String>()
         selection.append("(")
         val enumSets = mutableSetOf<Int>()
         enumSet?.forEach {
@@ -118,41 +117,36 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
             if (index > 0) selection.append("OR ")
             when (it) {
                 TYPE_IMG -> {
-                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=? ")
-                    args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
+                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE} ")
                 }
                 TYPE_VIDEO -> {
-                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=? ")
-                    args.add(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
+                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO} ")
                 }
             }
         }
         selection.append(") ")
         if (!enumSet.isNullOrEmpty()) {
             selection.append("AND (")
-            var index = 1
-            for (mime in enumSet) {
-                selection.append(MediaStore.Files.FileColumns.MIME_TYPE).append("=? ")
-                if (index < enumSet.size) {
+            enumSet.forEachIndexed { index, mimeType ->
+                selection.append(MediaStore.Files.FileColumns.MIME_TYPE).append("=\'${mimeType.mMimeTypeName}\' ")
+                if (index < enumSet.size - 1) {
                     selection.append("OR ")
                 }
-                index++
-                args.add(mime.mMimeTypeName)
             }
             selection.append(") ")
             ignorePaths?.let {
+                if (it.isEmpty()) return@let
                 selection.append("AND (")
                 it.forEachIndexed { index, ignore ->
-                    @Suppress("DEPRECATION") selection.append(MediaStore.Files.FileColumns.DATA).append(" NOT LIKE ? ")
+                    @Suppress("DEPRECATION") selection.append(MediaStore.Files.FileColumns.DATA).append(" NOT LIKE \'%$ignore%\' ")
                     if (index < it.lastIndex) {
                         selection.append("AND ")
                     }
-                    args.add("%$ignore%")
                 }
                 selection.append(") ")
             }
         }
         log(selection.toString())
-        return Pair(selection.toString(), args.toTypedArray())
+        return selection.toString()
     }
 }

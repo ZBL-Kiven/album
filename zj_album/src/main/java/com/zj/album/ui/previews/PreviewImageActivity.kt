@@ -1,4 +1,4 @@
-package com.zj.album.ui.preview
+package com.zj.album.ui.previews
 
 import android.app.Activity
 import android.support.v4.view.animation.FastOutSlowInInterpolator
@@ -12,6 +12,7 @@ import com.zj.album.nHelpers.DataStore
 import com.zj.album.nModule.FileInfo
 import com.zj.album.ui.base.BaseActivity
 import com.zj.album.ui.base.list.listeners.ItemClickListener
+import com.zj.album.ui.preview.ZoomPageTransformer
 import com.zj.album.ui.preview.adapter.LandscapeAdapter
 import com.zj.album.ui.preview.adapter.PreviewImageAdapter
 import com.zj.album.ui.preview.listener.FullPreviewListener
@@ -39,7 +40,7 @@ internal class PreviewImageActivity : BaseActivity(), FullPreviewListener {
     }
 
     override fun getContentView(): Int {
-        return R.layout.album_activity_preview
+        return R.layout.preview_activity
     }
 
     override fun initView() {
@@ -157,7 +158,7 @@ internal class PreviewImageActivity : BaseActivity(), FullPreviewListener {
     }
 
     /**
-     * 全屏
+     * full screen
      */
     override fun onFull() {
         if (mIsFullPreview) {

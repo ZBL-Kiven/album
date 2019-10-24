@@ -2,6 +2,10 @@
     <string name="loading_no_data">沒有找到可用圖片</string>
     <string name="loading_progress">載入中，請稍候…</string>
     <string name="loading_refresh">轻触屏幕以重試</string>
+    <string name="loading_video_progress">視頻載入中，請稍候…</string>
+    <string name="loading_video_error">視頻載入失敗</string>
+    <string name="loading_video_error_tint">請檢查文件是否損壞或暫不支持該格式</string>
+
 
     <string name="app_name">zj_album</string>
     <string name="pg_str_all">全部</string>
@@ -11,18 +15,18 @@
     <string name="pg_str_picture_count">共 %1$d 個文件</string>
     <string name="pg_str_preview">預覽</string>
     <string name="pg_str_send">完成</string>
-    <string name="pg_str_cacel">取消</string>
     <string name="pg_str_full_images_tip">原圖</string>
     <string name="pg_str_ok">確定</string>
     <string name="pg_str_images_choose_tip_message">不能同時選取圖片和視頻文件</string>
     <string name="pg_str_video_choose_tip_message">視頻只能選擇一個</string>
     <string name="pg_str_data_error">数据异常，请重新选择</string>
     <string name="pg_str_update_error">信息更新失败，点击重试</string>
-    <string name="pg_str_loading_waiting">载入中，请稍候…</string>
     <string name="pg_str_please_select_at_least_one_image">请至少选择一张图片</string>
     <string name="pg_str_at_best">最多只能选择 %1$d 张圖片</string>
     <string name="pg_str_the_album_failed_to_read">相册读取失败</string>
     <string name="pg_str_no_picture">没有找到可以展示的图片</string>
 
+
+    <string name="pv_str_default_time">00:00</string>
 
 </resources>

@@ -24,13 +24,13 @@ class PhotoGraphAdapter : BaseAdapter<FileInfo>(R.layout.graph_item_selected) {
         val isVideo = data.isVideo
         val simultaneousSelection = PhotoAlbum.simultaneousSelection
         val tvNum = holder.getView<TextView>(R.id.graph_item_tv_num)
-        tvNum.setBackgroundResource(if (isVideo && simultaneousSelection) R.drawable.bg_choose_local_video else R.drawable.bg_choose_local_media)
+        tvNum.setBackgroundResource(if (isVideo && !simultaneousSelection) R.drawable.bg_choose_local_video else R.drawable.bg_choose_local_media)
         val isSelected = data.isSelected()
         tvNum.isSelected = isSelected
         val index = DataStore.indexOfSelected(data.path)
 
         if (!isVideo || simultaneousSelection) {
-            tvNum.text = "${if (index >= 0) index + 1 else ""}"
+            tvNum.text = if (index >= 0) "${(index + 1)}" else ""
         }
         val flMark = holder.getView<View>(R.id.graph_item_fl_selected)
         if (payloads?.firstOrNull()?.toString() == "$position") {

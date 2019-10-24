@@ -72,7 +72,7 @@ public class PreviewImageAdapter extends PagerAdapter implements ImageViewTouch.
         int cachePosition = getCachePosition(position);
         View view = getItemView(cachePosition);
         if (view == null) {
-            view = mInflater.inflate(R.layout.album_item_preview_full, container, false);
+            view = mInflater.inflate(R.layout.preview_photo_full_item, container, false);
             imageViews.put(cachePosition, view);
         } else {
             container.removeView(view);

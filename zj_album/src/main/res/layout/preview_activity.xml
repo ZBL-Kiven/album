@@ -27,7 +27,7 @@
                 android:padding="12dp"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:text="@string/pg_str_cacel"
+                android:text="@string/pg_str_cancel"
                 android:textColor="@color/white" />
 
         <FrameLayout
@@ -66,7 +66,7 @@
                 android:layout_height="80dp"
                 android:overScrollMode="never"
                 android:scrollbars="none"
-                tools:listitem="@layout/album_item_preview" />
+                tools:listitem="@layout/preview_photo_selected_item" />
 
         <FrameLayout
                 android:id="@+id/cl_bottom_tab"
@@ -109,7 +109,6 @@
                         android:layout_height="@dimen/recent_msg_count_min_height"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="@dimen/recent_avatar_padding"
-                        android:background="@drawable/m_album_bg_blue_dot"
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="@dimen/x_small_text_size" />

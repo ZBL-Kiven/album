@@ -9,7 +9,6 @@ import com.zj.album.imageloader.impl.GlideLoader;
 import com.zj.album.nModule.FileInfo;
 import com.zj.album.ui.base.list.adapters.BaseAdapter;
 import com.zj.album.ui.base.list.holders.BaseViewHolder;
-import com.zj.album.widget.image.ImageViewTouch;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +23,7 @@ public class LandscapeAdapter extends BaseAdapter<FileInfo> {
     private LayoutInflater mInflater;
 
     public LandscapeAdapter() {
-        super(R.layout.album_item_preview);
+        super(R.layout.preview_photo_selected_item);
     }
 
     @Override
