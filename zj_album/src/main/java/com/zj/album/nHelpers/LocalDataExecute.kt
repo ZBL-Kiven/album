@@ -26,7 +26,6 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
     private val projection = arrayOf(MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DATE_MODIFIED, MediaStore.Files.FileColumns.MIME_TYPE, MediaStore.Files.FileColumns.SIZE, MediaStore.Video.VideoColumns.DURATION)
 
     override fun run() {
-        Thread.sleep(3000)
         onDataGot(running())
     }
 

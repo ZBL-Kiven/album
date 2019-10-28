@@ -39,6 +39,15 @@ class ExoPlayer(private val event: PlayerEvent?) {
 
     private val isPrepared: Boolean; get() = curState.pri >= State.PREPARE.pri
 
+
+    fun isStop(): Boolean {
+        return curState.pri < State.PREPARE.pri
+    }
+
+    fun isResumed(): Boolean {
+        return curState.pri == State.RESUME.pri
+    }
+
     private var onPaused = true
     private var onResumed = false
 

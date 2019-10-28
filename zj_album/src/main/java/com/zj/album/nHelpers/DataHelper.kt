@@ -208,4 +208,9 @@ object DataStore : DataHelper() {
     fun isOriginalUsed(): Boolean {
         return useOriginal
     }
+
+    @JvmStatic
+    fun curSelectedCount(): Int {
+        return getSelectedCount()
+    }
 }

@@ -12,6 +12,7 @@ import com.zj.album.R
 import com.zj.album.nutils.getDuration
 import com.zj.album.ui.views.BaseLoadingView
 
+@Suppress("unused")
 class VideoView : FrameLayout, PlayerEvent {
 
     constructor(context: Context) : this(context, null, 0)
@@ -32,11 +33,12 @@ class VideoView : FrameLayout, PlayerEvent {
     private var bottomToolsBar: View? = null
     private var videoPlayerView: PlayerView? = null
     private var isTickingSeekBarFromUser: Boolean = false
+    private var autoPlay = false
 
     private var exoPlayer: ExoPlayer? = null
 
     private fun init() {
-        val root = View.inflate(context, R.layout.preview_item_video, this)
+        val root = View.inflate(context, R.layout.preview_video, this)
         videoPlayerView = root.findViewById(R.id.video_preview_PlayerView)
         vPlay = root.findViewById(R.id.video_preview_iv_play)
         flPlay = root.findViewById(R.id.video_preview_fl_play)
@@ -52,6 +54,13 @@ class VideoView : FrameLayout, PlayerEvent {
     fun setData(url: String) {
         exoPlayer?.initData(url)
         onSeekChanged(0, false)
+    }
+
+    fun autoPlay(auto: Boolean) {
+        vPlay?.clearAnimation()
+        vPlay?.visibility = View.GONE
+        loadingView?.visibility = View.GONE
+        this.autoPlay = auto
     }
 
     private fun initListener() {
@@ -84,7 +93,7 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     override fun onLoading(path: String) {
-        loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
+        if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
         seekBar?.isEnabled = false
     }
 
@@ -93,9 +102,10 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     override fun onPrepare(path: String) {
-        loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
+        if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
         seekBar?.isEnabled = true
         tvEnd?.text = getDuration(exoPlayer?.getDuration() ?: 0)
+        if (autoPlay) exoPlayer?.resume()
     }
 
     override fun onPlay(path: String) {
@@ -156,11 +166,23 @@ class VideoView : FrameLayout, PlayerEvent {
         }
     }
 
-    fun onDestroy() {
-        onSeekChanged(0, false)
+    fun pause() {
+        exoPlayer?.pause()
+    }
+
+    fun isStop(): Boolean {
+        return exoPlayer?.isStop() ?: true
+    }
+
+    fun isResume(): Boolean {
+        return exoPlayer?.isResumed() ?: false
+    }
+
+
+    fun release() {
+        exoPlayer?.release()
         videoPlayerView?.player = null
         flPlay?.isSelected = false
         seekBar?.isEnabled = false
-        exoPlayer?.release()
     }
 }

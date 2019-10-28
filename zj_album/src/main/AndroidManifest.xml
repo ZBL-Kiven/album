@@ -11,7 +11,7 @@
                 android:launchMode="singleTask"/>
         <activity android:name="com.zj.album.ui.folders.FolderActivity"/>
         <activity android:name="com.zj.album.ui.preview.VideoPreviewActivity"/>
-        <activity android:name="com.zj.album.ui.previews.PreviewImageActivity"/>
+        <activity android:name="com.zj.album.ui.preview.PreviewActivity"/>
 
     </application>
 

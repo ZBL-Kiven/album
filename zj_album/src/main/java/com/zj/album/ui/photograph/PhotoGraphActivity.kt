@@ -15,7 +15,7 @@ import com.zj.album.nModule.FileInfo
 import com.zj.album.ui.base.BaseActivity
 import com.zj.album.ui.base.list.listeners.ItemClickListener
 import com.zj.album.ui.folders.FolderActivity
-import com.zj.album.ui.previews.PreviewImageActivity
+import com.zj.album.ui.preview.PreviewActivity
 import com.zj.album.ui.views.BaseLoadingView
 
 internal class PhotoGraphActivity : BaseActivity() {
@@ -72,7 +72,7 @@ internal class PhotoGraphActivity : BaseActivity() {
 
             override fun onItemClick(position: Int, v: View?, m: FileInfo?) {
                 m?.let { data ->
-                    startActivity(Intent(this@PhotoGraphActivity, PreviewImageActivity::class.java))
+                    PreviewActivity.start(this@PhotoGraphActivity, data)
                 }
             }
         })

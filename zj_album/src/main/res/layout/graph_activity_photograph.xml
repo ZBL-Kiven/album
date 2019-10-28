@@ -5,15 +5,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"
+        android:background="@color/darkBlueGrey"
         android:orientation="vertical">
 
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height"
             android:paddingStart="@dimen/dp_16"
-            android:paddingEnd="@dimen/dp_16"
-            android:background="@color/darkBlueGrey">
+            android:paddingEnd="@dimen/dp_16">
 
         <TextView
                 android:id="@+id/photo_tv_cancel"
@@ -65,6 +64,7 @@
                     app:layoutManager="android.support.v7.widget.GridLayoutManager"
                     app:spanCount="3"
                     tools:listitem="@layout/graph_item_selected"/>
+
             <com.zj.album.ui.views.BaseLoadingView
                     android:id="@+id/photo_loading"
                     android:layout_width="match_parent"

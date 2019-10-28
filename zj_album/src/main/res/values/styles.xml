@@ -16,6 +16,14 @@
         <attr name="refreshEnable" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="SquareImageView">
+        <attr name="orientation" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
+        <attr name="ratio" format="fraction"/>
+    </declare-styleable>
+
     <style name="mProgress_circle">
         <item name="android:minWidth">20dp</item>
         <item name="android:minHeight">20dp</item>
@@ -31,5 +39,6 @@
         <item name="android:minHeight">3dp</item>
         <item name="android:thumb">@drawable/video_thumb</item>
     </style>
+
 
 </resources>
