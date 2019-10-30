@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ZJJ on 2018/4/4.
+ * @author ZJJ on 2018/4/4.
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder, T> extends RecyclerView.Adapter<VH> {

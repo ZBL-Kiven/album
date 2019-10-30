@@ -1,7 +1,7 @@
 package com.zj.album.ui.preview.images.transformer;
 
 /**
- * Created by ZJJ on 2019.10.24
+ * @author ZJJ on 2019.10.24
  */
 public enum TransitionEffect {
     Default,

@@ -1,6 +1,5 @@
 package com.zj.album.ui.photograph
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -18,6 +17,9 @@ import com.zj.album.ui.folders.FolderActivity
 import com.zj.album.ui.preview.PreviewActivity
 import com.zj.album.ui.views.BaseLoadingView
 
+/**
+ * @author ZJJ on 2019.10.24
+ * */
 internal class PhotoGraphActivity : BaseActivity() {
 
     override fun getContentView(): Int {
@@ -90,11 +92,10 @@ internal class PhotoGraphActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onSelectedStateChange(count: Int) {
         vOk?.isEnabled = count > 0
         val s = if (count <= 0) "" else "($count)"
-        vOk?.text = "${PhotoAlbum.getString(R.string.pg_str_send)}$s"
+        vOk?.text = getString(R.string.pg_str_send).plus(s)
         photoGraphAdapter?.let {
             it.notifyItemRangeChanged(0, it.itemCount, "selected")
         }

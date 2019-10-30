@@ -1,33 +1,27 @@
 package com.zj.album.imageloader;
 
-import android.net.Uri;
 import android.widget.ImageView;
 
-/**
- * 图片加载引擎
- *
- * @author yangji
- */
 public interface ImageLoader {
 
     /**
-     * 加载缩略图
+     * loading thumbnail
      *
-     * @param imageView       需要加载的图片
-     * @param resize          图片大小
-     * @param defaultDrawable 默认展示图片
-     * @param path             图片URL
+     * @param imageView       the image view
+     * @param resize          resize to a square bitmap
+     * @param defaultDrawable the default if loading or fail
+     * @param path            resource url
      */
     void loadThumbnail(ImageView imageView, int resize, int defaultDrawable, String path);
 
 
     /**
-     * 加载全图
+     * loading a full image
      *
-     * @param imageView 控件
-     * @param resizeW   宽度
-     * @param resizeH   高度
-     * @param path       图片地址
+     * @param imageView the image view
+     * @param resizeW   resize bitmap width
+     * @param resizeH   resize bitmap height
+     * @param path      resource url
      */
     void loadImage(ImageView imageView, int resizeW, int resizeH, String path);
 }

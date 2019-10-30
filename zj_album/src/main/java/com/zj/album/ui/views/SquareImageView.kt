@@ -6,7 +6,10 @@ import android.util.AttributeSet
 import android.widget.ImageView
 import com.zj.album.R
 
-class SquareImageView : ImageView {
+/**
+ * @author ZJJ on 2019.10.24
+ * */
+internal class SquareImageView : ImageView {
 
     private var orientation: Int = 0
     private var ratio: Float = 1.0f

@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 /**
- * Created by ZJJ on 2018/4/4.
+ * @author ZJJ on 2018/4/4.
  */
 @SuppressWarnings("unused")
 public abstract class ItemClickListener<T> {

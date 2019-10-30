@@ -3,7 +3,7 @@ package com.zj.album.ui.preview.images.transformer;
 import android.view.View;
 
 /**
- * Created by ZJJ on 2019.10.24
+ * @author ZJJ on 2019.10.24
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class DepthPageTransformer extends PageTransformer {

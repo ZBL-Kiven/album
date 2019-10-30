@@ -2,8 +2,8 @@ package com.zj.album.nModule
 
 import java.util.*
 
-/*
-* Created by ZJJ on 2019/10/16
+/**
+* @author ZJJ on 2019.10.24
 * */
 data class FolderInfo(
     val isAll: Boolean

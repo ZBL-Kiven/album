@@ -12,7 +12,10 @@ import com.zj.album.R
 import com.zj.album.nutils.getDuration
 import com.zj.album.ui.views.BaseLoadingView
 
-@Suppress("unused")
+/**
+* @author ZJJ on 2019.10.24
+* */
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class VideoView : FrameLayout, PlayerEvent {
 
     constructor(context: Context) : this(context, null, 0)
@@ -25,7 +28,6 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     private var vPlay: View? = null
-    private var flPlay: View? = null
     private var tvStart: TextView? = null
     private var tvEnd: TextView? = null
     private var seekBar: SeekBar? = null
@@ -34,14 +36,15 @@ class VideoView : FrameLayout, PlayerEvent {
     private var videoPlayerView: PlayerView? = null
     private var isTickingSeekBarFromUser: Boolean = false
     private var autoPlay = false
+    private var seekProgressInterval: Long = 16
 
+    private var simpleVideoEventListener: SimpleVideoEventListener? = null
     private var exoPlayer: ExoPlayer? = null
 
     private fun init() {
         val root = View.inflate(context, R.layout.preview_video, this)
         videoPlayerView = root.findViewById(R.id.video_preview_PlayerView)
         vPlay = root.findViewById(R.id.video_preview_iv_play)
-        flPlay = root.findViewById(R.id.video_preview_fl_play)
         tvStart = root.findViewById(R.id.video_preview_tv_start)
         tvEnd = root.findViewById(R.id.video_preview_tv_end)
         loadingView = root.findViewById(R.id.video_preview_loading)
@@ -51,20 +54,8 @@ class VideoView : FrameLayout, PlayerEvent {
         exoPlayer = ExoPlayer(this)
     }
 
-    fun setData(url: String) {
-        exoPlayer?.initData(url)
-        onSeekChanged(0, false)
-    }
-
-    fun autoPlay(auto: Boolean) {
-        vPlay?.clearAnimation()
-        vPlay?.visibility = View.GONE
-        loadingView?.visibility = View.GONE
-        this.autoPlay = auto
-    }
-
     private fun initListener() {
-        flPlay?.setOnClickListener {
+        vPlay?.setOnClickListener {
             it.isEnabled = false
             if (!it.isSelected) {
                 exoPlayer?.resume()
@@ -73,7 +64,9 @@ class VideoView : FrameLayout, PlayerEvent {
             }
             it.isEnabled = true
         }
+    }
 
+    private fun initSeekBar() {
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 if (isTickingSeekBarFromUser && p2) {
@@ -93,63 +86,79 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     override fun onLoading(path: String) {
-        if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
         seekBar?.isEnabled = false
+        if (simpleVideoEventListener?.onLoading(path) == false) {
+            if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
+        }
     }
 
-    fun onFullScreenPlay(isFull: Boolean) {
-        bottomToolsBar?.visibility = if (isFull) VISIBLE else GONE
-    }
-
-    override fun onPrepare(path: String) {
-        if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
+    override fun onPrepare(path: String, videoSize: Long) {
         seekBar?.isEnabled = true
-        tvEnd?.text = getDuration(exoPlayer?.getDuration() ?: 0)
-        if (autoPlay) exoPlayer?.resume()
+        if (simpleVideoEventListener?.onPrepare(path, videoSize) == false) {
+            if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
+            tvEnd?.text = getDuration(videoSize)
+            if (autoPlay) exoPlayer?.resume()
+        }
     }
 
     override fun onPlay(path: String) {
-        flPlay?.isSelected = true
         seekBar?.isSelected = true
-        isTickingSeekBarFromUser = false
-        showOrHidePlayBtn(false)
+        if (simpleVideoEventListener?.onPlay(path) == false) {
+            isTickingSeekBarFromUser = false
+            showOrHidePlayBtn(false)
+        }
     }
 
     override fun onPause(path: String) {
-        flPlay?.isSelected = false
         seekBar?.isSelected = false
-        showOrHidePlayBtn(true)
+        if (simpleVideoEventListener?.onPause(path) == false) {
+            showOrHidePlayBtn(true)
+        }
+    }
+
+    override fun onStop(path: String) {
+        seekBar?.isEnabled = false
+        seekBar?.isSelected = false
+        onSeekChanged(0, false, exoPlayer?.getDuration() ?: 0)
+        if (simpleVideoEventListener?.onStop(path) == false) {
+            showOrHidePlayBtn(true)
+        }
     }
 
     override fun onCompleted(path: String) {
-        flPlay?.isSelected = false
         seekBar?.isSelected = false
-        showOrHidePlayBtn(true)
-        onSeekChanged(0, false)
+        onSeekChanged(0, false, exoPlayer?.getDuration() ?: 0)
+        if (simpleVideoEventListener?.onCompleted(path) == false) {
+            showOrHidePlayBtn(true)
+        }
     }
 
-    override fun onSeekChanged(seek: Int, fromUser: Boolean) {
+    override fun onSeekChanged(seek: Int, fromUser: Boolean, videoSize: Long) {
         if (!isTickingSeekBarFromUser && !fromUser) {
             seekBar?.progress = seek
         }
-        val curDuration = exoPlayer?.getDuration() ?: 0
-        val startProgress = curDuration / 100f * seek
-        tvStart?.text = getDuration(startProgress.toLong())
+        if (simpleVideoEventListener?.onSeekChanged(seek, fromUser, videoSize) == false) {
+            val startProgress = videoSize / 100f * seek
+            tvStart?.text = getDuration(startProgress.toLong())
+        }
     }
 
     override fun onError(e: Exception?) {
-        loadingView?.setMode(BaseLoadingView.DisplayMode.noData)
+        if (simpleVideoEventListener?.onError(e) == false) {
+            loadingView?.setMode(BaseLoadingView.DisplayMode.noData)
+        }
     }
 
     override fun getPlayerView(): PlayerView? {
         return videoPlayerView
     }
 
-    override fun getProgressPrevios(): Long {
-        return 16
+    override fun getProgressInterval(): Long {
+        return seekProgressInterval
     }
 
     private fun showOrHidePlayBtn(isShow: Boolean) {
+        vPlay?.isSelected = !isShow
         vPlay?.clearAnimation()
         if (isShow) {
             if (vPlay?.visibility == View.VISIBLE) return
@@ -166,8 +175,59 @@ class VideoView : FrameLayout, PlayerEvent {
         }
     }
 
+    fun setData(url: String) {
+        exoPlayer?.stop()
+        exoPlayer?.initData(url)
+        onSeekChanged(0, false, 0)
+    }
+
+    fun autoPlay(auto: Boolean) {
+        vPlay?.clearAnimation()
+        vPlay?.visibility = View.GONE
+        loadingView?.visibility = View.GONE
+        this.autoPlay = auto
+    }
+
+    fun setSeekInterval(interval: Long) {
+        this.seekProgressInterval = interval
+    }
+
+    fun setEventListener(listener: SimpleVideoEventListener) {
+        this.simpleVideoEventListener = listener
+    }
+
+    fun overrideSeekBar(seekBar: SeekBar?) {
+        this.seekBar?.setOnSeekBarChangeListener(null)
+        this.seekBar = seekBar
+        initSeekBar()
+    }
+
+    fun getPath(): String {
+        return exoPlayer?.currentPlayPath() ?: ""
+    }
+
+    fun onFullScreenPlay(isFull: Boolean) {
+        bottomToolsBar?.visibility = if (isFull) VISIBLE else GONE
+    }
+
+    fun resume(path: String) {
+        if (path == getPath()) {
+            exoPlayer?.resume()
+        } else {
+            setData(path)
+        }
+    }
+
     fun pause() {
         exoPlayer?.pause()
+    }
+
+    fun stop() {
+        exoPlayer?.stop()
+    }
+
+    fun isPause(): Boolean {
+        return exoPlayer?.isPause() ?: true
     }
 
     fun isStop(): Boolean {
@@ -178,11 +238,9 @@ class VideoView : FrameLayout, PlayerEvent {
         return exoPlayer?.isResumed() ?: false
     }
 
-
     fun release() {
-        exoPlayer?.release()
-        videoPlayerView?.player = null
-        flPlay?.isSelected = false
         seekBar?.isEnabled = false
+        videoPlayerView?.player = null
+        exoPlayer?.release()
     }
 }

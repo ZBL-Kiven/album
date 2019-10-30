@@ -13,26 +13,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    <LinearLayout
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-        <FrameLayout
-                android:id="@+id/video_preview_fl_play"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-            <ImageView
-                    android:id="@+id/video_preview_iv_play"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:padding="20dp"
-                    android:background="@drawable/video_btn_bg"
-                    android:src="@drawable/video_btn_play"
-                    tools:ignore="ContentDescription"/>
-        </FrameLayout>
+        <ImageView
+                android:id="@+id/video_preview_iv_play"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:padding="20dp"
+                android:background="@drawable/video_btn_bg"
+                android:src="@drawable/video_btn_play"
+                tools:ignore="ContentDescription"/>
 
         <LinearLayout
                 android:id="@+id/video_preview__tools_bar"
@@ -67,12 +60,13 @@
                     android:layout_height="wrap_content"/>
 
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 
     <com.zj.album.ui.views.BaseLoadingView
             android:id="@+id/video_preview_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:loadingRes="@drawable/loading_progressbar"
             app:noDataRes="@mipmap/video_loading_fail"
             app:backgroundFill="@color/loading_color_background"

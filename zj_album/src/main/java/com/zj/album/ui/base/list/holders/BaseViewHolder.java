@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.zj.album.ui.base.list.adapters.BaseRecyclerAdapter;
 
 /**
- * Created by ZJJ on 2018/4/4.
+ * @author ZJJ on 2018/4/4.
  */
 
-@SuppressWarnings({"unused", "unchecked", "WeakerAccess"})
+@SuppressWarnings({"unused", "unchecked"})
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private SparseArray<View> parseArray;

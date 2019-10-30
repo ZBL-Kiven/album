@@ -8,8 +8,8 @@ import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.runWithTryCatch
 import java.io.Serializable
 
-/*
-* Created by ZJJ on 2019/10/16
+/**
+* @author ZJJ on 2019.10.24
 * */
 data class FileInfo(val path: String, val mimeType: String, var size: Long) : Serializable {
     var lastModifyTs: Long = 0; private set

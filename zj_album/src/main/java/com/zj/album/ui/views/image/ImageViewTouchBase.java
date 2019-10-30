@@ -21,8 +21,6 @@ import com.zj.album.ui.views.image.utils.IDisposable;
 
 /**
  * Base View to manage image zoom/scroll/pinch operations
- *
- * @author alessandro
  */
 @SuppressWarnings("unused")
 public abstract class ImageViewTouchBase extends AppCompatImageView implements IDisposable {

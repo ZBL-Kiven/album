@@ -2,11 +2,12 @@ package com.zj.album.ui.preview.images
 
 import android.view.View
 
+/**
+* @author ZJJ on 2019.10.24
+* */
 interface OnPageChange<T : Any?> {
 
-    fun onChange(data: T?, view: View)
+    fun onBindData(data: T?, view: View)
 
-    fun onDisplayChange(dataPosition: Int)
-
-    fun onFocusChange(v: View, data: T?)
+    fun onFocusChange(v: View, data: T?, focus: Boolean)
 }

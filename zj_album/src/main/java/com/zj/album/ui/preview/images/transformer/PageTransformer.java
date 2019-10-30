@@ -6,7 +6,7 @@ import android.view.View;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by ZJJ on 2019.10.24
+ * @author ZJJ on 2019.10.24
  */
 public abstract class PageTransformer implements ViewPager.PageTransformer {
 

@@ -16,6 +16,9 @@ import com.zj.album.ui.base.list.holders.BaseViewHolder
 import com.zj.album.ui.base.list.views.EmptyRecyclerView
 import com.zj.album.ui.views.BaseLoadingView
 
+/**
+ * @author ZJJ on 2019.10.24
+ * */
 internal class FolderActivity : BaseActivity() {
 
     private var isStopHandleData: Boolean = false
@@ -53,28 +56,23 @@ internal class FolderActivity : BaseActivity() {
 
     private fun setData() {
         val recyclerView = findViewById<EmptyRecyclerView<FolderInfo>>(R.id.folder_lv_file)
-        recyclerView.setData(R.layout.folder_item_choose_file, false, DataStore.getFolderData(),
-            object : BaseAdapterDataSet<FolderInfo>() {
-                override fun initData(holder: BaseViewHolder, position: Int, data: FolderInfo, payLoads: List<Any>?) {
-                    holder.getView<View>(R.id.folder_item_select).isSelected =
-                        DataStore.isCurDisplayFolder(data.id)
-                    if (payLoads != null && payLoads.isNotEmpty()) return
-                    holder.setText(R.id.folder_item_tv_name, data.parentName)
-                    holder.setText(
-                        R.id.folder_item_tv_count,
-                        PhotoAlbum.getString(R.string.pg_str_picture_count, data.imageCounts)
-                    )
-                    val iv = holder.getView<ImageView>(R.id.folder_item_iv_img)
-                    GlideLoader().loadThumbnail(iv, iv.measuredWidth, R.mipmap.photo_nodata, data.topImgUri)
-                }
+        recyclerView.setData(R.layout.folder_item_choose_file, false, DataStore.getFolderData(), object : BaseAdapterDataSet<FolderInfo>() {
+            override fun initData(holder: BaseViewHolder, position: Int, data: FolderInfo, payLoads: List<Any>?) {
+                holder.getView<View>(R.id.folder_item_select).isSelected = DataStore.isCurDisplayFolder(data.id)
+                if (payLoads != null && payLoads.isNotEmpty()) return
+                holder.setText(R.id.folder_item_tv_name, data.parentName)
+                holder.setText(R.id.folder_item_tv_count, PhotoAlbum.getString(R.string.pg_str_picture_count, data.imageCounts))
+                val iv = holder.getView<ImageView>(R.id.folder_item_iv_img)
+                GlideLoader().loadThumbnail(iv, iv.measuredWidth, R.mipmap.photo_nodata, data.topImgUri)
+            }
 
-                override fun onItemClick(position: Int, v: View, m: FolderInfo?) {
-                    isStopHandleData = true
-                    DataProxy.setData(m)
-                    val adapter = recyclerView.adapter
-                    adapter?.notifyItemRangeChanged(0, adapter.itemCount, 0)
-                    finish()
-                }
-            })
+            override fun onItemClick(position: Int, v: View, m: FolderInfo?) {
+                isStopHandleData = true
+                DataProxy.setData(m)
+                val adapter = recyclerView.adapter
+                adapter?.notifyItemRangeChanged(0, adapter.itemCount, 0)
+                finish()
+            }
+        })
     }
 }

@@ -18,6 +18,9 @@ import com.zj.album.imageloader.impl.GlideLoader
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.getDuration
 
+/**
+* @author ZJJ on 2019.10.24
+* */
 class PhotoGraphAdapter : BaseAdapter<FileInfo>(R.layout.graph_item_selected) {
 
     override fun initData(holder: BaseViewHolder, position: Int, data: FileInfo, payloads: List<Any>?) {

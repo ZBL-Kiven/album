@@ -4,7 +4,7 @@ import android.view.View;
 
 
 /**
- * Created by ZJJ on 2019.10.24
+ * @author ZJJ on 2019.10.24
  */
 public class StackPageTransformer extends PageTransformer {
 

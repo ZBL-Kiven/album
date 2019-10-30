@@ -15,8 +15,6 @@ import java.io.InputStream;
 /**
  * Fast bitmap drawable. Does not support states. it only
  * support alpha and color matrix
- * @author alessandro
- *
  */
 @SuppressWarnings("unused")
 public class FastBitmapDrawable extends Drawable implements IBitmapDrawable {

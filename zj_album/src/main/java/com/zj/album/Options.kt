@@ -2,6 +2,9 @@ package com.zj.album
 
 import java.util.*
 
+/**
+ * @author ZJJ on 2019.10.24
+ * */
 @Suppress("unused")
 data class Options(internal var req: Int, internal val onStart: (Options) -> Unit) {
     internal var maxSelectSize: Int = Int.MAX_VALUE
@@ -78,17 +81,7 @@ data class Options(internal var req: Int, internal val onStart: (Options) -> Uni
 
         @JvmStatic
         fun ofVideo(): EnumSet<MimeType> {
-            return EnumSet.of(
-                MimeType.MPEG,
-                MimeType.MP4,
-                MimeType.AVI,
-                MimeType.MKV,
-                MimeType.QUICKTIME,
-                MimeType.THREEGPP,
-                MimeType.THREEGPP2,
-                MimeType.TS,
-                MimeType.WEBM
-            )
+            return EnumSet.of(MimeType.MPEG, MimeType.MP4, MimeType.AVI, MimeType.MKV, MimeType.QUICKTIME, MimeType.THREEGPP, MimeType.THREEGPP2, MimeType.TS, MimeType.WEBM)
         }
 
         @JvmStatic

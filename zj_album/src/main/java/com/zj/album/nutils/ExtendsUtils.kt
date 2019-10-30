@@ -10,6 +10,9 @@ import java.io.Serializable
 import java.lang.IllegalArgumentException
 import java.util.*
 
+/**
+* @author ZJJ on 2019.10.24
+* */
 fun <T> runWithTryCatch(block: () -> T?): T? {
     return try {
         block()
@@ -90,7 +93,5 @@ fun getDuration(mediaDuration: Long): String {
     val duration = mediaDuration / 1000
     val minute = duration / 60
     val second = duration % 60
-    return String.format(
-        Locale.getDefault(), "${if (minute < 10) "0%d" else "%d"}:${if (second < 10) "0%d" else "%d"}", minute, second
-    )
+    return String.format(Locale.getDefault(), "${if (minute < 10) "0%d" else "%d"}:${if (second < 10) "0%d" else "%d"}", minute, second)
 }

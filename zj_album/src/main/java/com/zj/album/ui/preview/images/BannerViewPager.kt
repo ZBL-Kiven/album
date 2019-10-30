@@ -8,14 +8,17 @@ import android.view.MotionEvent
 import com.zj.album.ui.preview.images.transformer.PageTransformer.getPageTransformer
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 
-@Suppress("unused")
+/**
+* @author ZJJ on 2019.10.24
+* */
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class BannerViewPager<T : Any?> @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ViewPager(context, attrs) {
     private var mAllowUserScrollable: () -> Boolean = { true }
-    private val maxGCSize = 3
     private var pageAdapter: PageAdapter<T>? = null
+    private var isLocked = false
 
     fun init(overScrollMode: Int, mTransitionEffect: TransitionEffect, onPageChange: OnPageChange<T>) {
-        PageAdapter(context, maxGCSize, onPageChange).let {
+        PageAdapter(context, onPageChange).let {
             pageAdapter = it
             adapter = it
             addOnPageChangeListener(it)
@@ -29,6 +32,9 @@ class BannerViewPager<T : Any?> @JvmOverloads constructor(context: Context, attr
         pageAdapter?.setData(resId, data, curItem)
         currentItem = ((adapter?.count) ?: 0) / 2
         pageAdapter?.notifyDataSetChanged()
+        if (data.isNullOrEmpty() || data.size == 1) {
+            mAllowUserScrollable = { false }
+        }
     }
 
     override fun setPageTransformer(reverseDrawingOrder: Boolean, transformer: PageTransformer?) {
@@ -54,8 +60,16 @@ class BannerViewPager<T : Any?> @JvmOverloads constructor(context: Context, attr
         mAllowUserScrollable = allowUserScrollable
     }
 
+    fun lock() {
+        isLocked = true
+    }
+
+    fun unLock() {
+        isLocked = false
+    }
+
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        return if (mAllowUserScrollable()) {
+        return if (mAllowUserScrollable() && !isLocked) {
             super.onInterceptTouchEvent(ev)
         } else {
             false

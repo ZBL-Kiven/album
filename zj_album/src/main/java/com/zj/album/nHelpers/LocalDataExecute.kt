@@ -5,7 +5,6 @@ import android.provider.MediaStore
 import com.zj.album.*
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.FolderInfo
-import com.zj.album.nutils.log
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -40,7 +39,6 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
             }
             return subGroupOfImage(mCursor)
         } catch (e: Exception) {
-            log("album loaded fail!")
             e.printStackTrace()
         } finally {
             mCursor?.close()
@@ -145,7 +143,6 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
                 selection.append(") ")
             }
         }
-        log(selection.toString())
         return selection.toString()
     }
 }

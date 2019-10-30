@@ -7,7 +7,7 @@ import com.zj.album.ui.base.list.holders.BaseViewHolder;
 import java.util.List;
 
 /**
- * Created by ZJJ on 2018/4/9.
+ * @author ZJJ on 2018/4/9.
  */
 @SuppressWarnings("unused")
 public abstract class BaseAdapterDataSet<T> {

@@ -11,6 +11,9 @@ import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.ui.photograph.PhotoGraphActivity
 
+/**
+ * @author ZJJ on 2019.10.24
+ * */
 object PhotoAlbum {
 
     fun options(act: Activity, requestCode: Int): Options {

@@ -14,9 +14,13 @@ import com.zj.album.nutils.runWithTryCatch
 import java.io.File
 import kotlin.math.min
 
-//Video player module
+/**
+ * @author ZJJ on 2019.10.24
+ *
+ * Video player module
+ * */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class ExoPlayer(private val event: PlayerEvent?) {
+class ExoPlayer(private var event: PlayerEvent?) {
 
     private var player: SimpleExoPlayer? = null
     private var playPath: String = ""
@@ -25,14 +29,14 @@ class ExoPlayer(private val event: PlayerEvent?) {
     private var handler: Handler? = null
 
     internal enum class State(val pri: Int) {
-        PREPARE(3), RESUME(4), STOP(2), PAUSE(1), DESTROY(0)
+        RESUME(4), PREPARE(3), PAUSE(2), STOP(1), DESTROY(0)
     }
 
     private val runnable: Runnable = Runnable {
         if (isPrepared) {
             val curDuration = getCurrentProgress()
             val curSeekProgress = (curDuration * 1.0f / duration * 100 + 0.5f).toInt()
-            event?.onSeekChanged(curSeekProgress, false)
+            event?.onSeekChanged(curSeekProgress, false, getDuration())
             startProgressListen()
         }
     }
@@ -40,12 +44,20 @@ class ExoPlayer(private val event: PlayerEvent?) {
     private val isPrepared: Boolean; get() = curState.pri >= State.PREPARE.pri
 
 
-    fun isStop(): Boolean {
+    fun isPause(): Boolean {
         return curState.pri < State.PREPARE.pri
+    }
+
+    fun isStop(): Boolean {
+        return curState.pri < State.PAUSE.pri
     }
 
     fun isResumed(): Boolean {
         return curState.pri == State.RESUME.pri
+    }
+
+    fun currentPlayPath(): String {
+        return playPath
     }
 
     private var onPaused = true
@@ -61,7 +73,7 @@ class ExoPlayer(private val event: PlayerEvent?) {
         val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, context.applicationContext?.packageName), DefaultBandwidthMeter())
         val videoSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
         player = ExoPlayerFactory.newSimpleInstance(context, DefaultTrackSelector())
-        event.getPlayerView()?.player = player
+        event?.getPlayerView()?.player = player
         player?.addListener(eventListener)
         player?.prepare(videoSource)
     }
@@ -89,7 +101,7 @@ class ExoPlayer(private val event: PlayerEvent?) {
         if (curState != State.PAUSE) pause()
         val seekProgress = (min(100, progress) / 100f * getDuration() - 1).toLong()
         runWithPlayer { it.seekTo(seekProgress) }
-        event?.onSeekChanged(progress, fromUser)
+        event?.onSeekChanged(progress, fromUser, getDuration())
     }
 
     fun getDuration(): Long {
@@ -100,11 +112,24 @@ class ExoPlayer(private val event: PlayerEvent?) {
         return runWithPlayer { it.currentPosition } ?: 0L
     }
 
-    fun release() {
-        curState = State.DESTROY
+    fun stop() {
+        if (isResumed()) pause()
+        curState = State.STOP
         stopProgressListen()
         handler = null
-        runWithPlayer { it.release() }
+        playPath = ""
+        runWithPlayer {
+            it.removeListener(eventListener)
+            it.release()
+        }
+        player = null
+        event?.onStop(playPath)
+    }
+
+    fun release() {
+        stop()
+        curState = State.DESTROY
+        event = null
     }
 
     private fun <T> runWithPlayer(block: (SimpleExoPlayer) -> T?): T? {
@@ -117,27 +142,27 @@ class ExoPlayer(private val event: PlayerEvent?) {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             when (playbackState) {
                 Player.STATE_ENDED -> {
-                    curState = State.STOP
+                    stop()
                     event?.onCompleted(playPath)
                 }
                 Player.STATE_READY -> {
                     if (!isPrepared) {
                         curState = State.PREPARE
                         duration = player?.duration ?: 0L
-                        event?.onPrepare(playPath)
+                        event?.onPrepare(playPath, duration)
                     }
                 }
             }
         }
 
         override fun onPlayerError(error: ExoPlaybackException?) {
-            curState = State.STOP
+            stop()
             event?.onError(error)
         }
     }
 
     private fun startProgressListen() {
-        handler?.postDelayed(runnable, event?.getProgressPrevios() ?: 100)
+        handler?.postDelayed(runnable, event?.getProgressInterval() ?: 100)
     }
 
     private fun stopProgressListen() {

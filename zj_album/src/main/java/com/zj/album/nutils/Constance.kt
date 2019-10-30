@@ -1,5 +1,8 @@
 package com.zj.album.nutils
 
+/**
+* @author ZJJ on 2019.10.24
+* */
 object Constance {
 
     const val REQUEST_OPEN_PREVIEW = 0x21

@@ -8,6 +8,9 @@ import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nModule.FileInfo
 import java.util.*
 
+/**
+ * @author ZJJ on 2019.10.24
+ * */
 internal abstract class BaseActivity : AppCompatActivity(), EventHub {
 
     abstract fun getContentView(): Int

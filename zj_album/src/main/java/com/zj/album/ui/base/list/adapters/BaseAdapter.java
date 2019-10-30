@@ -11,10 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Created by ZJJ on 2018/4/4.
+ * @author ZJJ on 2018/4/4.
  */
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("unused")
 public abstract class BaseAdapter<T> extends BaseRecyclerAdapter<BaseViewHolder, T> {
 
     private final int resId;

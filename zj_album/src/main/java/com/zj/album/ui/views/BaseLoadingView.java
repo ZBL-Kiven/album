@@ -21,9 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by ZJJ on 2018/7/3.
+ * @author ZJJ on 2018/7/3.
  */
-
 @SuppressWarnings({"unused", "unchecked"})
 public class BaseLoadingView extends FrameLayout {
 
