@@ -99,10 +99,12 @@ class ExoPlayer2(private var event: PlayerEvent?) {
                         if (it.currentPosition >= it.duration) {
                             seekTo(0, false)
                         }
+                        field = value
                         it.playWhenReady = true
                     }
                     startProgressListen()
                     event?.onPlay(playPath)
+                    return
                 }
 
                 State.COMPLETED -> {
@@ -131,7 +133,6 @@ class ExoPlayer2(private var event: PlayerEvent?) {
                     event = null
                 }
             }
-
             field = value
         }
 
@@ -167,8 +168,10 @@ class ExoPlayer2(private var event: PlayerEvent?) {
 
     private fun setPlayerState(state: State) {
         if (isReady() && state == State.READY) return
-        log("$state")
-        this.curState = state
+        log("cur = $curState   s = $state")
+        synchronized(this.curState) {
+            this.curState = state
+        }
     }
 
     fun setData(path: String) {

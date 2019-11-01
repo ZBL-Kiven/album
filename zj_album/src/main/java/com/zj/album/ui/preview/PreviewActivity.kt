@@ -276,6 +276,7 @@ internal class PreviewActivity : BaseActivity() {
             val vPlay = curContainerView?.findViewById<ImageView>(R.id.preview_base_btn_video_play)
             vPlay?.setOnClickListener {
                 mVideoView?.playOrResume(data.path)
+                showOrHidePlayBtn(vPlay, false)
             }
         }
     }

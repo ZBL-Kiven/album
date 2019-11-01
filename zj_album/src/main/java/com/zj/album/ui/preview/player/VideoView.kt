@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.google.android.exoplayer2.ui.PlayerView
 import com.zj.album.R
 import com.zj.album.nutils.getDuration
+import com.zj.album.nutils.log
 import com.zj.album.ui.views.BaseLoadingView
 
 /**

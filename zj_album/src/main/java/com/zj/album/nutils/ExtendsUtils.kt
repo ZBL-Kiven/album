@@ -106,9 +106,9 @@ fun <T : Any?> getPointIndexItem(collection: List<T>?, index: Int): T? {
 }
 
 fun showOrHideView(v: View?, isShow: Boolean, range: FloatArray, duration: Long) {
-    if (v?.animation != null) v.clearAnimation()
     if (duration > 0) {
         if ((isShow && v?.visibility == View.VISIBLE) || (!isShow && v?.visibility == View.GONE)) return
+        if (v?.animation != null) v.clearAnimation()
         val anim = AlphaAnimation(range[0], range[1])
         anim.duration = duration
         v?.startAnimation(anim)
