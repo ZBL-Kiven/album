@@ -70,11 +70,16 @@ internal class PhotoGraphActivity : BaseActivity() {
             loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
             PhotoAlbum.loadData()
         }
+        vPreview?.setOnClickListener {
+            DataStore.getCurSelectedData()?.firstOrNull()?.let {
+                startPreviewActivity(true, it.path)
+            }
+        }
         photoGraphAdapter?.setOnItemClickListener(object : ItemClickListener<FileInfo>() {
 
             override fun onItemClick(position: Int, v: View?, m: FileInfo?) {
                 m?.let { data ->
-                    PreviewActivity.start(this@PhotoGraphActivity, data)
+                    startPreviewActivity(false, data.path)
                 }
             }
         })
@@ -94,6 +99,7 @@ internal class PhotoGraphActivity : BaseActivity() {
 
     override fun onSelectedStateChange(count: Int) {
         vOk?.isEnabled = count > 0
+        vPreview?.isEnabled = count > 0
         val s = if (count <= 0) "" else "($count)"
         vOk?.text = getString(R.string.pg_str_send).plus(s)
         photoGraphAdapter?.let {
@@ -104,6 +110,10 @@ internal class PhotoGraphActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         cbOriginal?.isChecked = DataStore.isOriginalUsed()
+    }
+
+    private fun startPreviewActivity(isPreviewSelected: Boolean, path: String) {
+        PreviewActivity.start(this@PhotoGraphActivity, isPreviewSelected, path)
     }
 
     private fun doneAndFinish() {

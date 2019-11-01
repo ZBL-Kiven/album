@@ -10,9 +10,7 @@
                 android:name="com.zj.album.ui.photograph.PhotoGraphActivity"
                 android:launchMode="singleTask"/>
         <activity android:name="com.zj.album.ui.folders.FolderActivity"/>
-        <activity android:name="com.zj.album.ui.preview.VideoPreviewActivity"/>
         <activity android:name="com.zj.album.ui.preview.PreviewActivity"/>
-
     </application>
 
 </manifest>

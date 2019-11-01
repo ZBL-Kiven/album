@@ -39,7 +39,7 @@ class VideoView : FrameLayout, PlayerEvent {
     private var seekProgressInterval: Long = 16
 
     private var simpleVideoEventListener: SimpleVideoEventListener? = null
-    private var exoPlayer: ExoPlayer? = null
+    private var exoPlayer: ExoPlayer2? = null
 
     private fun init() {
         val root = View.inflate(context, R.layout.preview_video, this)
@@ -51,14 +51,14 @@ class VideoView : FrameLayout, PlayerEvent {
         bottomToolsBar = root.findViewById(R.id.video_preview__tools_bar)
         seekBar = root.findViewById(R.id.video_preview_sb)
         videoPlayerView?.useController = false
-        exoPlayer = ExoPlayer(this)
+        exoPlayer = ExoPlayer2(this)
     }
 
     private fun initListener() {
         vPlay?.setOnClickListener {
             it.isEnabled = false
             if (!it.isSelected) {
-                exoPlayer?.resume()
+                exoPlayer?.play()
             } else {
                 exoPlayer?.pause()
             }
@@ -67,6 +67,7 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     private fun initSeekBar() {
+        seekBar?.isEnabled = false
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 if (isTickingSeekBarFromUser && p2) {
@@ -80,7 +81,7 @@ class VideoView : FrameLayout, PlayerEvent {
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
                 isTickingSeekBarFromUser = false
-                exoPlayer?.resume()
+                exoPlayer?.play()
             }
         })
     }
@@ -97,7 +98,7 @@ class VideoView : FrameLayout, PlayerEvent {
         if (simpleVideoEventListener?.onPrepare(path, videoSize) == false) {
             if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
             tvEnd?.text = getDuration(videoSize)
-            if (autoPlay) exoPlayer?.resume()
+            if (autoPlay) exoPlayer?.play()
         }
     }
 
@@ -118,9 +119,9 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     override fun onStop(path: String) {
-        seekBar?.isEnabled = false
         seekBar?.isSelected = false
-        onSeekChanged(0, false, exoPlayer?.getDuration() ?: 0)
+        seekBar?.isEnabled = false
+        onSeekChanged(0, false, 0)
         if (simpleVideoEventListener?.onStop(path) == false) {
             showOrHidePlayBtn(true)
         }
@@ -135,9 +136,9 @@ class VideoView : FrameLayout, PlayerEvent {
     override fun onCompleted(path: String) {
         if (simpleVideoEventListener?.onCompleted(path) == false) {
             seekBar?.isSelected = false
-            onSeekChanged(0, false, exoPlayer?.getDuration() ?: 0)
+            seekBar?.isEnabled = false
+            onSeekChanged(0, false, 0)
         }
-        exoPlayer?.resetAndStop()
     }
 
     override fun onSeekChanged(seek: Int, fromUser: Boolean, videoSize: Long) {
@@ -183,9 +184,7 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     fun setData(url: String) {
-        exoPlayer?.stop()
-        exoPlayer?.initData(url)
-        onSeekChanged(0, false, 0)
+        exoPlayer?.setData(url)
     }
 
     fun autoPlay(auto: Boolean) {
@@ -219,10 +218,10 @@ class VideoView : FrameLayout, PlayerEvent {
 
     fun playOrResume(path: String) {
         if (path == getPath()) {
-            exoPlayer?.resume()
+            exoPlayer?.play()
         } else {
             setData(path)
-            exoPlayer?.resume()
+            exoPlayer?.play()
         }
     }
 
@@ -242,8 +241,8 @@ class VideoView : FrameLayout, PlayerEvent {
         return exoPlayer?.isStop() ?: true
     }
 
-    fun isResume(): Boolean {
-        return exoPlayer?.isResumed() ?: false
+    fun isPlaying(): Boolean {
+        return exoPlayer?.isPlaying() ?: false
     }
 
     fun release() {

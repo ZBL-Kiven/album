@@ -158,8 +158,7 @@ object DataProxy : DataHelper() {
         curDisplayFolder?.let {
             if (accessKey != curDataAccessKey) eventHub.onDataGot(it.files, curDataAccessKey)
             if (selectedAccessKey != curSelectedAccessKey) {
-                val selectedCount = getSelectedCount()
-                if (selectedCount > 0) eventHub.onSelectedChanged(selectedCount, curSelectedAccessKey)
+                eventHub.onSelectedChanged(getSelectedCount(), curSelectedAccessKey)
             }
         } ?: eventHub.onDataGot(null, accessKey)
     }

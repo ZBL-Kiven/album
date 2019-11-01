@@ -31,18 +31,19 @@ import com.zj.album.ui.base.list.listeners.ItemClickListener
 internal class PreviewActivity : BaseActivity() {
 
     companion object {
-        private const val LAUNCH_IS_VIDEO = "is_video"
         private const val LAUNCH_PATH = "path"
-        fun start(context: Context, data: FileInfo) {
+        private const val LAUNCH_PREVIEW_SELECTED = "preview_selected"
+        fun start(context: Context, isPreviewSelected: Boolean, path: String) {
             val i = Intent(context, PreviewActivity::class.java).apply {
-                putExtra(LAUNCH_IS_VIDEO, data.isVideo)
-                putExtra(LAUNCH_PATH, data.path)
+                putExtra(LAUNCH_PREVIEW_SELECTED, isPreviewSelected)
+                putExtra(LAUNCH_PATH, path)
             }
             context.startActivity(i)
         }
     }
 
-    private var initPath: String = ""
+    private var initPath = ""
+    private var isSelectedPreview = false
     private var isFull = false
 
     private var previewBanner: BannerViewPager<FileInfo>? = null
@@ -90,10 +91,10 @@ internal class PreviewActivity : BaseActivity() {
 
     override fun initData() {
         initPath = intent.getValueBySafe(LAUNCH_PATH, "")
+        isSelectedPreview = intent.getValueBySafe(LAUNCH_PREVIEW_SELECTED, false)
         mVideoView?.autoPlay(true)
         mVideoView?.setEventListener(videoEventListener)
         mVideoView?.overrideSeekBar(seekBar)
-        seekBar?.isEnabled = false
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         selectedRv?.layoutManager = layoutManager
@@ -110,12 +111,17 @@ internal class PreviewActivity : BaseActivity() {
                 it.setSelected(nextStatus)
             }
         }
+
+        cbOriginal?.setOnClickListener {
+
+        }
+
         mVideoView?.setOnClickListener { v ->
             (v as? VideoView)?.let {
                 val curPath = curFileData?.path
                 when {
                     curPath.isNullOrEmpty() -> it.stop()
-                    it.isResume() -> {
+                    it.isPlaying() -> {
                         it.pause()
                         if (isFull) full()
                     }
@@ -134,7 +140,7 @@ internal class PreviewActivity : BaseActivity() {
     }
 
     override fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
-        curPreviewData = data
+        curPreviewData = if (isSelectedPreview) DataStore.getCurSelectedData() else data
         setPreviewData(initPath)
     }
 
@@ -248,7 +254,6 @@ internal class PreviewActivity : BaseActivity() {
         vSelect?.isEnabled = isEnable
         vComplete?.isEnabled = (isEnable && DataStore.curSelectedCount() > 0)
         cbOriginal?.isEnabled = isEnable
-        seekBar?.isEnabled = isEnable
     }
 
     private fun initDataWithPagerSelected() {

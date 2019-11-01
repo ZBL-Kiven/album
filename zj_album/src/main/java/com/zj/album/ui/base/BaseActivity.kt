@@ -40,11 +40,9 @@ internal abstract class BaseActivity : AppCompatActivity(), EventHub {
     }
 
     open fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
-
     }
 
     open fun onSelectedStateChange(count: Int) {
-
     }
 
     override fun onResume() {

@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import com.zj.album.BuildConfig
-import com.zj.album.ui.preview.PreviewActivity
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -29,23 +28,26 @@ inline fun <reified T : Serializable> Intent.getValueBySafe(name: String, defaul
     return if (hasExtra(name)) {
         return try {
             when (T::class.java) {
-                Int::class.java -> {
+                java.lang.Integer::class.java, Int::class.java -> {
                     getIntExtra(name, (default as? Int) ?: 0) as? T
                 }
-                String::class.java -> {
+                java.lang.String::class.java, String::class.java -> {
                     getStringExtra(name) as? T
                 }
-                Float::class.java -> {
+                java.lang.Float::class.java, Float::class.java -> {
                     getFloatExtra(name, (default as? Float) ?: 0f) as? T
                 }
-                Double::class.java -> {
+                java.lang.Double::class.java, Double::class.java -> {
                     getDoubleExtra(name, (default as? Double) ?: 0.0) as? T
                 }
-                Long::class.java -> {
+                java.lang.Long::class.java, Long::class.java -> {
                     getLongExtra(name, (default as? Long) ?: 0L) as? T
                 }
+                java.lang.Boolean::class.java, Boolean::class.java -> {
+                    getBooleanExtra(name, (default as? Boolean) ?: false) as? T
+                }
                 else -> {
-                    throw IllegalArgumentException("Intent.getValueBySafe only supported by type : Int, string, Float, Double, Long")
+                    throw IllegalArgumentException("Intent.getValueBySafe only supported by type : Boolean, Int, string, Float, Double, Long")
                 }
             } ?: default
         } catch (e: Exception) {

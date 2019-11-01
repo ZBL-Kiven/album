@@ -1,5 +1,8 @@
 package com.zj.album.nutils
 
+import com.zj.album.PhotoAlbum
+import com.zj.album.R
+
 /**
  * @author ZJJ on 2019.10.24
  * */
@@ -12,4 +15,11 @@ object Constance {
     const val MAX_SELECT_COUNT = "max_select_count"
     const val REQUEST_CODE = "request_code"
     const val USE_ORIGINAL_DEFAULT = "use_original_default"
+
+    private var completedString = ""
+
+
+    fun getCompletedText(): String {
+        return if (completedString.isEmpty()) PhotoAlbum.getString(R.string.pg_str_send) else completedString
+    }
 }
