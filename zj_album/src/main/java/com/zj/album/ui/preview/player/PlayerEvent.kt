@@ -18,6 +18,8 @@ interface PlayerEvent {
 
     fun onStop(path: String)
 
+    fun completing(path: String)
+
     fun onCompleted(path: String)
 
     fun onSeekChanged(seek: Int, fromUser: Boolean, videoSize: Long)

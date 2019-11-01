@@ -5,7 +5,10 @@ package com.zj.album.nutils
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.animation.AlphaAnimation
 import com.zj.album.BuildConfig
+import com.zj.album.ui.preview.PreviewActivity
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -98,4 +101,15 @@ fun getDuration(mediaDuration: Long): String {
 
 fun <T : Any?> getPointIndexItem(collection: List<T>?, index: Int): T? {
     return if (index in 0 until (collection?.size ?: 0)) collection?.get(index) else null
+}
+
+fun showOrHideView(v: View?, isShow: Boolean, range: FloatArray, duration: Long) {
+    if (v?.animation != null) v.clearAnimation()
+    if (duration > 0) {
+        if ((isShow && v?.visibility == View.VISIBLE) || (!isShow && v?.visibility == View.GONE)) return
+        val anim = AlphaAnimation(range[0], range[1])
+        anim.duration = duration
+        v?.startAnimation(anim)
+    }
+    v?.visibility = if (isShow) View.VISIBLE else View.GONE
 }

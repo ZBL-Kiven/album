@@ -1,10 +1,10 @@
 package com.zj.album.nutils
 
 /**
-* @author ZJJ on 2019.10.24
-* */
+ * @author ZJJ on 2019.10.24
+ * */
 object Constance {
-
+    const val ANIMATE_DURATION = 300L
     const val REQUEST_OPEN_PREVIEW = 0x21
     const val REQUEST_OPEN_FOLDER = 0x22
     const val REQUEST_VIDEO_PREVIEW = 200

@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.zj.album.nutils.runWithTryCatch
 import java.io.File
+import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -33,15 +34,23 @@ class ExoPlayer(private var event: PlayerEvent?) {
     }
 
     private val runnable: Runnable = Runnable {
-        if (isPrepared) {
+        if (isPrepared()) {
             val curDuration = getCurrentProgress()
-            val curSeekProgress = (curDuration * 1.0f / duration * 100 + 0.5f).toInt()
-            event?.onSeekChanged(curSeekProgress, false, getDuration())
+            if (curDuration > 0) {
+                val interval = curDuration * 1.0f / max(1, duration)
+                val curSeekProgress = (interval * 100 + 0.5f).toInt()
+                event?.onSeekChanged(curSeekProgress, false, getDuration())
+                if (interval >= 0.99f) {
+                    event?.completing(currentPlayPath())
+                }
+            }
             startProgressListen()
         }
     }
 
-    private val isPrepared: Boolean; get() = curState.pri >= State.PREPARE.pri
+    fun isPrepared(): Boolean {
+        return curState.pri >= State.PREPARE.pri
+    }
 
 
     fun isPause(): Boolean {
@@ -112,18 +121,22 @@ class ExoPlayer(private var event: PlayerEvent?) {
         return runWithPlayer { it.currentPosition } ?: 0L
     }
 
-    fun stop() {
-        if (isResumed()) pause()
+    fun resetAndStop(notifyStop: Boolean = false) {
         curState = State.STOP
         stopProgressListen()
-        handler = null
-        playPath = ""
         runWithPlayer {
             it.removeListener(eventListener)
             it.release()
         }
+        if (notifyStop) event?.onStop(playPath)
+        handler = null
         player = null
-        event?.onStop(playPath)
+        playPath = ""
+    }
+
+    fun stop() {
+        if (isResumed()) pause()
+        resetAndStop(true)
     }
 
     fun release() {
@@ -146,7 +159,7 @@ class ExoPlayer(private var event: PlayerEvent?) {
                     event?.onCompleted(playPath)
                 }
                 Player.STATE_READY -> {
-                    if (!isPrepared) {
+                    if (!isPrepared() || duration <= 0) {
                         curState = State.PREPARE
                         duration = player?.duration ?: 0L
                         event?.onPrepare(playPath, duration)

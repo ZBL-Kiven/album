@@ -6,11 +6,9 @@ import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import android.widget.*
 import com.zj.album.imageloader.impl.GlideLoader
 import com.zj.album.nModule.FileInfo
-import com.zj.album.nutils.getValueBySafe
 import com.zj.album.ui.base.BaseActivity
 import com.zj.album.ui.preview.images.BannerViewPager
 import com.zj.album.ui.preview.images.OnPageChange
@@ -24,8 +22,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.zj.album.PhotoAlbum.simultaneousSelection
 import com.zj.album.R
 import com.zj.album.nHelpers.DataStore
-import com.zj.album.nutils.getDuration
-import com.zj.album.nutils.getPointIndexItem
+import com.zj.album.nutils.*
 import com.zj.album.ui.base.list.listeners.ItemClickListener
 
 /**
@@ -34,11 +31,8 @@ import com.zj.album.ui.base.list.listeners.ItemClickListener
 internal class PreviewActivity : BaseActivity() {
 
     companion object {
-
         private const val LAUNCH_IS_VIDEO = "is_video"
         private const val LAUNCH_PATH = "path"
-        private const val ANIMATE_DURATION = 300L
-
         fun start(context: Context, data: FileInfo) {
             val i = Intent(context, PreviewActivity::class.java).apply {
                 putExtra(LAUNCH_IS_VIDEO, data.isVideo)
@@ -122,10 +116,10 @@ internal class PreviewActivity : BaseActivity() {
                 when {
                     curPath.isNullOrEmpty() -> it.stop()
                     it.isResume() -> {
-                        if (isFull) full()
                         it.pause()
+                        if (isFull) full()
                     }
-                    else -> it.resume(curPath)
+                    else -> full()
                 }
             }
         }
@@ -168,6 +162,11 @@ internal class PreviewActivity : BaseActivity() {
             override fun onFocusChange(v: View?, data: FileInfo?, focus: Boolean) {
                 if (v != null && data != null) {
                     val iv = v.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
+                    val vPlay = v.findViewById<ImageView>(R.id.preview_base_btn_video_play)
+                    if (!focus && data.isVideo) {
+                        showOrHideOverlay(iv, true)
+                        showOrHidePlayBtn(vPlay, true)
+                    }
                     previewBanner?.setAllowUserScrollable {
                         if (!focus) {
                             true
@@ -192,8 +191,8 @@ internal class PreviewActivity : BaseActivity() {
         iv.setScaleEnabled(!data.isVideo)
         iv.doubleTapEnabled = !data.isVideo
         iv.setDoubleTapListener(null)
-        iv.visibility = View.VISIBLE
         GlideLoader().loadImage(iv, iv.measuredWidth, iv.measuredHeight, data.path)
+        if (iv.visibility != View.VISIBLE) showOrHideView(iv, true, floatArrayOf(0.0f, 1.0f), Constance.ANIMATE_DURATION)
         play.setOnClickListener(null)
         play.isSelected = false
         play.visibility = if (data.isVideo) View.VISIBLE else View.GONE
@@ -202,18 +201,12 @@ internal class PreviewActivity : BaseActivity() {
     }
 
     private fun onCurDataChanged(v: View, data: FileInfo, focus: Boolean) {
-        val iv = v.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
-        val vPlay = v.findViewById<ImageView>(R.id.preview_base_btn_video_play)
         if (!focus) {
+            if (isFull) full()
             val flContainer = v.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
             if (flContainer.childCount > 0) {
                 val vv = flContainer.getChildAt(0) as? VideoView
                 vv?.stop()
-                flContainer.removeAllViews()
-            }
-            if (data.isVideo) {
-                iv.visibility = View.VISIBLE
-                showOrHidePlayBtn(vPlay, true)
             }
         } else {
             curContainerView = v as? FrameLayout
@@ -277,33 +270,15 @@ internal class PreviewActivity : BaseActivity() {
         curFileData?.let { data ->
             val vPlay = curContainerView?.findViewById<ImageView>(R.id.preview_base_btn_video_play)
             vPlay?.setOnClickListener {
-                mVideoView?.resume(data.path)
+                mVideoView?.playOrResume(data.path)
             }
-        }
-    }
-
-    private fun showOrHidePlayBtn(v: View?, isShow: Boolean) {
-        v?.isSelected = !isShow
-        v?.clearAnimation()
-        if (isShow) {
-            if (v?.visibility == View.VISIBLE) return
-            val animIn = AlphaAnimation(0.0f, 1.0f)
-            animIn.duration = ANIMATE_DURATION
-            v?.startAnimation(animIn)
-            v?.visibility = View.VISIBLE
-        } else {
-            if (v?.visibility == View.GONE) return
-            val animIn = AlphaAnimation(1.0f, 0.0f)
-            animIn.duration = ANIMATE_DURATION
-            v?.startAnimation(animIn)
-            v?.visibility = View.GONE
         }
     }
 
     private var anim: PreviewFullValueAnimator? = null
         get() {
             if (field == null) field = PreviewFullValueAnimator(fullListener)
-            field?.duration = ANIMATE_DURATION
+            field?.duration = Constance.ANIMATE_DURATION
             return field
         }
 
@@ -334,21 +309,13 @@ internal class PreviewActivity : BaseActivity() {
         }
     }
 
-    private fun full() {
-        if (anim?.isRunning == true) return
-        llTopBar?.clearAnimation()
-        llBottomBar?.clearAnimation()
-        anim?.start(isFull)
-        isFull = !isFull
-    }
-
     private val videoEventListener = object : SimpleVideoEventListener() {
         override fun onPlay(path: String): Boolean {
             val iv = curContainerView?.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
             val vPlay = curContainerView?.findViewById<ImageView>(R.id.preview_base_btn_video_play)
             val flContainer = curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
             showOrHidePlayBtn(vPlay, false)
-            iv?.visibility = View.GONE
+            showOrHideOverlay(iv, false)
             val parent = mVideoView?.parent
             when {
                 parent == flContainer -> {
@@ -370,29 +337,55 @@ internal class PreviewActivity : BaseActivity() {
             return true
         }
 
-        override fun onCompleted(path: String): Boolean {
-            val iv = curContainerView?.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
+        override fun onCompleting(path: String): Boolean {
             val vPlay = curContainerView?.findViewById<ImageView>(R.id.preview_base_btn_video_play)
-            val flContainer = curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
-            showOrHidePlayBtn(vPlay, true)
-            iv?.visibility = View.VISIBLE
-            flContainer?.removeAllViews()
+            val iv = curContainerView?.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
+            if (iv?.visibility == View.GONE) showOrHideOverlay(iv, true)
+            if (vPlay?.visibility == View.GONE) showOrHidePlayBtn(vPlay, true)
             return true
+        }
+
+        override fun onCompleted(path: String): Boolean {
+            val flContainer = curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
+            flContainer?.removeAllViews()
+            return false
         }
 
         override fun onPause(path: String): Boolean {
             val vPlay = curContainerView?.findViewById<ImageView>(R.id.preview_base_btn_video_play)
-            showOrHidePlayBtn(vPlay, true)
+            if (vPlay?.visibility == View.GONE) showOrHidePlayBtn(vPlay, true)
             return true
         }
 
         override fun onStop(path: String): Boolean {
             val iv = curContainerView?.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
             val flContainer = curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
-            iv?.visibility = View.VISIBLE
+            if (iv?.visibility == View.GONE) showOrHideOverlay(iv, true)
             flContainer?.removeAllViews()
             return true
         }
+    }
+
+    fun showOrHidePlayBtn(v: View?, isShow: Boolean) {
+        v?.isSelected = !isShow
+        val start = if (isShow) 0.0f else 1.0f
+        val end = if (isShow) 1.0f else 0.0f
+        showOrHideView(v, isShow, floatArrayOf(start, end), Constance.ANIMATE_DURATION)
+    }
+
+    fun showOrHideOverlay(v: View?, isShow: Boolean) {
+        val start = if (isShow) 1.0f else 1.0f
+        val end = if (isShow) 1.0f else 0.9f
+        val duration = if (!isShow) Constance.ANIMATE_DURATION else 0
+        showOrHideView(v, isShow, floatArrayOf(start, end), duration)
+    }
+
+    private fun full() {
+        if (anim?.isRunning == true) return
+        llTopBar?.clearAnimation()
+        llBottomBar?.clearAnimation()
+        anim?.start(isFull)
+        isFull = !isFull
     }
 
     override fun onDestroy() {

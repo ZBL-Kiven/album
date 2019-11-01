@@ -31,6 +31,10 @@ open class SimpleVideoEventListener {
         return false
     }
 
+    open fun onCompleting(path: String): Boolean {
+        return false
+    }
+
     open fun onCompleted(path: String): Boolean {
         return false
     }

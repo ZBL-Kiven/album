@@ -13,8 +13,8 @@ import com.zj.album.nutils.getDuration
 import com.zj.album.ui.views.BaseLoadingView
 
 /**
-* @author ZJJ on 2019.10.24
-* */
+ * @author ZJJ on 2019.10.24
+ * */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class VideoView : FrameLayout, PlayerEvent {
 
@@ -103,6 +103,7 @@ class VideoView : FrameLayout, PlayerEvent {
 
     override fun onPlay(path: String) {
         seekBar?.isSelected = true
+        seekBar?.isEnabled = true
         if (simpleVideoEventListener?.onPlay(path) == false) {
             isTickingSeekBarFromUser = false
             showOrHidePlayBtn(false)
@@ -125,12 +126,18 @@ class VideoView : FrameLayout, PlayerEvent {
         }
     }
 
-    override fun onCompleted(path: String) {
-        seekBar?.isSelected = false
-        onSeekChanged(0, false, exoPlayer?.getDuration() ?: 0)
-        if (simpleVideoEventListener?.onCompleted(path) == false) {
+    override fun completing(path: String) {
+        if (simpleVideoEventListener?.onCompleting(path) == false) {
             showOrHidePlayBtn(true)
         }
+    }
+
+    override fun onCompleted(path: String) {
+        if (simpleVideoEventListener?.onCompleted(path) == false) {
+            seekBar?.isSelected = false
+            onSeekChanged(0, false, exoPlayer?.getDuration() ?: 0)
+        }
+        exoPlayer?.resetAndStop()
     }
 
     override fun onSeekChanged(seek: Int, fromUser: Boolean, videoSize: Long) {
@@ -210,11 +217,12 @@ class VideoView : FrameLayout, PlayerEvent {
         bottomToolsBar?.visibility = if (isFull) VISIBLE else GONE
     }
 
-    fun resume(path: String) {
+    fun playOrResume(path: String) {
         if (path == getPath()) {
             exoPlayer?.resume()
         } else {
             setData(path)
+            exoPlayer?.resume()
         }
     }
 
@@ -242,5 +250,6 @@ class VideoView : FrameLayout, PlayerEvent {
         seekBar?.isEnabled = false
         videoPlayerView?.player = null
         exoPlayer?.release()
+        exoPlayer = null
     }
 }
