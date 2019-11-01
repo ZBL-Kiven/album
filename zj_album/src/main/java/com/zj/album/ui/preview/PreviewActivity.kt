@@ -19,10 +19,14 @@ import com.zj.album.ui.preview.player.SimpleVideoEventListener
 import com.zj.album.ui.preview.player.VideoView
 import com.zj.album.ui.views.image.ImageViewTouch
 import android.animation.Animator
+import android.support.v4.view.ViewPager
+import android.support.v7.widget.LinearLayoutManager
 import com.zj.album.PhotoAlbum.simultaneousSelection
 import com.zj.album.R
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.getDuration
+import com.zj.album.nutils.getPointIndexItem
+import com.zj.album.ui.base.list.listeners.ItemClickListener
 
 /**
  * @author ZJJ on 2019.10.24
@@ -62,6 +66,8 @@ internal class PreviewActivity : BaseActivity() {
 
     private var curContainerView: FrameLayout? = null
     private var curFileData: FileInfo? = null
+    private var previewSelectedAdapter: PreviewSelectedAdapter? = null
+    private var curPreviewData: List<FileInfo>? = null
 
     private var mVideoView: VideoView? = null
         get() {
@@ -94,6 +100,11 @@ internal class PreviewActivity : BaseActivity() {
         mVideoView?.setEventListener(videoEventListener)
         mVideoView?.overrideSeekBar(seekBar)
         seekBar?.isEnabled = false
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        selectedRv?.layoutManager = layoutManager
+        previewSelectedAdapter = PreviewSelectedAdapter()
+        selectedRv?.adapter = previewSelectedAdapter
         initPreviewBanner()
     }
 
@@ -102,9 +113,7 @@ internal class PreviewActivity : BaseActivity() {
         vSelect?.setOnClickListener {
             curFileData?.let {
                 val nextStatus = !it.isSelected()
-                if (it.setSelected(nextStatus)) {
-                    updateSelectState()
-                }
+                it.setSelected(nextStatus)
             }
         }
         mVideoView?.setOnClickListener { v ->
@@ -120,18 +129,33 @@ internal class PreviewActivity : BaseActivity() {
                 }
             }
         }
+        previewSelectedAdapter?.setOnItemClickListener(object : ItemClickListener<FileInfo>() {
+            override fun onItemClick(position: Int, v: View?, m: FileInfo?) {
+                m?.path?.let {
+                    initPreviewBanner()
+                    setPreviewData(it)
+                }
+            }
+        })
     }
 
     override fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
-        previewBanner?.setData(R.layout.preview_item_base, data, (data?.indexOfFirst { it.path == initPath }) ?: 0)
+        curPreviewData = data
+        setPreviewData(initPath)
     }
 
     override fun onSelectedStateChange(count: Int) {
         selectedRv?.visibility = if (count > 0) View.VISIBLE else View.GONE
+        previewSelectedAdapter?.change(DataStore.getCurSelectedData())
+        updateSelectState()
+    }
+
+    private fun setPreviewData(curPath: String) {
+        previewBanner?.setData(curPreviewData, (curPreviewData?.indexOfFirst { it.path == curPath }) ?: 0)
     }
 
     private fun initPreviewBanner() {
-        previewBanner?.init(0, TransitionEffect.Zoom, object : OnPageChange<FileInfo> {
+        previewBanner?.init(R.layout.preview_item_base, 0, TransitionEffect.Zoom, object : OnPageChange<FileInfo> {
             override fun onBindData(data: FileInfo?, view: View) {
                 data?.let {
                     val iv = view.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
@@ -141,8 +165,8 @@ internal class PreviewActivity : BaseActivity() {
                 }
             }
 
-            override fun onFocusChange(v: View, data: FileInfo?, focus: Boolean) {
-                data?.let {
+            override fun onFocusChange(v: View?, data: FileInfo?, focus: Boolean) {
+                if (v != null && data != null) {
                     val iv = v.findViewById<ImageViewTouch>(R.id.preview_base_iv_img)
                     previewBanner?.setAllowUserScrollable {
                         if (!focus) {
@@ -153,9 +177,13 @@ internal class PreviewActivity : BaseActivity() {
                         }
                     }
                     previewBanner?.lock()
-                    onCurDataChanged(v, it, focus)
+                    onCurDataChanged(v, data, focus)
                     previewBanner?.unLock()
                 }
+            }
+
+            override fun onScrollStateChanged(interval: Float, state: Int) {
+                setViewsEnable(state == ViewPager.SCROLL_STATE_IDLE)
             }
         })
     }
@@ -199,18 +227,35 @@ internal class PreviewActivity : BaseActivity() {
         curFileData?.let { data ->
             val isSelected = data.isSelected()
             vSelect?.isSelected = isSelected
-            if (!data.isVideo || simultaneousSelection) {
+            val isVideoOnly = !data.isVideo || simultaneousSelection
+            if (isVideoOnly) {
                 vSelect?.setBackgroundResource(R.drawable.bg_choose_local_media)
                 val index = DataStore.indexOfSelected(data.path)
                 vSelect?.text = if (index >= 0) "${(index + 1)}" else ""
-                val curSelectedCount = DataStore.curSelectedCount()
-                val s = if (curSelectedCount <= 0) "" else "($curSelectedCount)"
-                vComplete?.text = getString(R.string.pg_str_send).plus(s)
             } else {
                 vSelect?.setBackgroundResource(R.drawable.bg_choose_local_video)
-                vComplete?.text = getString(R.string.pg_str_send)
             }
+            setCompletedText(isVideoOnly)
         }
+    }
+
+    private fun setCompletedText(isVideoOnly: Boolean) {
+        val curSelectedCount = DataStore.curSelectedCount()
+        val firstIsVideo = getPointIndexItem(DataStore.getCurSelectedData(), 0)?.isVideo ?: false
+        if (isVideoOnly && curSelectedCount == 1 && firstIsVideo) {
+            vComplete?.text = getString(R.string.pg_str_send)
+        } else {
+            val s = if (curSelectedCount <= 0) "" else "($curSelectedCount)"
+            vComplete?.text = getString(R.string.pg_str_send).plus(s)
+        }
+        vComplete?.isEnabled = curSelectedCount > 0
+    }
+
+    private fun setViewsEnable(isEnable: Boolean) {
+        vSelect?.isEnabled = isEnable
+        vComplete?.isEnabled = (isEnable && DataStore.curSelectedCount() > 0)
+        cbOriginal?.isEnabled = isEnable
+        seekBar?.isEnabled = isEnable
     }
 
     private fun initDataWithPagerSelected() {

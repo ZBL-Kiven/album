@@ -9,16 +9,21 @@ import com.zj.album.ui.preview.images.transformer.PageTransformer.getPageTransfo
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 
 /**
-* @author ZJJ on 2019.10.24
-* */
+ * @author ZJJ on 2019.10.24
+ * */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class BannerViewPager<T : Any?> @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ViewPager(context, attrs) {
     private var mAllowUserScrollable: () -> Boolean = { true }
     private var pageAdapter: PageAdapter<T>? = null
     private var isLocked = false
 
-    fun init(overScrollMode: Int, mTransitionEffect: TransitionEffect, onPageChange: OnPageChange<T>) {
-        PageAdapter(context, onPageChange).let {
+    fun init(resId: Int, overScrollMode: Int, mTransitionEffect: TransitionEffect, onPageChange: OnPageChange<T>) {
+        pageAdapter?.let {
+            it.clear()
+            it.notifyDataSetChanged()
+        }
+        removeAllViews()
+        PageAdapter(resId, context, onPageChange).let {
             pageAdapter = it
             adapter = it
             addOnPageChangeListener(it)
@@ -28,8 +33,8 @@ class BannerViewPager<T : Any?> @JvmOverloads constructor(context: Context, attr
         setPageTransformer(true, getPageTransformer(mTransitionEffect))
     }
 
-    fun setData(resId: Int, data: List<T>?, curItem: Int) {
-        pageAdapter?.setData(resId, data, curItem)
+    fun setData(data: List<T>?, curItem: Int) {
+        pageAdapter?.setData(data, curItem)
         currentItem = ((adapter?.count) ?: 0) / 2
         pageAdapter?.notifyDataSetChanged()
         if (data.isNullOrEmpty() || data.size == 1) {

@@ -5,12 +5,13 @@ import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.view.ViewGroup
+import com.zj.album.nutils.getPointIndexItem
 import kotlin.math.min
 
 /**
-* @author ZJJ on 2019.10.24
-* */
-internal class PageAdapter<T : Any?>(val context: Context, private val adapter: OnPageChange<T>?) : PagerAdapter(), ViewPager.OnPageChangeListener {
+ * @author ZJJ on 2019.10.24
+ * */
+internal class PageAdapter<T : Any?>(private val resId: Int, var context: Context?, private var adapter: OnPageChange<T>?) : PagerAdapter(), ViewPager.OnPageChangeListener {
 
     private var isFirst = true
     private var oldPosition: Int = -1
@@ -31,10 +32,7 @@ internal class PageAdapter<T : Any?>(val context: Context, private val adapter: 
         maxCount = (halfMax - realMaxOffset) * 2 + 1
     }
 
-    fun setData(resId: Int, data: List<T>?, curItem: Int) {
-        if (curViewPosition in 0 until views.size && curSelectedPosition in 0 until (mData?.size ?: 0)) {
-            adapter?.onFocusChange(views[curViewPosition], mData?.get(curSelectedPosition), false)
-        }
+    fun setData(data: List<T>?, curItem: Int) {
         isFirst = true
         mData = data
         curSelectedPosition = curItem
@@ -46,7 +44,6 @@ internal class PageAdapter<T : Any?>(val context: Context, private val adapter: 
             v.tag = tag
             return v
         }
-
         views = mutableListOf<View>().apply {
             mData?.let {
                 if (it.isEmpty()) return@let
@@ -58,10 +55,10 @@ internal class PageAdapter<T : Any?>(val context: Context, private val adapter: 
         }
     }
 
-    private var views = listOf<View>()
+    private var views = mutableListOf<View>()
 
     override fun getCount(): Int {
-        return if (views.size <= 1) views.size else maxCount
+        return if (views.size == 1) views.size else maxCount
     }
 
     override fun isViewFromObject(view: View, obj: Any): Boolean {
@@ -86,23 +83,22 @@ internal class PageAdapter<T : Any?>(val context: Context, private val adapter: 
 
     private fun fillItem(v: View, position: Int) {
         if (isFirst) {
-            if (adapter != null) {
-                mData?.let { data ->
+            mData?.let { data ->
+                if (adapter != null) {
                     var index = 0
                     if (position != 0) index = if (position == views.lastIndex) -1 else 2
                     curSelectedPosition += index
                     if (curSelectedPosition < 0) curSelectedPosition = data.size - 1
                     if (curSelectedPosition >= data.size) curSelectedPosition -= data.size
-                    adapter.onBindData(data[curSelectedPosition], v)
+                    adapter?.onBindData(data[curSelectedPosition], v)
                 }
-            }
-            if (position == 1) {
-                isFirst = false
-                curSelectedPosition--
+                if (position == 1) {
+                    isFirst = false
+                    curSelectedPosition = calculatePositionWithRange(curSelectedPosition - 1, data.size)
+                }
             }
         }
     }
-
 
     private fun onPageScrolled(position: Int) {
         mData?.let { data ->
@@ -148,16 +144,27 @@ internal class PageAdapter<T : Any?>(val context: Context, private val adapter: 
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
-
     }
 
-    override fun onPageScrollStateChanged(p0: Int) {
 
+    override fun onPageScrollStateChanged(p0: Int) {
     }
 
     override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
         if (p1 > 0.0f) handlerScrollState(p0)
         if (p1 == 0.0f) handlerCurItemChanged(p0)
+        when (p1) {
+            0.0f -> {
+                adapter?.onScrollStateChanged(p1, ViewPager.SCROLL_STATE_IDLE)
+            }
+            1.0f -> {
+                adapter?.onScrollStateChanged(p1, ViewPager.SCROLL_STATE_SETTLING)
+            }
+            else -> {
+                adapter?.onScrollStateChanged(p1, ViewPager.SCROLL_STATE_DRAGGING)
+            }
+        }
+
     }
 
     override fun onPageSelected(p0: Int) {
@@ -169,7 +176,7 @@ internal class PageAdapter<T : Any?>(val context: Context, private val adapter: 
         if (triggerScrollPosition == position) return
         triggerItemPosition = -1
         triggerScrollPosition = position
-        adapter?.onFocusChange(views[curViewPosition], mData?.get(curSelectedPosition), false)
+        onFocusChanged(false)
     }
 
     private var triggerItemPosition = -1
@@ -177,6 +184,35 @@ internal class PageAdapter<T : Any?>(val context: Context, private val adapter: 
         if (triggerItemPosition == position) return
         triggerScrollPosition = -1
         triggerItemPosition = position
-        adapter?.onFocusChange(views[curViewPosition], mData?.get(curSelectedPosition), true)
+        onFocusChanged(true)
+    }
+
+    private fun onFocusChanged(focus: Boolean) {
+        adapter?.onFocusChange(getPointIndexItem(views, curViewPosition), getPointIndexItem(mData, curSelectedPosition), focus)
+    }
+
+    fun clear() {
+        if (curViewPosition in 0 until views.size && curSelectedPosition in 0 until (mData?.size ?: 0)) {
+            onFocusChanged(false)
+        }
+        adapter = null
+        context = null
+        mData = null
+        fun removeViews(vg: ViewGroup) {
+            if (vg.childCount <= 0) return
+            val views = mutableListOf<View>()
+            for (i in 0 until vg.childCount) {
+                val v = vg.getChildAt(i)
+                views.add(v)
+            }
+            views.forEach {
+                vg.removeView(it)
+                if (it is ViewGroup) removeViews(it)
+            }
+        }
+        views.forEach { v ->
+            (v as? ViewGroup)?.let { removeViews(it) }
+        }
+        views.clear()
     }
 }

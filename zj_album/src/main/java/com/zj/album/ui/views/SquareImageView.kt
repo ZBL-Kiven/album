@@ -5,6 +5,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.zj.album.R
+import com.zj.album.nutils.log
 
 /**
  * @author ZJJ on 2019.10.24
@@ -23,6 +24,8 @@ internal class SquareImageView : ImageView {
             var ta: TypedArray? = null
             try {
                 ta = context.obtainStyledAttributes(attrs, R.styleable.SquareImageView)
+                orientation = ta.getInt(R.styleable.SquareImageView_orientation, 0)
+                ratio = ta.getFraction(R.styleable.SquareImageView_ratio, 1, 2, 1.0f)
             } finally {
                 ta?.recycle()
             }
@@ -32,11 +35,12 @@ internal class SquareImageView : ImageView {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(getDefaultSize(0, widthMeasureSpec), getDefaultSize(0, heightMeasureSpec))
         val childSize = if (orientation == 0) measuredWidth else measuredHeight
-        val size = MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY)
-        var width = size
-        var height = size
-        if (orientation == 0) height = (height * ratio).toInt()
-        else width = (width * ratio).toInt()
-        super.onMeasure(width, height)
+        var mesW = childSize
+        var mesH = childSize
+        if (orientation == 0) mesH = (mesH * ratio).toInt()
+        else mesW = (mesW * ratio).toInt()
+        val mW = MeasureSpec.makeMeasureSpec(mesW, MeasureSpec.EXACTLY)
+        val mH = MeasureSpec.makeMeasureSpec(mesH, MeasureSpec.EXACTLY)
+        super.onMeasure(mW, mH)
     }
 }

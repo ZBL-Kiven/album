@@ -21,5 +21,5 @@ dependencies {
     // 用于视频播放
     implementation 'com.google.android.exoplayer:exoplayer-core:2.9.3'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.3'
-    implementation "com.github.bumptech.glide:glide:4.7.1"
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
 }

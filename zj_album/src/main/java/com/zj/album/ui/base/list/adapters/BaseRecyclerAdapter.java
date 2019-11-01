@@ -38,6 +38,10 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder, T> extends 
         return new ArrayList<>(data);
     }
 
+    protected List<T> getData() {
+        return data;
+    }
+
     public T getItem(int position) {
         return data.get(position);
     }
@@ -45,7 +49,7 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder, T> extends 
     public void add(T info) {
         if (info == null) return;
         this.data.add(info);
-        notifyItemInserted(getMaxPosition());
+        notifyItemInserted(getItemCount());
         setDataChange();
     }
 
@@ -53,7 +57,7 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder, T> extends 
         if (info == null) return;
         this.data.add(position, info);
         notifyItemInserted(position);
-        notifyItemRangeChanged(position, getMaxPosition());
+        notifyItemRangeChanged(position, getItemCount());
         setDataChange();
     }
 

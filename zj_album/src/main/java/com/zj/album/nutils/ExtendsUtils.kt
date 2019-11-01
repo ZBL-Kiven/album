@@ -11,8 +11,8 @@ import java.lang.IllegalArgumentException
 import java.util.*
 
 /**
-* @author ZJJ on 2019.10.24
-* */
+ * @author ZJJ on 2019.10.24
+ * */
 fun <T> runWithTryCatch(block: () -> T?): T? {
     return try {
         block()
@@ -94,4 +94,8 @@ fun getDuration(mediaDuration: Long): String {
     val minute = duration / 60
     val second = duration % 60
     return String.format(Locale.getDefault(), "${if (minute < 10) "0%d" else "%d"}:${if (second < 10) "0%d" else "%d"}", minute, second)
+}
+
+fun <T : Any?> getPointIndexItem(collection: List<T>?, index: Int): T? {
+    return if (index in 0 until (collection?.size ?: 0)) collection?.get(index) else null
 }
