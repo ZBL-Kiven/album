@@ -50,7 +50,9 @@ internal class PhotoGraphActivity : BaseActivity() {
     }
 
     override fun initData() {
-        photoGraphAdapter = PhotoGraphAdapter()
+        photoGraphAdapter = PhotoGraphAdapter {
+            cbOriginal?.isChecked ?: false && DataStore.isOriginalInAutoMode() == Constance.ORIGINAL_POLY
+        }
         rvGraph?.adapter = photoGraphAdapter
     }
 
@@ -68,7 +70,7 @@ internal class PhotoGraphActivity : BaseActivity() {
             if (DataStore.isOriginalInAutoMode() == Constance.ORIGINAL_POLY) {
                 photoGraphAdapter?.let { it.notifyItemRangeChanged(0, it.itemCount, Constance.NOTIFY_ORIGINAL) }
             } else {
-                //todo make recycler item notified
+                DataProxy.onOriginalChanged(checked, "")
             }
         }
         loadingView?.setRefreshListener {

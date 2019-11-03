@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AlphaAnimation
 import com.zj.album.BuildConfig
 import java.io.Serializable
 import java.lang.IllegalArgumentException
@@ -106,12 +105,21 @@ fun <T : Any?> getPointIndexItem(collection: List<T>?, index: Int): T? {
 }
 
 fun showOrHideView(v: View?, isShow: Boolean, range: FloatArray, duration: Long) {
-    if (duration > 0) {
-        if ((isShow && v?.visibility == View.VISIBLE) || (!isShow && v?.visibility == View.GONE)) return
-        if (v?.animation != null) v.clearAnimation()
-        val anim = AlphaAnimation(range[0], range[1])
-        anim.duration = duration
-        v?.startAnimation(anim)
+    v?.let {
+        synchronized(it) {
+            if (it.animation != null && ((it.visibility == View.VISIBLE && isShow) || (it.visibility != View.VISIBLE && !isShow))) return@let
+            it.alpha = range[0]
+            if (isShow) it.visibility = View.VISIBLE
+            if (it.animation != null) it.clearAnimation()
+            if (duration > 0) {
+                it.animate()?.alpha(range[1])?.setDuration(duration)?.withEndAction {
+                    it.alpha = range[1]
+                    it.visibility = if (isShow) View.VISIBLE else View.GONE
+                }?.start()
+            } else {
+                it.alpha = range[1]
+                it.visibility = if (isShow) View.VISIBLE else View.GONE
+            }
+        }
     }
-    v?.visibility = if (isShow) View.VISIBLE else View.GONE
 }

@@ -67,7 +67,7 @@ sealed class DataHelper {
         if (select) {
             putSelectedPath(info)
         } else {
-            info.useOriginalImages =false
+            info.useOriginalImages = false
             removeFormSelectedPaths(info.path)
         }
         curSelectedAccessKey = UUID.randomUUID().toString()
@@ -158,7 +158,7 @@ object DataProxy : DataHelper() {
 
     fun onOriginalChanged(original: Boolean, path: String): Boolean {
         if (!PhotoAlbum.useOriginalPolymorphism) {
-            useOriginal = original
+            setUseOriginal(original)
             selectedPaths?.forEach {
                 it.useOriginalImages = original
             }

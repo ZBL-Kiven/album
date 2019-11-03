@@ -21,6 +21,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private SparseArray<View> parseArray;
     private BaseRecyclerAdapter mAdapter;
+    private long lastClickTime = 0L;
 
     public BaseViewHolder(BaseRecyclerAdapter adapter, View v) {
         super(v);
@@ -29,8 +30,14 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long diffTime = System.currentTimeMillis() - lastClickTime;
+                if (diffTime < 500) {
+                    if (diffTime < 0) lastClickTime = 0;
+                    else return;
+                }
                 if (mAdapter.onClickListener != null)
                     mAdapter.onClickListener.onItemClick(getLayoutPosition(), itemView, mAdapter.getItem(getLayoutPosition()));
+                lastClickTime = System.currentTimeMillis();
             }
         });
     }

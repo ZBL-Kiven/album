@@ -10,7 +10,6 @@ import android.widget.TextView
 import com.google.android.exoplayer2.ui.PlayerView
 import com.zj.album.R
 import com.zj.album.nutils.getDuration
-import com.zj.album.nutils.log
 import com.zj.album.ui.views.BaseLoadingView
 
 /**
@@ -40,7 +39,7 @@ class VideoView : FrameLayout, PlayerEvent {
     private var seekProgressInterval: Long = 16
 
     private var simpleVideoEventListener: SimpleVideoEventListener? = null
-    private var exoPlayer: ExoPlayer2? = null
+    private var exoPlayer: ExoPlayer? = null
 
     private fun init() {
         val root = View.inflate(context, R.layout.preview_video, this)
@@ -52,7 +51,7 @@ class VideoView : FrameLayout, PlayerEvent {
         bottomToolsBar = root.findViewById(R.id.video_preview__tools_bar)
         seekBar = root.findViewById(R.id.video_preview_sb)
         videoPlayerView?.useController = false
-        exoPlayer = ExoPlayer2(this)
+        exoPlayer = ExoPlayer(this)
     }
 
     private fun initListener() {

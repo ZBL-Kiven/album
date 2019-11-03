@@ -1,6 +1,5 @@
 package com.zj.album.ui.preview.player
 
-
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -15,115 +14,151 @@ import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author ZJJ on 2019.10.24
- *
- * Video player module
- * */
-@Suppress("unused", "MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 class ExoPlayer(private var event: PlayerEvent?) {
 
     private var player: SimpleExoPlayer? = null
     private var playPath: String = ""
     private var duration = 0L
-    private var curState: State = State.DESTROY
     private var handler: Handler? = null
 
+    private var autoPlay = false
+    private var isReady = false
+
     internal enum class State(val pri: Int) {
-        RESUME(4), PREPARE(3), PAUSE(2), STOP(1), DESTROY(0)
+        COMPLETING(8), PLAY(7), READY(6), LOADING(5), COMPLETED(3), PAUSE(2), STOP(1), DESTROY(0)
     }
 
-    private val runnable: Runnable = Runnable {
-        if (isPrepared()) {
-            val curDuration = getCurrentProgress()
-            if (curDuration > 0) {
-                val interval = curDuration * 1.0f / max(1, duration)
-                val curSeekProgress = (interval * 100 + 0.5f).toInt()
-                event?.onSeekChanged(curSeekProgress, false, getDuration())
-                if (interval >= 0.99f) {
-                    event?.completing(currentPlayPath())
-                }
-            }
-            startProgressListen()
-        }
+    fun isReady(): Boolean {
+        return curState.pri >= State.READY.pri
     }
 
-    fun isPrepared(): Boolean {
-        return curState.pri >= State.PREPARE.pri
+    fun isPlaying(): Boolean {
+        return curState.pri >= State.PLAY.pri
     }
-
 
     fun isPause(): Boolean {
-        return curState.pri < State.PREPARE.pri
+        return curState.pri <= State.PAUSE.pri
     }
 
     fun isStop(): Boolean {
-        return curState.pri < State.PAUSE.pri
+        return curState.pri <= State.STOP.pri
     }
 
-    fun isResumed(): Boolean {
-        return curState.pri == State.RESUME.pri
+    fun isDestroyed(): Boolean {
+        return curState.pri == State.DESTROY.pri
     }
 
     fun currentPlayPath(): String {
         return playPath
     }
 
-    private var onPaused = true
-    private var onResumed = false
+    private val runnable: Runnable = Runnable {
+        if (isReady()) {
+            val curDuration = player?.currentPosition ?: 0
+            if (curDuration > 0) {
+                val interval = curDuration * 1.0f / max(1, duration)
+                val curSeekProgress = (interval * 100 + 0.5f).toInt()
+                event?.onSeekChanged(min(100, curSeekProgress), false, duration)
+                if (interval >= 0.99f) {
+                    setPlayerState(State.COMPLETING)
+                }
+            }
+            startProgressListen()
+        } else {
+            stopProgressListen()
+        }
+    }
 
-    fun initData(path: String) {
-        curState = State.STOP
-        event?.onLoading(path)
+    private var curState: State = State.DESTROY
+        set(value) {
+            if (field == value) return
+            when (value) {
+                State.LOADING -> {
+                    isReady = false
+                    autoPlay(false)
+                    if (isPlaying()) {
+                        setPlayerState(State.STOP)
+                    }
+                    event?.onLoading(playPath)
+                    loadingData()
+                }
+                State.READY -> {
+                    duration = player?.duration ?: 0
+                    event?.onPrepare(playPath, duration)
+                    isReady = true
+                    if (autoPlay) {
+                        player?.playWhenReady
+                        setPlayerState(State.PLAY)
+                        return
+                    }
+                }
+                State.PLAY -> {
+                    runWithPlayer {
+                        if (it.currentPosition >= it.duration) {
+                            seekTo(0, false)
+                        }
+                        field = value
+                        it.playWhenReady = true
+                    }
+                    startProgressListen()
+                    event?.onPlay(playPath)
+                    return
+                }
+
+                State.COMPLETING -> {
+                    event?.completing(currentPlayPath())
+                }
+
+                State.COMPLETED -> {
+                    setPlayerState(State.STOP)
+                }
+
+                State.PAUSE -> {
+                    if (isPause()) return
+                    runWithPlayer { it.playWhenReady = false }
+                    stopProgressListen()
+                    event?.onPause(playPath)
+                }
+
+                State.STOP -> {
+                    if (isStop()) return
+                    if (isPlaying()) setPlayerState(State.PAUSE)
+                    isReady = false
+                    autoPlay(false)
+                    resetAndStop(true)
+                }
+
+                State.DESTROY -> {
+                    if (isDestroyed()) return
+                    if (isPlaying()) setPlayerState(State.PAUSE)
+                    if (!isStop()) setPlayerState(State.STOP)
+                    event = null
+                }
+            }
+            field = value
+        }
+
+    private fun autoPlay(autoPlay: Boolean) {
+        this.autoPlay = autoPlay
+    }
+
+    private fun loadingData() {
+        event?.onLoading(playPath)
         handler = Handler(Looper.getMainLooper())
-        playPath = path
-        val uri = Uri.fromFile(File(path))
+        val uri = Uri.fromFile(File(playPath))
         val context = event?.getContext() ?: return
         val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, context.applicationContext?.packageName), DefaultBandwidthMeter())
         val videoSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
         player = ExoPlayerFactory.newSimpleInstance(context, DefaultTrackSelector())
-        event?.getPlayerView()?.player = player
-        player?.addListener(eventListener)
-        player?.prepare(videoSource)
-    }
-
-    fun resume() {
         runWithPlayer {
-            if (it.currentPosition >= it.duration) {
-                seekTo(0, false)
-            }
-            it.playWhenReady = true
+            event?.getPlayerView()?.player = it
+            it.addListener(eventListener)
+            it.prepare(videoSource)
         }
-        curState = State.RESUME
-        event?.onPlay(playPath)
-        startProgressListen()
     }
 
-    fun pause() {
-        curState = State.PAUSE
-        runWithPlayer { it.playWhenReady = false }
-        event?.onPause(playPath)
-        stopProgressListen()
-    }
-
-    fun seekTo(progress: Int, fromUser: Boolean) {
-        if (curState != State.PAUSE) pause()
-        val seekProgress = (min(100, progress) / 100f * getDuration() - 1).toLong()
-        runWithPlayer { it.seekTo(seekProgress) }
-        event?.onSeekChanged(progress, fromUser, getDuration())
-    }
-
-    fun getDuration(): Long {
-        return duration
-    }
-
-    fun getCurrentProgress(): Long {
-        return runWithPlayer { it.currentPosition } ?: 0L
-    }
-
-    fun resetAndStop(notifyStop: Boolean = false) {
-        curState = State.STOP
-        stopProgressListen()
+    private fun resetAndStop(notifyStop: Boolean = false) {
         runWithPlayer {
             it.removeListener(eventListener)
             it.release()
@@ -134,15 +169,47 @@ class ExoPlayer(private var event: PlayerEvent?) {
         playPath = ""
     }
 
+    private fun setPlayerState(state: State) {
+        if (isReady() && state == State.READY) return
+        synchronized(this.curState) {
+            this.curState = state
+        }
+    }
+
+    fun setData(path: String) {
+        playPath = path
+        setPlayerState(State.LOADING)
+    }
+
+    fun play() {
+        if (isReady) {
+            setPlayerState(State.PLAY)
+        } else {
+            autoPlay(true)
+        }
+    }
+
+    fun pause() {
+        setPlayerState(State.PAUSE)
+    }
+
     fun stop() {
-        if (isResumed()) pause()
-        resetAndStop(true)
+        autoPlay(false)
+        setPlayerState(State.STOP)
+    }
+
+    fun seekTo(progress: Int, fromUser: Boolean) {
+        if (curState != State.PAUSE) setPlayerState(State.PAUSE)
+        autoPlay(false)
+        if (duration > 0) {
+            val seekProgress = (min(100, progress) / 100f * duration - 1).toLong()
+            runWithPlayer { it.seekTo(seekProgress) }
+            event?.onSeekChanged(progress, fromUser, duration)
+        }
     }
 
     fun release() {
-        stop()
-        curState = State.DESTROY
-        event = null
+        setPlayerState(State.DESTROY)
     }
 
     private fun <T> runWithPlayer(block: (SimpleExoPlayer) -> T?): T? {
@@ -155,21 +222,16 @@ class ExoPlayer(private var event: PlayerEvent?) {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             when (playbackState) {
                 Player.STATE_ENDED -> {
-                    stop()
-                    event?.onCompleted(playPath)
+                    setPlayerState(State.COMPLETED)
                 }
                 Player.STATE_READY -> {
-                    if (!isPrepared() || duration <= 0) {
-                        curState = State.PREPARE
-                        duration = player?.duration ?: 0L
-                        event?.onPrepare(playPath, duration)
-                    }
+                    setPlayerState(State.READY)
                 }
             }
         }
 
         override fun onPlayerError(error: ExoPlaybackException?) {
-            stop()
+            setPlayerState(State.STOP)
             event?.onError(error)
         }
     }

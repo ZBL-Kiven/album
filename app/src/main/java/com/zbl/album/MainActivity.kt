@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         PhotoAlbum.options(this, 0)
             .maxSelectedCount(9)
             .setOriginalPolymorphism(true)
-            .simultaneousSelection(true)
+//            .simultaneousSelection(true)
             .start()
     }
 }

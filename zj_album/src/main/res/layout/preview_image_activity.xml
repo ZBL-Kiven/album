@@ -123,7 +123,7 @@
                     android:textColor="@drawable/photo_enabled_text"
                     android:textSize="@dimen/medium_text_size"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/preview_tv_done"
+                    android:layout_toStartOf="@id/preview_cb_original"
                     android:text="@string/pg_str_full_images_tip"/>
 
             <TextView

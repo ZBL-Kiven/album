@@ -33,8 +33,8 @@ data class FileInfo(val path: String, val mimeType: String, var size: Long, var 
         return false
     }
 
-    internal fun setOriginal(useOriginal: Boolean) {
-        DataProxy.onOriginalChanged(useOriginal, path)
+    internal fun setOriginal(useOriginal: Boolean): Boolean {
+        return DataProxy.onOriginalChanged(useOriginal, path)
     }
 
     internal fun isOriginal(): Boolean {

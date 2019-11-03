@@ -5,12 +5,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/darkBlueGrey"
         android:orientation="vertical">
 
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height"
+            android:background="@color/darkBlueGrey"
             android:paddingStart="@dimen/dp_16"
             android:paddingEnd="@dimen/dp_16">
 
@@ -45,81 +45,77 @@
                 android:layout_gravity="center"/>
     </FrameLayout>
 
-
-    <LinearLayout
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-        <FrameLayout
+            android:layout_height="0dp"
+            android:background="@android:color/white"
+            android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/photo_rv"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                app:spanCount="3"
+                android:paddingBottom="1dp"
+                tools:listitem="@layout/graph_item_selected"/>
 
-            <android.support.v7.widget.RecyclerView
-                    android:id="@+id/photo_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                    app:spanCount="3"
-                    tools:listitem="@layout/graph_item_selected"/>
-
-            <com.zj.album.ui.views.BaseLoadingView
-                    android:id="@+id/photo_loading"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:loadingRes="@drawable/loading_progressbar"
-                    app:noDataRes="@mipmap/loading_empty_data"
-                    app:backgroundFill="@color/loading_color_background"
-                    app:backgroundOnAct="@color/loading_color_background_float"
-                    app:hintColor="@color/darkBlueGrey"
-                    app:refreshTextColor="@color/grayish"
-                    app:loadingText="@string/loading_progress"
-                    app:refreshText="@string/loading_refresh"
-                    app:noDataText="@string/loading_no_data"/>
-        </FrameLayout>
-
-        <FrameLayout
+        <com.zj.album.ui.views.BaseLoadingView
+                android:id="@+id/photo_loading"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:loadingRes="@drawable/loading_progressbar"
+                app:noDataRes="@mipmap/loading_empty_data"
+                app:backgroundFill="@color/loading_color_background"
+                app:backgroundOnAct="@color/loading_color_background_float"
+                app:hintColor="@color/darkBlueGrey"
+                app:refreshTextColor="@color/grayish"
+                app:loadingText="@string/loading_progress"
+                app:refreshText="@string/loading_refresh"
+                app:noDataText="@string/loading_no_data"/>
+    </FrameLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:background="@color/paleBlue"
+            android:layout_height="@dimen/media_choose_bottom_bar_height">
+
+        <TextView
+                android:id="@+id/photo_tv_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:enabled="false"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:gravity="center"
+                android:text="@string/pg_str_preview"
+                android:textColor="@drawable/photo_enabled_text"
+                android:textSize="@dimen/medium_text_size"/>
+
+        <CheckBox
+                android:id="@+id/photo_cb_original"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@drawable/photo_enabled_text"
+                android:layout_gravity="center"
+                android:textSize="@dimen/medium_text_size"
+                android:text="@string/pg_str_full_images_tip"/>
+
+        <TextView
+                android:id="@+id/photo_tv_done"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@color/paleBlue"
-                android:layout_height="@dimen/media_choose_bottom_bar_height">
-
-            <TextView
-                    android:id="@+id/photo_tv_preview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:enabled="false"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:gravity="center"
-                    android:text="@string/pg_str_preview"
-                    android:textColor="@drawable/photo_enabled_text"
-                    android:textSize="@dimen/medium_text_size"/>
-
-            <CheckBox
-                    android:id="@+id/photo_cb_original"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="@drawable/photo_enabled_text"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/medium_text_size"
-                    android:text="@string/pg_str_full_images_tip"/>
-
-            <TextView
-                    android:id="@+id/photo_tv_done"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:background="@color/paleBlue"
-                    android:enabled="false"
-                    android:layout_gravity="end"
-                    android:gravity="center"
-                    android:text="@string/pg_str_send"
-                    android:textColor="@drawable/photo_enabled_text"
-                    android:textSize="@dimen/medium_text_size"/>
-        </FrameLayout>
-    </LinearLayout>
+                android:enabled="false"
+                android:layout_gravity="end"
+                android:gravity="center"
+                android:text="@string/pg_str_send"
+                android:textColor="@drawable/photo_enabled_text"
+                android:textSize="@dimen/medium_text_size"/>
+    </FrameLayout>
 
 </LinearLayout>
