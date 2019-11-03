@@ -12,6 +12,7 @@ data class Options(internal var req: Int, internal val onStart: (Options) -> Uni
     internal var simultaneousSelection: Boolean = false
     internal var sortWithDesc: Boolean = true
     internal var useOriginDefault: Boolean = false
+    internal var originalPolymorphism: Boolean = false
     internal var selectedUris: Collection<Pair<String, Boolean>>? = null
     internal var ignorePaths: Array<String>? = arrayOf()
     internal var mimeType: EnumSet<MimeType>? = pairOf(ofImage(), ofVideo())
@@ -38,6 +39,11 @@ data class Options(internal var req: Int, internal val onStart: (Options) -> Uni
 
     fun useOriginDefault(isOriginal: Boolean): Options {
         this.useOriginDefault = isOriginal
+        return this
+    }
+
+    fun setOriginalPolymorphism(polymorphism: Boolean): Options {
+        this.originalPolymorphism = polymorphism
         return this
     }
 

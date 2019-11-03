@@ -112,8 +112,14 @@ internal class PreviewActivity : BaseActivity() {
             }
         }
 
-        cbOriginal?.setOnClickListener {
-
+        cbOriginal?.setOnCheckedChangeListener { cb, check ->
+            curFileData?.let {
+                if (it.isOriginal() == check) return@let
+                if (it.isVideo) {
+                    cbOriginal?.isChecked = false;return@let
+                }
+                it.setOriginal(check)
+            } ?: { cbOriginal?.isChecked = false }.invoke()
         }
 
         mVideoView?.setOnClickListener { v ->
@@ -145,8 +151,13 @@ internal class PreviewActivity : BaseActivity() {
     }
 
     override fun onSelectedStateChange(count: Int) {
-        selectedRv?.visibility = if (count > 0) View.VISIBLE else View.GONE
+        val hasData = count > 0
         previewSelectedAdapter?.change(DataStore.getCurSelectedData())
+        if (hasData && selectedRv?.visibility != View.VISIBLE || !hasData && selectedRv?.visibility != View.GONE) {
+            val start = if (hasData) 0.0f else 1.0f
+            val end = if (hasData) 1.0f else 0.0f
+            showOrHideView(selectedRv, hasData, floatArrayOf(start, end), Constance.ANIMATE_DURATION)
+        }
         updateSelectState()
     }
 
@@ -224,8 +235,8 @@ internal class PreviewActivity : BaseActivity() {
 
     private fun updateSelectState() {
         curFileData?.let { data ->
-            val isSelected = data.isSelected()
-            vSelect?.isSelected = isSelected
+            vSelect?.isSelected = data.isSelected()
+            cbOriginal?.isChecked = data.isOriginal()
             val isVideoOnly = !data.isVideo || simultaneousSelection
             if (isVideoOnly) {
                 vSelect?.setBackgroundResource(R.drawable.bg_choose_local_media)
@@ -247,13 +258,34 @@ internal class PreviewActivity : BaseActivity() {
             val s = if (curSelectedCount <= 0) "" else "($curSelectedCount)"
             vComplete?.text = getString(R.string.pg_str_send).plus(s)
         }
-        vComplete?.isEnabled = curSelectedCount > 0
+        setViewsEnable(true)
     }
 
     private fun setViewsEnable(isEnable: Boolean) {
-        vSelect?.isEnabled = isEnable
-        vComplete?.isEnabled = (isEnable && DataStore.curSelectedCount() > 0)
-        cbOriginal?.isEnabled = isEnable
+        setSelectedEnable(isEnable)
+        setCompleteEnable(isEnable)
+        setOriginalEnable(isEnable)
+    }
+
+    private fun setSelectedEnable(isEnable: Boolean) {
+        vSelect?.let {
+            if (it.isEnabled != isEnable) it.isEnabled = isEnable
+        }
+    }
+
+    private fun setCompleteEnable(isEnable: Boolean) {
+        vComplete?.let {
+            val enabled = isEnable && DataStore.curSelectedCount() > 0
+            if (it.isEnabled != enabled) it.isEnabled = enabled
+        }
+    }
+
+    private fun setOriginalEnable(isEnable: Boolean) {
+        cbOriginal?.let {
+            val enabled = DataStore.curSelectedCount() > 0 && DataStore.hasImageSelected() && isEnable
+            if (it.isEnabled != enabled) it.isEnabled = enabled
+        }
+
     }
 
     private fun initDataWithPagerSelected() {

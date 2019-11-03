@@ -9,9 +9,9 @@ import com.zj.album.nutils.runWithTryCatch
 import java.io.Serializable
 
 /**
-* @author ZJJ on 2019.10.24
-* */
-data class FileInfo(val path: String, val mimeType: String, var size: Long) : Serializable {
+ * @author ZJJ on 2019.10.24
+ * */
+data class FileInfo(val path: String, val mimeType: String, var size: Long, var useOriginalImages: Boolean = false) : Serializable {
     var lastModifyTs: Long = 0; private set
 
     var duration: Long = 0
@@ -32,6 +32,15 @@ data class FileInfo(val path: String, val mimeType: String, var size: Long) : Se
         } else 0
         return false
     }
+
+    internal fun setOriginal(useOriginal: Boolean) {
+        DataProxy.onOriginalChanged(useOriginal, path)
+    }
+
+    internal fun isOriginal(): Boolean {
+        return DataStore.isOriginalData(path)
+    }
+
 
     companion object {
 

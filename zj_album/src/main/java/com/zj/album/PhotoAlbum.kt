@@ -21,6 +21,7 @@ object PhotoAlbum {
         return Options(requestCode) {
             this.options = it
             this.maxSelectSize = it.maxSelectSize
+            this.useOriginalPolymorphism = it.originalPolymorphism
             DataProxy.setUseOriginal(it.useOriginDefault)
             this.simultaneousSelection = it.simultaneousSelection
             act.startActivityForResult(Intent(act, PhotoGraphActivity::class.java), it.req)
@@ -42,6 +43,8 @@ object PhotoAlbum {
     internal var maxSelectSize = Int.MAX_VALUE
     @JvmStatic
     internal var simultaneousSelection = false
+    @JvmStatic
+    internal var useOriginalPolymorphism = false
 
     private var appContext: Context? = null
 

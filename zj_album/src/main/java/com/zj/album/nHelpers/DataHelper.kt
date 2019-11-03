@@ -7,6 +7,7 @@ import com.zj.album.R
 import com.zj.album.interfaces.EventHub
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.FolderInfo
+import com.zj.album.nutils.Constance
 import java.util.*
 
 private var useOriginal = false
@@ -30,7 +31,7 @@ private var curDisplayFolder: FolderInfo? = null
 
 sealed class DataHelper {
 
-    private fun getFormSelectedPaths(path: String): FileInfo? {
+    protected fun getFormSelectedPaths(path: String): FileInfo? {
         return selectedPaths?.firstOrNull { it.path == path }
     }
 
@@ -66,6 +67,7 @@ sealed class DataHelper {
         if (select) {
             putSelectedPath(info)
         } else {
+            info.useOriginalImages =false
             removeFormSelectedPaths(info.path)
         }
         curSelectedAccessKey = UUID.randomUUID().toString()
@@ -86,7 +88,7 @@ object DataProxy : DataHelper() {
     fun init(selected: Collection<Pair<String, Boolean>>?) {
         selectedPaths?.clear()
         selected?.forEach {
-            putSelectedPath(FileInfo("", it.first, 0))
+            putSelectedPath(FileInfo(it.first, "", 0, it.second))
         }
     }
 
@@ -100,8 +102,9 @@ object DataProxy : DataHelper() {
     fun setData(data: FolderInfo?) {
         data?.files?.forEach {
             val path = it.path
-            if (findIsInSelectedPaths(path)) {
-                it.setSelected(true, ignoreMaxCount = true)
+            getFormSelectedPaths(path)?.let { f ->
+                it.setSelected(f.isSelected(), ignoreMaxCount = true)
+                it.useOriginalImages = f.useOriginalImages
                 putSelectedPath(it)
             }
         }
@@ -151,6 +154,24 @@ object DataProxy : DataHelper() {
         }
         if (canSelect) putASelect(select, info)
         return canSelect
+    }
+
+    fun onOriginalChanged(original: Boolean, path: String): Boolean {
+        if (!PhotoAlbum.useOriginalPolymorphism) {
+            useOriginal = original
+            selectedPaths?.forEach {
+                it.useOriginalImages = original
+            }
+        } else {
+            if (!findIsInSelectedPaths(path) && original) {
+                val fInfo = curDisplayFolder?.files?.firstOrNull { it.path == path }
+                fInfo?.useOriginalImages = original
+                if (fInfo != null) if (!onSelectedChanged(true, fInfo, false)) return false
+            } else {
+                getFormSelectedPaths(path)?.useOriginalImages = original
+            }
+        }
+        return true
     }
 
     fun register(regKey: String, accessKey: String, selectedAccessKey: String, eventHub: EventHub) {
@@ -203,13 +224,29 @@ object DataStore : DataHelper() {
         return id == curDisplayFolder?.id
     }
 
-    @JvmStatic
-    fun isOriginalUsed(): Boolean {
-        return useOriginal
+    fun isOriginalData(path: String): Boolean {
+        if (path.isEmpty()) return false
+        if (!PhotoAlbum.useOriginalPolymorphism) return useOriginal
+        return getFormSelectedPaths(path)?.useOriginalImages ?: false
     }
 
     @JvmStatic
     fun curSelectedCount(): Int {
         return getSelectedCount()
+    }
+
+    @JvmStatic
+    fun isOriginalInAutoMode(): Int {
+        return when {
+            PhotoAlbum.useOriginalPolymorphism -> return Constance.ORIGINAL_POLY
+            useOriginal -> return Constance.ORIGINAL_AUTO_SET
+            !useOriginal -> return Constance.ORIGINAL_AUTO_NOT
+            else -> Constance.CODE_UNKNOWN
+        }
+    }
+
+    @JvmStatic
+    fun hasImageSelected(): Boolean {
+        return (selectedPaths?.any { !it.isVideo } ?: false)
     }
 }

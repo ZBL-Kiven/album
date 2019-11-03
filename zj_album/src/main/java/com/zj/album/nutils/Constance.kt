@@ -1,25 +1,24 @@
 package com.zj.album.nutils
 
-import com.zj.album.PhotoAlbum
-import com.zj.album.R
-
 /**
  * @author ZJJ on 2019.10.24
  * */
 object Constance {
+
+    const val CODE_UNKNOWN = -1
+
     const val ANIMATE_DURATION = 300L
     const val REQUEST_OPEN_PREVIEW = 0x21
     const val REQUEST_OPEN_FOLDER = 0x22
     const val REQUEST_VIDEO_PREVIEW = 200
 
-    const val MAX_SELECT_COUNT = "max_select_count"
-    const val REQUEST_CODE = "request_code"
-    const val USE_ORIGINAL_DEFAULT = "use_original_default"
+    const val ORIGINAL_AUTO_SET = 0x31
+    const val ORIGINAL_AUTO_NOT = 0x32
+    const val ORIGINAL_POLY = 0x33
+
+    const val NOTIFY_SELECTED = "selected"
+
+    const val NOTIFY_ORIGINAL =  "original"
 
     private var completedString = ""
-
-
-    fun getCompletedText(): String {
-        return if (completedString.isEmpty()) PhotoAlbum.getString(R.string.pg_str_send) else completedString
-    }
 }

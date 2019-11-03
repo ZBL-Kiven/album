@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun start() {
-        PhotoAlbum.options(this, 0).maxSelectedCount(9).start()
+        PhotoAlbum.options(this, 0)
+            .maxSelectedCount(9)
+            .setOriginalPolymorphism(true)
+            .simultaneousSelection(true)
+            .start()
     }
 }

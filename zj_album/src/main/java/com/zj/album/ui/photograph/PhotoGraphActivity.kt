@@ -11,6 +11,7 @@ import com.zj.album.R
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nModule.FileInfo
+import com.zj.album.nutils.Constance
 import com.zj.album.ui.base.BaseActivity
 import com.zj.album.ui.base.list.listeners.ItemClickListener
 import com.zj.album.ui.folders.FolderActivity
@@ -64,7 +65,11 @@ internal class PhotoGraphActivity : BaseActivity() {
             doneAndFinish()
         }
         cbOriginal?.setOnCheckedChangeListener { _, checked ->
-            DataProxy.setUseOriginal(checked)
+            if (DataStore.isOriginalInAutoMode() == Constance.ORIGINAL_POLY) {
+                photoGraphAdapter?.let { it.notifyItemRangeChanged(0, it.itemCount, Constance.NOTIFY_ORIGINAL) }
+            } else {
+                //todo make recycler item notified
+            }
         }
         loadingView?.setRefreshListener {
             loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
@@ -102,14 +107,19 @@ internal class PhotoGraphActivity : BaseActivity() {
         vPreview?.isEnabled = count > 0
         val s = if (count <= 0) "" else "($count)"
         vOk?.text = getString(R.string.pg_str_send).plus(s)
+        cbOriginal?.visibility = if (count <= 0 || DataStore.hasImageSelected()) View.VISIBLE else {
+            cbOriginal?.isChecked = false; View.GONE
+        }
         photoGraphAdapter?.let {
-            it.notifyItemRangeChanged(0, it.itemCount, "selected")
+            it.notifyItemRangeChanged(0, it.itemCount, Constance.NOTIFY_SELECTED)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        cbOriginal?.isChecked = DataStore.isOriginalUsed()
+        val isOriginalInAutoMod = DataStore.isOriginalInAutoMode()
+        if (isOriginalInAutoMod != Constance.ORIGINAL_POLY) cbOriginal?.isChecked = isOriginalInAutoMod == Constance.ORIGINAL_AUTO_SET
+
     }
 
     private fun startPreviewActivity(isPreviewSelected: Boolean, path: String) {
