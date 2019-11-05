@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'kotlin-android'
+apply plugin: 'maven'
 
 android {
     compileSdkVersion compile_sdk_version as int
@@ -11,7 +11,14 @@ android {
         versionName "1.0"
     }
 }
-
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('../repository'))
+        pom.groupId = "com.cf.zjj"
+        pom.artifactId = "ZAlbum"
+        pom.version = "1.0.0-SNAPSHOT"
+    }
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
