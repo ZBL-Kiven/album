@@ -5,7 +5,7 @@ import java.util.*
 /**
 * @author ZJJ on 2019.10.24
 * */
-data class FolderInfo(
+internal data class FolderInfo(
     val isAll: Boolean
 ) {
     var id: String = UUID.randomUUID().toString()

@@ -2,7 +2,7 @@ package com.zj.album.nModule
 
 import android.database.Cursor
 import android.provider.MediaStore
-import com.zj.album.isVideo
+import com.zj.album.nutils.isVideo
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.runWithTryCatch
@@ -26,6 +26,7 @@ data class FileInfo(val path: String, val mimeType: String, var size: Long, var 
     }
 
     internal fun setSelected(selected: Boolean, ignoreMaxCount: Boolean = false): Boolean {
+        if (selected == isSelected()) return false
         lastModifyTs = if (DataProxy.onSelectedChanged(selected, this, ignoreMaxCount)) {
             if (selected) System.currentTimeMillis()
             return true
@@ -41,8 +42,7 @@ data class FileInfo(val path: String, val mimeType: String, var size: Long, var 
         return DataStore.isOriginalData(path)
     }
 
-
-    companion object {
+    internal companion object {
 
         fun valueOf(cursor: Cursor): FileInfo {
             @Suppress("DEPRECATION") val uri = runWithTryCatch {

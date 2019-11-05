@@ -1,44 +1,47 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package com.zj.album
+package com.zj.album.nutils
 
-import android.app.Activity
+import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
+import com.zj.album.R
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.GraphDataHelper
-import com.zj.album.ui.photograph.PhotoGraphActivity
+import com.zj.album.nModule.OptionInfo
 
 /**
  * @author ZJJ on 2019.10.24
  * */
-object PhotoAlbum {
+internal object AlbumConfig {
 
-    fun options(act: Activity, requestCode: Int): Options {
-        this.appContext = act.applicationContext
-        return Options(requestCode) {
-            this.options = it
-            this.maxSelectSize = it.maxSelectSize
-            this.useOriginalPolymorphism = it.originalPolymorphism
-            DataProxy.setUseOriginal(it.useOriginDefault)
-            this.simultaneousSelection = it.simultaneousSelection
-            act.startActivityForResult(Intent(act, PhotoGraphActivity::class.java), it.req)
-            loadData()
-        }
+    private var options: OptionInfo? = null
+
+    fun setOptions(appCtx: Application, options: OptionInfo) {
+        appContext = appCtx
+        this.options = options
+        appName = options.appName
+        maxSelectSize = options.maxSelectSize
+        useOriginalPolymorphism = options.originalPolymorphism
+        DataProxy.setUseOriginal(options.useOriginDefault)
+        simultaneousSelection = options.simultaneousSelection
+        loadData()
     }
 
-    private fun initGraph(it: Options) {
+    private fun initGraph(it: OptionInfo) {
         GraphDataHelper.init(it.mimeType, it.sortWithDesc, it.minSize, it.selectedUris, it.ignorePaths)
     }
-
-    private var options: Options? = null
 
     internal fun loadData() {
         options?.let { initGraph(it) }
     }
 
+    @JvmStatic
+    internal var appName = ""
+        get() {
+            return if (field.isEmpty()) getString(R.string.app_name) else field
+        }
     @JvmStatic
     internal var maxSelectSize = Int.MAX_VALUE
     @JvmStatic

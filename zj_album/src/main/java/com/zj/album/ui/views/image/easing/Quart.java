@@ -1,5 +1,6 @@
 package com.zj.album.ui.views.image.easing;
 
+@SuppressWarnings("unused")
 public class Quart implements Easing {
 
 	@Override

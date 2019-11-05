@@ -5,11 +5,15 @@ import android.provider.MediaStore
 import com.zj.album.*
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.FolderInfo
+import com.zj.album.nutils.AlbumConfig
+import com.zj.album.nutils.MimeType
+import com.zj.album.nutils.TYPE_IMG
+import com.zj.album.nutils.TYPE_VIDEO
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, private val ignorePaths: Array<String>?, private val onDataGot: (ArrayList<FolderInfo>?) -> Unit) : Runnable {
+internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, private val ignorePaths: List<String>?, private val onDataGot: (ArrayList<FolderInfo>?) -> Unit) : Runnable {
 
     private var isDesc = false
     private var fileMinSize = 1L
@@ -31,7 +35,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
     private fun running(): ArrayList<FolderInfo>? {
         var mCursor: Cursor? = null
         try {
-            val resolver = PhotoAlbum.getContentResolver()
+            val resolver = AlbumConfig.getContentResolver()
             val selectionAndArgs = getSelectionAndArgs(enumSet)
             mCursor = resolver?.query(searchUri, projection, selectionAndArgs, null, sortOrder + getRange(0, 0))
             if (mCursor == null) {
@@ -79,7 +83,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
         allInfo.files = files
         allInfo.imageCounts = allInfo.files?.size ?: 0
         allInfo.topImgUri = allInfo.files?.get(0)?.path ?: ""
-        allInfo.parentName = PhotoAlbum.getString(R.string.pg_str_all)
+        allInfo.parentName = AlbumConfig.getString(R.string.pg_str_all)
         list.add(allInfo)
         groupData.forEach { (s, lst) ->
             val fInfo = FolderInfo(false)

@@ -2,33 +2,23 @@ package com.zj.album.nHelpers
 
 import android.os.Handler
 import android.os.Looper
-import com.zj.album.MimeType
+import com.zj.album.nModule.SimpleSelectInfo
+import com.zj.album.nutils.MimeType
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 
-object GraphDataHelper {
+internal object GraphDataHelper {
 
     var isRunning = false; private set
 
-    fun init(
-        enumSet: EnumSet<MimeType>?,
-        useDesc: Boolean,
-        minSize: Long,
-        selectedPaths: Collection<Pair<String, Boolean>>? = null,
-        ignorePaths: Array<String>? = arrayOf()
-    ) {
+    fun init(enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, selectedPaths: Collection<SimpleSelectInfo>? = null, ignorePaths: ArrayList<String>?) {
         DataProxy.init(selectedPaths)
         initData(enumSet, useDesc, minSize, ignorePaths)
     }
 
-    private fun initData(
-        enumSet: EnumSet<MimeType>?,
-        useDesc: Boolean,
-        minSize: Long,
-        ignorePaths: Array<String>? = arrayOf(),
-        e: ExecutorService? = null
-    ) {
+    private fun initData(enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, ignorePaths: List<String>? = arrayListOf(), e: ExecutorService? = null) {
         if (isRunning) return
         var executors = e
         isRunning = true

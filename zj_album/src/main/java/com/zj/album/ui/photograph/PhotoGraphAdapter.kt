@@ -11,9 +11,8 @@ import com.zj.album.ui.base.list.holders.BaseViewHolder
 
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.animation.AlphaAnimation
 import android.widget.ImageView
-import com.zj.album.PhotoAlbum
+import com.zj.album.nutils.AlbumConfig
 import com.zj.album.imageloader.impl.GlideLoader
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.Constance
@@ -27,7 +26,7 @@ class PhotoGraphAdapter(private val isOriginalSupport: () -> Boolean) : BaseAdap
 
     override fun initData(holder: BaseViewHolder, position: Int, data: FileInfo, payloads: List<Any>?) {
         val isVideo = data.isVideo
-        val simultaneousSelection = PhotoAlbum.simultaneousSelection
+        val simultaneousSelection = AlbumConfig.simultaneousSelection
         val tvNum = holder.getView<TextView>(R.id.graph_item_tv_num)
         val vSelect = holder.getView<View>(R.id.graph_item_btn_num)
         val tvOriginal = holder.getView<TextView>(R.id.graph_item_tv_original)

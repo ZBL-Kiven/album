@@ -1,11 +1,19 @@
 package com.zj.album.ui.base
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import com.zj.album.R
 import com.zj.album.interfaces.EventHub
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nModule.FileInfo
+import com.zj.album.nutils.AlbumConfig
+import com.zj.album.nutils.log
 import java.util.*
 
 /**
@@ -22,7 +30,14 @@ internal abstract class BaseActivity : AppCompatActivity(), EventHub {
     private var curSelectedAccessKey: String = ""
     private val regKey = UUID.randomUUID().toString()
     final override fun onCreate(savedInstanceState: Bundle?) {
+        val i = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (i == PackageManager.PERMISSION_GRANTED) {
+            start()
+        } else ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
         super.onCreate(savedInstanceState)
+    }
+
+    private fun start() {
         setContentView(getContentView())
         initView()
         initData()
@@ -53,5 +68,19 @@ internal abstract class BaseActivity : AppCompatActivity(), EventHub {
     override fun onStop() {
         DataProxy.unregister(regKey)
         super.onStop()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        log("onRequestPermissionsResult")
+        val i = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (i == PackageManager.PERMISSION_GRANTED) {
+            start()
+        } else {
+            val appName = AlbumConfig.appName
+            val name = if (appName.isEmpty()) getString(R.string.app_name) else appName
+            Toast.makeText(this, getString(R.string.pg_permission_request_fail, name), Toast.LENGTH_LONG).show()
+            finish()
+        }
     }
 }

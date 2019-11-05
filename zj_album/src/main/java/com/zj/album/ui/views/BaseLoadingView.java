@@ -270,15 +270,7 @@ public class BaseLoadingView extends FrameLayout {
         }
     }
 
-    /**
-     * just call setMode after this View got,
-     *
-     * @param mode      the current display mode you need;
-     * @param showOnAct is showing on content? or hide content?
-     * @param hint      show something when it`s change a mode;
-     */
-    public void setMode(DisplayMode mode, String hint, boolean showOnAct, int delayDismissTime) {
-        setMode(mode, hint, showOnAct);
+    public void hideDelay(int delayDismissTime) {
         postDelayed(new Runnable() {
             @Override
             public void run() {

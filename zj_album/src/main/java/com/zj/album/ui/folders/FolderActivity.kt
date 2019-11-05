@@ -3,7 +3,7 @@ package com.zj.album.ui.folders
 import android.view.View
 
 import android.widget.ImageView
-import com.zj.album.PhotoAlbum
+import com.zj.album.nutils.AlbumConfig
 import com.zj.album.R
 import com.zj.album.imageloader.impl.GlideLoader
 import com.zj.album.nHelpers.DataProxy
@@ -37,7 +37,7 @@ internal class FolderActivity : BaseActivity() {
         isStopHandleData = false
         loadingView?.setRefreshListener {
             loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
-            PhotoAlbum.loadData()
+            AlbumConfig.loadData()
         }
         findViewById<View>(R.id.folder_cancel).setOnClickListener { finish() }
     }
@@ -61,9 +61,9 @@ internal class FolderActivity : BaseActivity() {
                 holder.getView<View>(R.id.folder_item_select).isSelected = DataStore.isCurDisplayFolder(data.id)
                 if (payLoads != null && payLoads.isNotEmpty()) return
                 holder.setText(R.id.folder_item_tv_name, data.parentName)
-                holder.setText(R.id.folder_item_tv_count, PhotoAlbum.getString(R.string.pg_str_picture_count, data.imageCounts))
+                holder.setText(R.id.folder_item_tv_count, AlbumConfig.getString(R.string.pg_str_picture_count, data.imageCounts))
                 val iv = holder.getView<ImageView>(R.id.folder_item_iv_img)
-                GlideLoader().loadThumbnail(iv, iv.measuredWidth, R.mipmap.photo_nodata, data.topImgUri)
+                GlideLoader().loadThumbnail(iv, iv.measuredWidth, R.mipmap.photo_nodata, data.topImgUri ?: "")
             }
 
             override fun onItemClick(position: Int, v: View, m: FolderInfo?) {

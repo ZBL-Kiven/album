@@ -2,7 +2,10 @@ package com.zj.album.interfaces
 
 import com.zj.album.nModule.FileInfo
 
-interface EventHub {
+/**
+ * @author ZJJ on 2019.10.24
+ * */
+internal interface EventHub {
 
     fun onDataGot(data: List<FileInfo>?, dataAccessKey: String)
 

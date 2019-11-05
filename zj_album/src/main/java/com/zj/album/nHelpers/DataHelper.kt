@@ -2,17 +2,19 @@
 
 package com.zj.album.nHelpers
 
-import com.zj.album.PhotoAlbum
+import com.zj.album.nutils.AlbumConfig
 import com.zj.album.R
 import com.zj.album.interfaces.EventHub
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.FolderInfo
+import com.zj.album.nModule.SimpleSelectInfo
 import com.zj.album.nutils.Constance
 import java.util.*
+import kotlin.collections.ArrayList
 
 private var useOriginal = false
 private var curDataAccessKey: String = ""
-private var curSelectedAccessKey: String = ""
+private var curSelectedAccessKey: String = "init"
 
 private var mData: MutableList<FolderInfo>? = null
     get() {
@@ -20,9 +22,9 @@ private var mData: MutableList<FolderInfo>? = null
         return field
     }
 
-private var selectedPaths: MutableList<FileInfo>? = null
+private var selectedPaths: ArrayList<FileInfo>? = null
     get() {
-        if (field == null) field = mutableListOf();return field
+        if (field == null) field = arrayListOf();return field
     }
 
 private val dataListeners: MutableMap<String, EventHub>? = mutableMapOf()
@@ -46,8 +48,15 @@ sealed class DataHelper {
     protected fun putSelectedPath(info: FileInfo?) {
         if (info != null) {
             val selectedIndex = getIndexOfSelected(info.path)
-            if (selectedIndex >= 0) selectedPaths?.set(selectedIndex, info)
-            else selectedPaths?.add(info)
+            if (selectedIndex >= 0) {
+                info.useOriginalImages = selectedPaths?.get(selectedIndex)?.useOriginalImages ?: false
+                selectedPaths?.set(selectedIndex, info)
+            } else {
+                if (!AlbumConfig.useOriginalPolymorphism) {
+                    info.useOriginalImages = useOriginal
+                }
+            }
+            selectedPaths?.add(info)
             selectedPaths?.sortBy { it.lastModifyTs }
         }
     }
@@ -83,53 +92,54 @@ sealed class DataHelper {
     }
 }
 
-object DataProxy : DataHelper() {
+internal object DataProxy : DataHelper() {
     @JvmStatic
-    fun init(selected: Collection<Pair<String, Boolean>>?) {
+    fun init(selected: Collection<SimpleSelectInfo>?) {
         selectedPaths?.clear()
         selected?.forEach {
-            putSelectedPath(FileInfo(it.first, "", 0, it.second))
+            putSelectedPath(FileInfo(it.path, "", 0, it.useOriginal))
         }
     }
 
     @JvmStatic
-    fun setLocalData(data: MutableList<FolderInfo>?) {
+    internal fun setLocalData(data: MutableList<FolderInfo>?) {
         mData = data
         curDisplayFolder = data?.firstOrNull { it.isAll }
         setData(curDisplayFolder)
     }
 
-    fun setData(data: FolderInfo?) {
+    internal fun setData(data: FolderInfo?) {
         data?.files?.forEach {
             val path = it.path
             getFormSelectedPaths(path)?.let { f ->
                 it.setSelected(f.isSelected(), ignoreMaxCount = true)
                 it.useOriginalImages = f.useOriginalImages
-                putSelectedPath(it)
             }
         }
         curDisplayFolder = data
-        curSelectedAccessKey = UUID.randomUUID().toString()
-        dataListeners?.forEach {
-            it.value.onSelectedChanged(getSelectedCount(), curSelectedAccessKey)
-        }
         curDataAccessKey = UUID.randomUUID().toString()
         dataListeners?.forEach {
             it.value.onDataGot(data?.files, if (data != null) curDataAccessKey else "")
+        }
+        val selectedCount = getSelectedCount()
+        if (selectedCount > 0) {
+            dataListeners?.forEach {
+                it.value.onSelectedChanged(selectedCount, curSelectedAccessKey)
+            }
         }
     }
 
     fun onSelectedChanged(select: Boolean, info: FileInfo, ignoreMaxCount: Boolean): Boolean {
         val selectedCount = getSelectedCount()
-        val isNotMaxSized = selectedCount < PhotoAlbum.maxSelectSize
+        val isNotMaxSized = selectedCount < AlbumConfig.maxSelectSize
         val isVideoSelected = info.isVideo
         fun toast(id: Int, vararg args: Any) {
-            if (!ignoreMaxCount) PhotoAlbum.toastLong(id, *args)
+            if (!ignoreMaxCount) AlbumConfig.toastLong(id, *args)
         }
 
         val canSelect = when {
             !select -> true
-            PhotoAlbum.simultaneousSelection -> isNotMaxSized // not supported simultaneous selection
+            AlbumConfig.simultaneousSelection -> isNotMaxSized // not supported simultaneous selection
             selectedCount <= 0 -> true
             isNotMaxSized -> {
                 val selectedHasVideo = (selectedPaths?.firstOrNull { it.isVideo } != null)
@@ -148,7 +158,7 @@ object DataProxy : DataHelper() {
                 }
             }
             else -> {
-                toast(R.string.pg_str_at_best, PhotoAlbum.maxSelectSize)
+                toast(R.string.pg_str_at_best, AlbumConfig.maxSelectSize)
                 false
             }
         }
@@ -157,7 +167,7 @@ object DataProxy : DataHelper() {
     }
 
     fun onOriginalChanged(original: Boolean, path: String): Boolean {
-        if (!PhotoAlbum.useOriginalPolymorphism) {
+        if (!AlbumConfig.useOriginalPolymorphism) {
             setUseOriginal(original)
             selectedPaths?.forEach {
                 it.useOriginalImages = original
@@ -177,9 +187,12 @@ object DataProxy : DataHelper() {
     fun register(regKey: String, accessKey: String, selectedAccessKey: String, eventHub: EventHub) {
         dataListeners?.put(regKey, eventHub)
         curDisplayFolder?.let {
-            if (accessKey != curDataAccessKey) eventHub.onDataGot(it.files, curDataAccessKey)
-            if (selectedAccessKey != curSelectedAccessKey) {
-                eventHub.onSelectedChanged(getSelectedCount(), curSelectedAccessKey)
+            val isDataAccess = accessKey != curDataAccessKey
+            val isSelectedAccess = selectedAccessKey != curSelectedAccessKey
+            val selectedCount = getSelectedCount()
+            if (isDataAccess) eventHub.onDataGot(it.files, curDataAccessKey)
+            if (isSelectedAccess && selectedCount > 0) {
+                eventHub.onSelectedChanged(selectedCount, curSelectedAccessKey)
             }
         } ?: eventHub.onDataGot(null, accessKey)
     }
@@ -193,15 +206,15 @@ object DataProxy : DataHelper() {
     }
 }
 
-object DataStore : DataHelper() {
+internal object DataStore : DataHelper() {
     @JvmStatic
     fun getCurData(): FolderInfo? {
         return curDisplayFolder
     }
 
     @JvmStatic
-    fun getCurSelectedData(): List<FileInfo>? {
-        return selectedPaths
+    fun getCurSelectedData(): ArrayList<FileInfo> {
+        return selectedPaths ?: arrayListOf()
     }
 
     @JvmStatic
@@ -226,7 +239,7 @@ object DataStore : DataHelper() {
 
     fun isOriginalData(path: String): Boolean {
         if (path.isEmpty()) return false
-        if (!PhotoAlbum.useOriginalPolymorphism) return useOriginal
+        if (!AlbumConfig.useOriginalPolymorphism) return useOriginal
         return getFormSelectedPaths(path)?.useOriginalImages ?: false
     }
 
@@ -238,7 +251,7 @@ object DataStore : DataHelper() {
     @JvmStatic
     fun isOriginalInAutoMode(): Int {
         return when {
-            PhotoAlbum.useOriginalPolymorphism -> return Constance.ORIGINAL_POLY
+            AlbumConfig.useOriginalPolymorphism -> return Constance.ORIGINAL_POLY
             useOriginal -> return Constance.ORIGINAL_AUTO_SET
             !useOriginal -> return Constance.ORIGINAL_AUTO_NOT
             else -> Constance.CODE_UNKNOWN

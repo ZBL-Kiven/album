@@ -1,5 +1,6 @@
 package com.zj.album.ui.views.image.easing;
 
+@SuppressWarnings("unused")
 public class Linear implements Easing {
 
 	public double easeNone(double time, double start, double end, double duration) {

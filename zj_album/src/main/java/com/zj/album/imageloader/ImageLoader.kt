@@ -1,8 +1,8 @@
-package com.zj.album.imageloader;
+package com.zj.album.imageloader
 
-import android.widget.ImageView;
+import android.widget.ImageView
 
-public interface ImageLoader {
+internal interface ImageLoader {
 
     /**
      * loading thumbnail
@@ -12,7 +12,7 @@ public interface ImageLoader {
      * @param defaultDrawable the default if loading or fail
      * @param path            resource url
      */
-    void loadThumbnail(ImageView imageView, int resize, int defaultDrawable, String path);
+    fun loadThumbnail(imageView: ImageView, resize: Int, defaultDrawable: Int, path: String)
 
 
     /**
@@ -23,5 +23,5 @@ public interface ImageLoader {
      * @param resizeH   resize bitmap height
      * @param path      resource url
      */
-    void loadImage(ImageView imageView, int resizeW, int resizeH, String path);
+    fun loadImage(imageView: ImageView, resizeW: Int, resizeH: Int, path: String)
 }

@@ -8,7 +8,8 @@
     <application>
         <activity
                 android:name="com.zj.album.ui.photograph.PhotoGraphActivity"
-                android:launchMode="singleTask"/>
+                android:launchMode="singleTask">
+        </activity>
         <activity android:name="com.zj.album.ui.folders.FolderActivity"/>
         <activity android:name="com.zj.album.ui.preview.PreviewActivity"/>
     </application>

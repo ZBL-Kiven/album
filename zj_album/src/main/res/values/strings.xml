@@ -18,7 +18,7 @@
     <string name="pg_str_images_choose_tip_message">Cannot select both image and video</string>
     <string name="pg_str_video_choose_tip_message">Video can only choose one</string>
     <string name="pg_str_at_best">Can only select up to %1$d files</string>
-
+    <string name="pg_permission_request_fail">%s permissions denied!</string>
     <string name="pv_str_default_time">00:00</string>
 
 </resources>

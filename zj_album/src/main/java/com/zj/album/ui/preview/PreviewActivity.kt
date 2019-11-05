@@ -1,7 +1,6 @@
 package com.zj.album.ui.preview
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -17,9 +16,10 @@ import com.zj.album.ui.preview.player.SimpleVideoEventListener
 import com.zj.album.ui.preview.player.VideoView
 import com.zj.album.ui.views.image.ImageViewTouch
 import android.animation.Animator
+import android.app.Activity
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
-import com.zj.album.PhotoAlbum.simultaneousSelection
+import com.zj.album.nutils.AlbumConfig.simultaneousSelection
 import com.zj.album.R
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.*
@@ -34,12 +34,12 @@ internal class PreviewActivity : BaseActivity() {
     companion object {
         private const val LAUNCH_PATH = "path"
         private const val LAUNCH_PREVIEW_SELECTED = "preview_selected"
-        fun start(context: Context, isPreviewSelected: Boolean, path: String) {
+        fun start(context: Activity, isPreviewSelected: Boolean, path: String) {
             val i = Intent(context, PreviewActivity::class.java).apply {
                 putExtra(LAUNCH_PREVIEW_SELECTED, isPreviewSelected)
                 putExtra(LAUNCH_PATH, path)
             }
-            context.startActivity(i)
+            context.startActivityForResult(i, Constance.REQUEST_OPEN_PREVIEW)
         }
     }
 
@@ -146,11 +146,16 @@ internal class PreviewActivity : BaseActivity() {
                 }
             }
         })
+
+        vComplete?.setOnClickListener {
+            completedAndFinish()
+        }
     }
 
     override fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
-        curPreviewData = if (isSelectedPreview) ArrayList(DataStore.getCurSelectedData() ?: arrayListOf()) else data
+        curPreviewData = if (isSelectedPreview) ArrayList(DataStore.getCurSelectedData()) else data
         setPreviewData(initPath)
+        setCompletedText(false)
     }
 
     override fun onSelectedStateChange(count: Int) {
@@ -415,6 +420,13 @@ internal class PreviewActivity : BaseActivity() {
         llBottomBar?.clearAnimation()
         anim?.start(isFull)
         isFull = !isFull
+    }
+
+    private fun completedAndFinish() {
+        if (DataStore.curSelectedCount() > 0) {
+            setResult(Constance.RESULT_PREVIEW)
+            finish()
+        }
     }
 
     override fun onDestroy() {

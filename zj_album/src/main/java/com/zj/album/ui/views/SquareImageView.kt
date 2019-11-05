@@ -5,7 +5,6 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.zj.album.R
-import com.zj.album.nutils.log
 
 /**
  * @author ZJJ on 2019.10.24
