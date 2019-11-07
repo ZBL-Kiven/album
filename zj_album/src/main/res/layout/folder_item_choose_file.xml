@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 tools:text="folder name"
-                android:textColor="@color/darkBlueGrey"
+                android:textColor="@color/pg_color_primary"
                 android:textSize="@dimen/medium_text_size"/>
 
         <TextView
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 tools:text="1212"
-                android:textColor="@color/grayish"
+                android:textColor="@color/pg_color_gray"
                 android:textSize="@dimen/small_text_size"/>
         <View
                 android:id="@+id/folder_item_select"

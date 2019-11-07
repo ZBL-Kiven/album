@@ -10,7 +10,7 @@
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height"
-            android:background="@color/darkBlueGrey"
+            android:background="@color/pg_color_primary"
             android:paddingStart="@dimen/dp_16"
             android:paddingEnd="@dimen/dp_16">
 
@@ -24,7 +24,7 @@
                 android:textSize="@dimen/small_text_size"
                 android:gravity="center"
                 android:text="@string/pg_str_cancel"
-                android:textColor="@color/white"/>
+                android:textColor="@color/pg_color_white"/>
 
         <TextView
                 android:id="@+id/photo_tv_file"
@@ -34,13 +34,13 @@
                 android:textSize="@dimen/small_text_size"
                 android:layout_gravity="end|center_vertical"
                 android:text="@string/pg_str_album"
-                android:textColor="@color/white"/>
+                android:textColor="@color/pg_color_white"/>
         <TextView
                 android:id="@+id/photo_tv_tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pg_str_all"
-                android:textColor="@color/white"
+                android:textColor="@color/pg_color_white"
                 android:textSize="@dimen/medium_text_size"
                 android:layout_gravity="center"/>
     </FrameLayout>
@@ -68,10 +68,10 @@
                 android:layout_height="match_parent"
                 app:loadingRes="@drawable/loading_progressbar"
                 app:noDataRes="@mipmap/loading_empty_data"
-                app:backgroundFill="@color/loading_color_background"
-                app:backgroundOnAct="@color/loading_color_background_float"
-                app:hintColor="@color/darkBlueGrey"
-                app:refreshTextColor="@color/grayish"
+                app:backgroundFill="@color/pg_color_loading_color_background"
+                app:backgroundOnAct="@color/pg_color_loading_background_float"
+                app:hintColor="@color/pg_color_primary"
+                app:refreshTextColor="@color/pg_color_gray"
                 app:loadingText="@string/loading_progress"
                 app:refreshText="@string/loading_refresh"
                 app:noDataText="@string/loading_no_data"/>
@@ -79,7 +79,7 @@
 
     <FrameLayout
             android:layout_width="match_parent"
-            android:background="@color/paleBlue"
+            android:background="@color/pg_color_blue_pale"
             android:layout_height="@dimen/media_choose_bottom_bar_height">
 
         <TextView
@@ -109,7 +109,7 @@
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:background="@color/paleBlue"
+                android:background="@color/pg_color_blue_pale"
                 android:enabled="false"
                 android:layout_gravity="end"
                 android:gravity="center"

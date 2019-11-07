@@ -103,8 +103,8 @@ internal class BaseLoadingView @JvmOverloads constructor(context: Context, attrs
         if (attrs != null) {
             val array = context.obtainStyledAttributes(attrs, R.styleable.BaseLoadingView)
             try {
-                bgColor = array.getColor(R.styleable.BaseLoadingView_backgroundFill, ContextCompat.getColor(context, R.color.loading_color_background))
-                bgColorOnAct = array.getColor(R.styleable.BaseLoadingView_backgroundOnAct, ContextCompat.getColor(context, R.color.loading_color_background_float))
+                bgColor = array.getColor(R.styleable.BaseLoadingView_backgroundFill, ContextCompat.getColor(context, R.color.pg_color_loading_color_background))
+                bgColorOnAct = array.getColor(R.styleable.BaseLoadingView_backgroundOnAct, ContextCompat.getColor(context, R.color.pg_color_loading_background_float))
                 noDataRes = array.getResourceId(R.styleable.BaseLoadingView_noDataRes, -1)
                 noNetworkRes = array.getResourceId(R.styleable.BaseLoadingView_noNetworkRes, -1)
                 loadingRes = array.getResourceId(R.styleable.BaseLoadingView_loadingRes, -1)

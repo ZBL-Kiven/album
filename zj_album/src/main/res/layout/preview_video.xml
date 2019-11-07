@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@color/black50"
+                android:background="@color/pg_color_black_50"
                 android:padding="10dp"
                 android:visibility="gone"
                 android:orientation="horizontal">
@@ -39,7 +39,7 @@
                     android:id="@+id/video_preview_tv_start"
                     android:layout_width="wrap_content"
                     android:text="@string/pv_str_default_time"
-                    android:textColor="@color/gray5"
+                    android:textColor="@color/pg_color_gray_5"
                     android:layout_height="wrap_content"/>
 
             <SeekBar
@@ -54,7 +54,7 @@
                     android:id="@+id/video_preview_tv_end"
                     android:layout_width="wrap_content"
                     android:text="@string/pv_str_default_time"
-                    android:textColor="@color/gray5"
+                    android:textColor="@color/pg_color_gray_5"
                     android:layout_height="wrap_content"/>
 
         </LinearLayout>
@@ -67,10 +67,10 @@
             android:visibility="gone"
             app:loadingRes="@drawable/loading_progressbar"
             app:noDataRes="@mipmap/video_loading_fail"
-            app:backgroundFill="@color/loading_color_background"
-            app:backgroundOnAct="@color/loading_color_background_float"
-            app:hintColor="@color/darkBlueGrey"
-            app:refreshTextColor="@color/grayish"
+            app:backgroundFill="@color/pg_color_loading_color_background"
+            app:backgroundOnAct="@color/pg_color_loading_background_float"
+            app:hintColor="@color/pg_color_primary"
+            app:refreshTextColor="@color/pg_color_gray"
             app:loadingText="@string/loading_video_progress"
             app:refreshText="@string/loading_video_error_tint"
             app:noDataText="@string/loading_video_error"/>
