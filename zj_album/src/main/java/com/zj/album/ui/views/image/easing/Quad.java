@@ -1,7 +1,7 @@
 package com.zj.album.ui.views.image.easing;
 
 @SuppressWarnings("unused")
-public class Quad implements Easing {
+class Quad implements Easing {
 
 	@Override
 	public double easeOut(double t, double b, double c, double d) {

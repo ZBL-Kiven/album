@@ -81,7 +81,7 @@ internal class PhotoGraphActivity : BaseActivity() {
             }
         }
         loadingView?.setRefreshListener {
-            loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
+            loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
             AlbumConfig.loadData()
         }
         vPreview?.setOnClickListener {
@@ -101,8 +101,8 @@ internal class PhotoGraphActivity : BaseActivity() {
 
     override fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
         when {
-            isQueryTaskRunning -> loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
-            data.isNullOrEmpty() -> loadingView?.setMode(BaseLoadingView.DisplayMode.noData)
+            isQueryTaskRunning -> loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
+            data.isNullOrEmpty() -> loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
             else -> {
                 tvTitle?.text = DataStore.getCurData()?.parentName
                 photoGraphAdapter?.change(data)

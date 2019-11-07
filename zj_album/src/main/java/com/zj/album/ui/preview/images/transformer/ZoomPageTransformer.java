@@ -7,7 +7,7 @@ import android.view.View;
  * @author ZJJ on 2019.10.24
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class ZoomPageTransformer extends PageTransformer {
+class ZoomPageTransformer extends PageTransformerEffect {
     private float mMinScale = 0.96f;
     private float mMinAlpha = 0.65f;
 

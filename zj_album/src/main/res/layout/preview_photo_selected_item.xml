@@ -14,8 +14,8 @@
             android:id="@+id/preview_selected_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:orientation="vertical"
-            app:ratio="102%"
+            app:squareWith="vertical"
+            app:squareRatio="102%"
             android:scaleType="centerCrop"
             tools:ignore="ContentDescription"/>
 

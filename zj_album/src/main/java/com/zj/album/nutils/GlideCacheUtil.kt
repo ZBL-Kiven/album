@@ -13,7 +13,7 @@ import java.io.File
  *
  * Created by ZJJ on 2019/11/5
  */
-object GlideCacheUtil {
+internal object GlideCacheUtil {
 
     /**
      * clear image cache form rom

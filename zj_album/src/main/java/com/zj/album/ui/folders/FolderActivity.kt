@@ -36,7 +36,7 @@ internal class FolderActivity : BaseActivity() {
     override fun initListener() {
         isStopHandleData = false
         loadingView?.setRefreshListener {
-            loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
+            loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
             AlbumConfig.loadData()
         }
         findViewById<View>(R.id.folder_cancel).setOnClickListener { finish() }
@@ -44,10 +44,10 @@ internal class FolderActivity : BaseActivity() {
 
     override fun onDataDispatch(data: List<FileInfo>?, isQueryTaskRunning: Boolean) {
         when {
-            isQueryTaskRunning -> loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
-            data.isNullOrEmpty() -> loadingView?.setMode(BaseLoadingView.DisplayMode.noData)
+            isQueryTaskRunning -> loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
+            data.isNullOrEmpty() -> loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
             else -> {
-                loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
+                loadingView?.setMode(BaseLoadingView.DisplayMode.DISMISS)
                 if (isStopHandleData) return
                 setData()
             }

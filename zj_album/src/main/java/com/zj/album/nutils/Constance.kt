@@ -3,7 +3,7 @@ package com.zj.album.nutils
 /**
  * @author ZJJ on 2019.10.24
  * */
-object Constance {
+internal object Constance {
 
     const val LAUNCH_KEY = "launch"
 

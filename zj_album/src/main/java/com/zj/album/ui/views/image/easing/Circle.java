@@ -1,7 +1,7 @@
 package com.zj.album.ui.views.image.easing;
 
 @SuppressWarnings("unused")
-public class Circ implements Easing {
+class Circle implements Easing {
 
 	@Override
 	public double easeOut(double time, double start, double end, double duration) {

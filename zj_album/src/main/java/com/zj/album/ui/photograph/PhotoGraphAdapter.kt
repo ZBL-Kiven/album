@@ -22,7 +22,7 @@ import com.zj.album.nutils.showOrHideView
 /**
  * @author ZJJ on 2019.10.24
  * */
-class PhotoGraphAdapter(private val isOriginalSupport: () -> Boolean) : BaseAdapter<FileInfo>(R.layout.graph_item_selected) {
+internal class PhotoGraphAdapter(private val isOriginalSupport: () -> Boolean) : BaseAdapter<FileInfo>(R.layout.graph_item_selected) {
 
     override fun initData(holder: BaseViewHolder, position: Int, data: FileInfo, payloads: List<Any>?) {
         val isVideo = data.isVideo

@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    <com.zj.album.ui.views.image.ImageViewTouch
+    <com.zj.album.ui.views.image.TouchScaleImageView
             android:id="@+id/preview_base_iv_img"
             android:layout_width="match_parent"
             android:visibility="gone"

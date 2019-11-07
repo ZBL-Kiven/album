@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * @author ZJJ on 2019.10.24
  */
-public class DefaultPageTransformer extends PageTransformer {
+class DefaultPageTransformer extends PageTransformerEffect {
 
     @Override
     public void handleInvisiblePage(View view, float position) {

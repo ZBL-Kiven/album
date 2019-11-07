@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import com.zj.album.AlbumIns
 import com.zj.album.nModule.SimpleSelectInfo
 import com.zj.album.nutils.AlbumOptions
-import com.zj.album.nutils.log
+import com.zj.album.ui.preview.images.transformer.TransitionEffect
+import com.zj.album.ui.views.image.easing.ScaleEffect
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,23 +26,20 @@ class MainActivity : AppCompatActivity() {
         start()
     }
 
-    ///storage/emulated/0/DCIM/Camera/IMG_20190701_164213.jpg , true | , /storage/emulated/0/DCIM/Camera/IMG_20190701_164233.jpg , true | , /storage/emulated/0/DCIM/Camera/IMG_20190701_164242.jpg , true |
     private fun start() {
-        AlbumIns.with(this)
-            .setOriginalPolymorphism(false)
-            .simultaneousSelection(false)
-            .maxSelectedCount(9)
-            .ignorePaths("QQ")
-            .mimeTypes(AlbumOptions.pairOf(AlbumOptions.ofImage(), AlbumOptions.ofVideo()))
-            .sortWithDesc(true)
-            .useOriginDefault(true)
+        AlbumIns.with(this).setOriginalPolymorphism(false).simultaneousSelection(false).maxSelectedCount(9)
+            .ignorePaths("QQ").mimeTypes(AlbumOptions.pairOf(AlbumOptions.ofImage(), AlbumOptions.ofVideo()))
+            .sortWithDesc(true).useOriginDefault(true)
             .selectedUris(arrayListOf(SimpleSelectInfo("/storage/emulated/0/DCIM/Camera/IMG_20190701_164213.jpg", true)))
+            .imageScaleEffect(ScaleEffect.QUAD)
+            .pagerTransitionEffect(TransitionEffect.Zoom)
             .start { _, data ->
-                log("aa  =   ${data?.joinToString { "${it.path} , ${it.useOriginalImages} | " }}")
+                Log.e("", "aa  =   ${data?.joinToString { "${it.path} , ${it.useOriginalImages} | " }}")
             }
     }
 
     fun startAlbum(v: View?) {
+
         val i = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
         if (i != PackageManager.PERMISSION_GRANTED) {
             start()

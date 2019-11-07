@@ -6,7 +6,7 @@ import android.view.View;
  * @author ZJJ on 2019.10.24
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class CubePageTransformer extends PageTransformer {
+class CubePageTransformer extends PageTransformerEffect {
     
     private float mMaxRotation = 15.0f;
 

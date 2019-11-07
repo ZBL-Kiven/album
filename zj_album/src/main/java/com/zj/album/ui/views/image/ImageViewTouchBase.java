@@ -12,9 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-
-import com.zj.album.ui.views.image.easing.Cubic;
-import com.zj.album.ui.views.image.easing.Easing;
+import com.zj.album.ui.views.image.easing.ScaleEffect;
 import com.zj.album.ui.views.image.graphics.FastBitmapDrawable;
 import com.zj.album.ui.views.image.utils.IDisposable;
 
@@ -23,7 +21,7 @@ import com.zj.album.ui.views.image.utils.IDisposable;
  * Base View to manage image zoom/scroll/pinch operations
  */
 @SuppressWarnings("unused")
-public abstract class ImageViewTouchBase extends AppCompatImageView implements IDisposable {
+abstract class ImageViewTouchBase extends AppCompatImageView implements IDisposable {
 
     public interface OnDrawableChangeListener {
 
@@ -67,7 +65,6 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
 
     public static final float ZOOM_INVALID = -1f;
 
-    protected Easing mEasing = new Cubic();
     protected Matrix mBaseMatrix = new Matrix();
     protected Matrix mSuppMatrix = new Matrix();
     protected Matrix mNextMatrix;
@@ -132,6 +129,10 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         if (scaleType == ScaleType.MATRIX) {
             super.setScaleType(scaleType);
         }
+    }
+
+    protected ScaleEffect getEasingEffect() {
+        return ScaleEffect.CUBIC;
     }
 
     /**
@@ -341,13 +342,7 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
         final int viewWidth = getWidth();
 
         if (viewWidth <= 0) {
-            mLayoutRunnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    setImageDrawable(drawable, initial_matrix, min_zoom, max_zoom);
-                }
-            };
+            mLayoutRunnable = () -> setImageDrawable(drawable, initial_matrix, min_zoom, max_zoom);
             return;
         }
         _setImageDrawable(drawable, initial_matrix, min_zoom, max_zoom);
@@ -684,7 +679,7 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
     }
 
     protected void zoomTo(float scale) {
-         if (scale > getMaxScale()) scale = getMaxScale();
+        if (scale > getMaxScale()) scale = getMaxScale();
         if (scale < getMinScale()) scale = getMinScale();
         PointF center = getCenter();
         zoomTo(scale, center.x, center.y);
@@ -759,8 +754,8 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
             public void run() {
                 long now = System.currentTimeMillis();
                 double currentMs = Math.min(durationMs, now - startTime);
-                double x = mEasing.easeOut(currentMs, 0, dx, durationMs);
-                double y = mEasing.easeOut(currentMs, 0, dy, durationMs);
+                double x = getEasingEffect().getEasing().easeOut(currentMs, 0, dx, durationMs);
+                double y = getEasingEffect().getEasing().easeOut(currentMs, 0, dy, durationMs);
                 panBy((x - old_x), (y - old_y));
                 old_x = x;
                 old_y = y;
@@ -795,7 +790,7 @@ public abstract class ImageViewTouchBase extends AppCompatImageView implements I
             public void run() {
                 long now = System.currentTimeMillis();
                 float currentMs = Math.min(durationMs, now - startTime);
-                float newScale = (float) mEasing.easeInOut(currentMs, 0, deltaScale, durationMs);
+                float newScale = (float) getEasingEffect().getEasing().easeInOut(currentMs, 0, deltaScale, durationMs);
                 zoomTo(oldScale + newScale, destX, destY);
                 if (currentMs < durationMs) {
                     mHandler.post(this);

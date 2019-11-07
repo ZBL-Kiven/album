@@ -6,7 +6,7 @@ import android.view.View;
  * @author ZJJ on 2019.10.24
  */
 @SuppressWarnings("unused")
-public class FlipPageTransformer extends PageTransformer {
+class FlipPageTransformer extends PageTransformerEffect {
     private static final float ROTATION = 180.0f;
 
     @Override

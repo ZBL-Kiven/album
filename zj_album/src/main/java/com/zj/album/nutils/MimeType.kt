@@ -25,17 +25,17 @@ enum class MimeType(val mMimeTypeName: String, val mExtensions: Set<String>, val
     AVI("video/avi", hashSetOf("avi"), TYPE_VIDEO);
 }
 
-const val TYPE_IMG = 1
-const val TYPE_VIDEO = 2
+internal const val TYPE_IMG = 1
+internal const val TYPE_VIDEO = 2
 
-fun isImage(mimeType: String?): Boolean {
+internal fun isImage(mimeType: String?): Boolean {
     return mimeType?.startsWith("image") ?: false
 }
 
-fun isVideo(mimeType: String?): Boolean {
+internal fun isVideo(mimeType: String?): Boolean {
     return mimeType?.startsWith("video") ?: false
 }
 
-fun isGif(mimeType: String?): Boolean {
+internal fun isGif(mimeType: String?): Boolean {
     return if (mimeType == null) false else mimeType == MimeType.GIF.toString()
 }

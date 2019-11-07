@@ -14,7 +14,7 @@ import java.util.*
 /**
  * @author ZJJ on 2019.10.24
  * */
-fun <T> runWithTryCatch(block: () -> T?): T? {
+internal fun <T> runWithTryCatch(block: () -> T?): T? {
     return try {
         block()
     } catch (e: Exception) {
@@ -23,7 +23,7 @@ fun <T> runWithTryCatch(block: () -> T?): T? {
     }
 }
 
-inline fun <reified T : Serializable> Intent.getValueBySafe(name: String, default: T): T {
+internal inline fun <reified T : Serializable> Intent.getValueBySafe(name: String, default: T): T {
     return if (hasExtra(name)) {
         return try {
             when (T::class.java) {
@@ -56,7 +56,7 @@ inline fun <reified T : Serializable> Intent.getValueBySafe(name: String, defaul
     } else default
 }
 
-inline fun <reified T : Serializable> Bundle.getValueBySafe(name: String, default: T): T {
+internal inline fun <reified T : Serializable> Bundle.getValueBySafe(name: String, default: T): T {
     return if (containsKey(name)) {
         return try {
             when (T::class.java) {
@@ -89,22 +89,22 @@ inline fun <reified T : Serializable> Bundle.getValueBySafe(name: String, defaul
     } else default
 }
 
-fun log(s: String) {
+internal fun log(s: String) {
     if (BuildConfig.DEBUG) Log.e("ZJJ ----- ", s)
 }
 
-fun getDuration(mediaDuration: Long): String {
+internal fun getDuration(mediaDuration: Long): String {
     val duration = mediaDuration / 1000
     val minute = duration / 60
     val second = duration % 60
     return String.format(Locale.getDefault(), "${if (minute < 10) "0%d" else "%d"}:${if (second < 10) "0%d" else "%d"}", minute, second)
 }
 
-fun <T : Any?> getPointIndexItem(collection: List<T>?, index: Int): T? {
+internal fun <T : Any?> getPointIndexItem(collection: List<T>?, index: Int): T? {
     return if (index in 0 until (collection?.size ?: 0)) collection?.get(index) else null
 }
 
-fun showOrHideView(v: View?, isShow: Boolean, range: FloatArray, duration: Long) {
+internal fun showOrHideView(v: View?, isShow: Boolean, range: FloatArray, duration: Long) {
     v?.let {
         synchronized(it) {
             if (it.animation != null && ((it.visibility == View.VISIBLE && isShow) || (it.visibility != View.VISIBLE && !isShow))) return@let

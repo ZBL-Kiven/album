@@ -12,7 +12,7 @@ import com.zj.album.ui.base.list.holders.BaseViewHolder
 import com.zj.album.ui.views.SquareImageView
 import kotlin.math.max
 
-class PreviewSelectedAdapter : BaseAdapter<FileInfo>(R.layout.preview_photo_selected_item) {
+internal class PreviewSelectedAdapter : BaseAdapter<FileInfo>(R.layout.preview_photo_selected_item) {
 
     override fun initData(holder: BaseViewHolder?, position: Int, data: FileInfo?, payloads: MutableList<Any>?) {
         data?.let {

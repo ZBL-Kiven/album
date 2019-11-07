@@ -1,7 +1,7 @@
 package com.zj.album.ui.views.image.easing;
 
 @SuppressWarnings("unused")
-public class Elastic implements Easing {
+class Elastic implements Easing {
 
     @Override
     public double easeIn(double time, double start, double end, double duration) {

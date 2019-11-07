@@ -1,7 +1,7 @@
 package com.zj.album.ui.views.image.easing;
 
 @SuppressWarnings("unused")
-public class Cubic implements Easing {
+class Cubic implements Easing {
 
 	@Override
 	public double easeOut(double time, double start, double end, double duration) {

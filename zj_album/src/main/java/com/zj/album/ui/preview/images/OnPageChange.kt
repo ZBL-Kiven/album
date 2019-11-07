@@ -5,7 +5,7 @@ import android.view.View
 /**
  * @author ZJJ on 2019.10.24
  * */
-interface OnPageChange<T : Any?> {
+internal interface OnPageChange<T : Any?> {
 
     fun onBindData(data: T?, view: View)
 

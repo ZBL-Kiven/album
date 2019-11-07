@@ -3,6 +3,8 @@ package com.zj.album.nutils
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.OptionInfo
 import com.zj.album.nModule.SimpleSelectInfo
+import com.zj.album.ui.preview.images.transformer.TransitionEffect
+import com.zj.album.ui.views.image.easing.ScaleEffect
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
@@ -57,6 +59,16 @@ class AlbumOptions internal constructor(internal val onStart: (OptionInfo, call:
 
     fun mimeTypes(types: EnumSet<MimeType>?): AlbumOptions {
         options.mimeType = types
+        return this
+    }
+
+    fun pagerTransitionEffect(effect: TransitionEffect): AlbumOptions {
+        options.pagerEffect = effect
+        return this
+    }
+
+    fun imageScaleEffect(effect: ScaleEffect): AlbumOptions {
+        options.imageScaleEffect = effect
         return this
     }
 

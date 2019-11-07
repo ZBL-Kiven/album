@@ -23,8 +23,8 @@ internal class SquareImageView : ImageView {
             var ta: TypedArray? = null
             try {
                 ta = context.obtainStyledAttributes(attrs, R.styleable.SquareImageView)
-                orientation = ta.getInt(R.styleable.SquareImageView_orientation, 0)
-                ratio = ta.getFraction(R.styleable.SquareImageView_ratio, 1, 2, 1.0f)
+                orientation = ta.getInt(R.styleable.SquareImageView_squareWith, 0)
+                ratio = ta.getFraction(R.styleable.SquareImageView_squareRatio, 1, 2, 1.0f)
             } finally {
                 ta?.recycle()
             }

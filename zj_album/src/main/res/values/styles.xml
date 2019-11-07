@@ -17,11 +17,11 @@
     </declare-styleable>
 
     <declare-styleable name="SquareImageView">
-        <attr name="orientation" format="enum">
+        <attr name="squareWith" format="enum">
             <enum name="horizontal" value="0"/>
             <enum name="vertical" value="1"/>
         </attr>
-        <attr name="ratio" format="fraction"/>
+        <attr name="squareRatio" format="fraction"/>
     </declare-styleable>
 
     <style name="mProgress_circle">

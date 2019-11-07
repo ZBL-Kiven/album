@@ -5,13 +5,16 @@ import android.provider.MediaStore
 import com.zj.album.nutils.isVideo
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.DataStore
+import com.zj.album.nutils.isGif
+import com.zj.album.nutils.isImage
 import com.zj.album.nutils.runWithTryCatch
 import java.io.Serializable
 
 /**
  * @author ZJJ on 2019.10.24
  * */
-data class FileInfo(val path: String, val mimeType: String, var size: Long, var useOriginalImages: Boolean = false) : Serializable {
+@Suppress("unused")
+data class FileInfo internal constructor(val path: String, val mimeType: String, var size: Long, var useOriginalImages: Boolean = false) : Serializable {
     var lastModifyTs: Long = 0; private set
 
     var duration: Long = 0
@@ -20,6 +23,8 @@ data class FileInfo(val path: String, val mimeType: String, var size: Long, var 
         }
 
     val isVideo: Boolean; get() = isVideo(mimeType)
+    val isImage: Boolean; get() = isImage(mimeType)
+    val isGif: Boolean; get() = isGif(mimeType)
 
     internal fun isSelected(): Boolean {
         return DataStore.isSelected(path)

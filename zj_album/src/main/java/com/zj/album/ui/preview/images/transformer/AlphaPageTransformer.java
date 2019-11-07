@@ -6,7 +6,7 @@ import android.view.View;
  * @author ZJJ on 2019.10.24
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AlphaPageTransformer extends PageTransformer {
+class AlphaPageTransformer extends PageTransformerEffect {
     private float mMinScale = 0.4f;
 
     public AlphaPageTransformer() {

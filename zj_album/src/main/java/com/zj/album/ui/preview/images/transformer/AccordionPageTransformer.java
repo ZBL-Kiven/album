@@ -6,7 +6,7 @@ import android.view.View;
  * @author ZJJ on 2019.10
  */
 @SuppressWarnings({"unused"})
-public class AccordionPageTransformer extends PageTransformer {
+class AccordionPageTransformer extends PageTransformerEffect {
 
     @Override
     public void handleInvisiblePage(View view, float position) {

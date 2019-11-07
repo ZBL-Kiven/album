@@ -89,14 +89,14 @@ class VideoView : FrameLayout, PlayerEvent {
     override fun onLoading(path: String) {
         seekBar?.isEnabled = false
         if (simpleVideoEventListener?.onLoading(path) == false) {
-            if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.loading)
+            if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
         }
     }
 
     override fun onPrepare(path: String, videoSize: Long) {
         seekBar?.isEnabled = true
         if (simpleVideoEventListener?.onPrepare(path, videoSize) == false) {
-            if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.normal)
+            if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.DISMISS)
             tvEnd?.text = getDuration(videoSize)
             if (autoPlay) exoPlayer?.play()
         }
@@ -153,7 +153,7 @@ class VideoView : FrameLayout, PlayerEvent {
 
     override fun onError(e: Exception?) {
         if (simpleVideoEventListener?.onError(e) == false) {
-            loadingView?.setMode(BaseLoadingView.DisplayMode.noData)
+            loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
         }
     }
 

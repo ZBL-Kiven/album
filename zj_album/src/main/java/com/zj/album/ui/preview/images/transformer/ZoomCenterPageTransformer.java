@@ -6,7 +6,7 @@ import android.view.View;
 /**
  * @author ZJJ on 2019.10.24
  */
-public class ZoomCenterPageTransformer extends PageTransformer {
+class ZoomCenterPageTransformer extends PageTransformerEffect {
 
     @Override
     public void handleInvisiblePage(View view, float position) {

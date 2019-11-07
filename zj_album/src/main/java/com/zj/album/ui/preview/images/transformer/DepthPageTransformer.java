@@ -6,7 +6,7 @@ import android.view.View;
  * @author ZJJ on 2019.10.24
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class DepthPageTransformer extends PageTransformer {
+class DepthPageTransformer extends PageTransformerEffect {
     private float mMinScale = 0.8f;
 
     public DepthPageTransformer() {

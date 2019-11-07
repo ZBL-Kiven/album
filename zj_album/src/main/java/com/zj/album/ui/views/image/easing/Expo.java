@@ -1,7 +1,7 @@
 package com.zj.album.ui.views.image.easing;
 
 @SuppressWarnings("unused")
-public class Expo implements Easing {
+class Expo implements Easing {
 
     @Override
     public double easeOut(double time, double start, double end, double duration) {

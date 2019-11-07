@@ -6,7 +6,7 @@ import android.view.View;
  * @author ZJJ on 2019.10
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class RotatePageTransformer extends PageTransformer {
+class RotatePageTransformer extends PageTransformerEffect {
     private float mMaxRotation = 15.0f;
 
     public RotatePageTransformer() {

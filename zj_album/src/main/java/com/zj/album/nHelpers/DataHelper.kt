@@ -31,7 +31,7 @@ private val dataListeners: MutableMap<String, EventHub>? = mutableMapOf()
 
 private var curDisplayFolder: FolderInfo? = null
 
-sealed class DataHelper {
+internal sealed class DataHelper {
 
     protected fun getFormSelectedPaths(path: String): FileInfo? {
         return selectedPaths?.firstOrNull { it.path == path }

@@ -1,7 +1,7 @@
 package com.zj.album.ui.views.image.easing;
 
 @SuppressWarnings("unused")
-public class Bounce implements Easing {
+class Bounce implements Easing {
 
     @Override
     public double easeOut(double t, double b, double c, double d) {

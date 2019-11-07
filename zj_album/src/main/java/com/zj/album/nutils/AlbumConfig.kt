@@ -10,6 +10,8 @@ import com.zj.album.R
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nModule.OptionInfo
+import com.zj.album.ui.preview.images.transformer.TransitionEffect
+import com.zj.album.ui.views.image.easing.ScaleEffect
 
 /**
  * @author ZJJ on 2019.10.24
@@ -24,8 +26,10 @@ internal object AlbumConfig {
         appName = options.appName
         maxSelectSize = options.maxSelectSize
         useOriginalPolymorphism = options.originalPolymorphism
-        DataProxy.setUseOriginal(options.useOriginDefault)
         simultaneousSelection = options.simultaneousSelection
+        pageTransformer = options.pagerEffect
+        imageScaleEffect = options.imageScaleEffect
+        DataProxy.setUseOriginal(options.useOriginDefault)
         loadData()
     }
 
@@ -48,6 +52,11 @@ internal object AlbumConfig {
     internal var simultaneousSelection = false
     @JvmStatic
     internal var useOriginalPolymorphism = false
+    @JvmStatic
+    internal var pageTransformer: TransitionEffect = TransitionEffect.Zoom
+    @JvmStatic
+    internal var imageScaleEffect: ScaleEffect = ScaleEffect.CUBIC
+
 
     private var appContext: Context? = null
 
