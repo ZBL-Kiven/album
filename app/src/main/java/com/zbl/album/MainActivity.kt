@@ -13,6 +13,7 @@ import com.zj.album.nModule.SimpleSelectInfo
 import com.zj.album.nutils.AlbumOptions
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 import com.zj.album.ui.views.image.easing.ScaleEffect
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,17 +30,15 @@ class MainActivity : AppCompatActivity() {
     private fun start() {
         AlbumIns.with(this).setOriginalPolymorphism(false).simultaneousSelection(false).maxSelectedCount(9)
             .ignorePaths("QQ").mimeTypes(AlbumOptions.pairOf(AlbumOptions.ofImage(), AlbumOptions.ofVideo()))
-            .sortWithDesc(true).useOriginDefault(true)
-            .selectedUris(arrayListOf(SimpleSelectInfo("/storage/emulated/0/DCIM/Camera/IMG_20190701_164213.jpg", true)))
-            .imageScaleEffect(ScaleEffect.QUAD)
-            .pagerTransitionEffect(TransitionEffect.Zoom)
-            .start { _, data ->
-                Log.e("", "aa  =   ${data?.joinToString { "${it.path} , ${it.useOriginalImages} | " }}")
+            .sortWithDesc(true).useOriginDefault(true).imageScaleEffect(ScaleEffect.QUAD)
+            .pagerTransitionEffect(TransitionEffect.Zoom).start { _, data ->
+                main_tv?.text = data?.joinToString {
+                    "\n path = ${it.path} \n" + " original = ${it.useOriginalImages} | \n"
+                }
             }
     }
 
     fun startAlbum(v: View?) {
-
         val i = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
         if (i != PackageManager.PERMISSION_GRANTED) {
             start()
