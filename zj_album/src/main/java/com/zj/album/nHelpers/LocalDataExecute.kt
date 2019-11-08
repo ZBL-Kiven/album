@@ -13,14 +13,20 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, private val ignorePaths: List<String>?, private val onDataGot: (ArrayList<FolderInfo>?) -> Unit) : Runnable {
+internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc: Boolean, imgMinSize: Long, imgMaxSize: Long, vMinSize: Long, vMaxSize: Long, private val ignorePaths: List<String>?, private val onDataGot: (ArrayList<FolderInfo>?) -> Unit) : Runnable {
 
     private var isDesc = false
-    private var fileMinSize = 1L
+    private var fileImgMinSize = 0L
+    private var fileImgMaxSize = Long.MAX_VALUE
+    private var fileVideoMinSize = 0L
+    private var fileVideoMaxSize = Long.MAX_VALUE
 
     init {
         this.isDesc = useDesc
-        this.fileMinSize = minSize
+        this.fileImgMinSize = imgMinSize
+        this.fileImgMaxSize = imgMaxSize
+        this.fileVideoMinSize = vMinSize
+        this.fileVideoMaxSize = vMaxSize
     }
 
     private val sortOrder: String; get() = MediaStore.Files.FileColumns.DATE_MODIFIED + if (isDesc) " DESC " else " ASC "
@@ -56,7 +62,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
             while (cursor.moveToNext()) {
                 val media = FileInfo.valueOf(cursor)
                 val file = File(media.path)
-                if (!file.exists() || file.isDirectory || !file.canRead() || file.length() <= fileMinSize) {
+                if (!file.exists() || file.isDirectory || !file.canRead()) {
                     continue
                 }
                 allInfo.add(media)
@@ -116,14 +122,22 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
         }
         enumSets.forEachIndexed { index, it ->
             if (index > 0) selection.append("OR ")
+            selection.append(" (")
             when (it) {
                 TYPE_IMG -> {
-                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE} ")
+                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE)
+                        .append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE} ").append("AND ")
+                        .append(MediaStore.Files.FileColumns.SIZE)
+                        .append(" BETWEEN $fileImgMinSize AND $fileImgMaxSize ")
                 }
                 TYPE_VIDEO -> {
-                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO} ")
+                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE)
+                        .append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO} ").append("AND ")
+                        .append(MediaStore.Files.FileColumns.SIZE)
+                        .append(" BETWEEN $fileVideoMinSize AND $fileVideoMaxSize ")
                 }
             }
+            selection.append(") ")
         }
         selection.append(") ")
         if (!enumSet.isNullOrEmpty()) {

@@ -34,7 +34,7 @@ internal object AlbumConfig {
     }
 
     private fun initGraph(it: OptionInfo) {
-        GraphDataHelper.init(it.mimeType, it.sortWithDesc, it.minSize, it.selectedUris, it.ignorePaths)
+        GraphDataHelper.init(it.mimeType, it.sortWithDesc, it.imgMinSize, it.imgMaxSize, it.videoMinSize, it.videoMaxSize, it.selectedUris, it.ignorePaths)
     }
 
     internal fun loadData() {

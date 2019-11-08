@@ -6,8 +6,11 @@ import com.zj.album.nModule.SimpleSelectInfo
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 import com.zj.album.ui.views.image.easing.ScaleEffect
 import java.io.Serializable
+import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * @author ZJJ on 2019.10.24
@@ -22,8 +25,25 @@ class AlbumOptions internal constructor(internal val onStart: (OptionInfo, call:
         return this
     }
 
-    fun minFilterSize(minSize: Long): AlbumOptions {
-        options.minSize = minSize
+    fun imgSizeRange(start: Long, end: Long): AlbumOptions {
+        var trueEnd = end
+        if (start < 0 || end < 0) {
+            throw IllegalArgumentException("the image size range must not contain to negative numbers!")
+        }
+        if (start == end) trueEnd++
+        options.imgMinSize = min(start, trueEnd)
+        options.imgMaxSize = max(start, trueEnd)
+        return this
+    }
+
+    fun videoSizeRange(start: Long, end: Long): AlbumOptions {
+        var trueEnd = end
+        if (start < 0 || end < 0) {
+            throw IllegalArgumentException("the video size range must not contain to negative numbers!")
+        }
+        if (start == end) trueEnd++
+        options.videoMinSize = min(start, trueEnd)
+        options.videoMaxSize = max(start, trueEnd)
         return this
     }
 

@@ -1,0 +1,127 @@
+//the colors
+
+color
+name = "pg_color_black"  
+value = #181F2A 
+    
+color 
+name = "pg_color_black_50"  
+value = #7f181F2A 
+    
+color 
+name = "pg_color_black_d"  
+value = #df000000 
+    
+color 
+name = "pg_color_blue_pale"  
+value = #EDF0F7 
+    
+color 
+name = "pg_color_gray"  
+value = #A4A4A4 
+    
+color 
+name = "pg_color_gray_5"  
+value = #F5F5F5 
+    
+color 
+name = "pg_color_loading_background_float"  
+value = #30000000 
+    
+color 
+name = "pg_color_loading_color_background"  
+value = #fff4f4f4 
+    
+color 
+name = "pg_color_primary"  
+value = #36485E 
+    
+color 
+name = "pg_color_white"  
+value = #FFFFFF 
+
+//the string res
+
+string
+name = "loading_no_data"
+value = No picture fond
+    
+string 
+name = "loading_progress"  
+value = please wait…
+    
+string 
+name = "loading_refresh"  
+value = Tap the screen to try again
+    
+string 
+name = "loading_video_error"  
+value = Video load fail
+    
+string 
+name = "loading_video_error_tint"  
+value = file is damaged or the format is not supported
+    
+string 
+name = "loading_video_progress"  
+value = The video loading…
+    
+string 
+name = "pg_permission_request_fail"  
+value = %s permissions denied!
+    
+string 
+name = "pg_str_album"  
+value = Folders
+    
+string 
+name = "pg_str_all"  
+value = All
+    
+string 
+name = "pg_str_all_files"  
+value = All Kinds
+    
+string 
+name = "pg_str_at_best"  
+value = Can only select up to %1$d files
+    
+string 
+name = "pg_str_cancel"  
+value = Cancel
+    
+string 
+name = "pg_str_full_images_tip"  
+value = Original
+    
+string 
+name = "pg_str_images_choose_tip_message"  
+value = Cannot select both image and video
+    
+string 
+name = "pg_str_picture_count"  
+value = for %1$d files found
+    
+string 
+name = "pg_str_preview"  
+value = Preview
+    
+string 
+name = "pg_str_send"  
+value = Done
+    
+string 
+name = "pg_str_video_choose_tip_message"  
+value = Video can only choose one
+    
+string 
+name = "pv_str_default_time"  
+value = 00:00
+
+//the styles
+
+style 
+name = "CustomSeekBarStyle"
+     
+style 
+name = "mProgress_circle"

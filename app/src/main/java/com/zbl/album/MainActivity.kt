@@ -28,10 +28,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun start() {
-        AlbumIns.with(this).setOriginalPolymorphism(false).simultaneousSelection(false).maxSelectedCount(9)
-            .ignorePaths("QQ").mimeTypes(AlbumOptions.pairOf(AlbumOptions.ofImage(), AlbumOptions.ofVideo()))
-            .sortWithDesc(true).useOriginDefault(true).imageScaleEffect(ScaleEffect.QUAD)
-            .pagerTransitionEffect(TransitionEffect.Zoom).start { _, data ->
+        AlbumIns.with(this)
+            .setOriginalPolymorphism(false)
+            .simultaneousSelection(false)
+            .maxSelectedCount(9)
+            .ignorePaths("QQ")
+            .mimeTypes(AlbumOptions.pairOf(AlbumOptions.ofImage(), AlbumOptions.ofVideo()))
+            .sortWithDesc(true)
+            .useOriginDefault(true)
+            .imgSizeRange(1, 20000000)
+            .videoSizeRange(1, 200000000)
+            .imageScaleEffect(ScaleEffect.QUAD)
+            .pagerTransitionEffect(TransitionEffect.Zoom)
+            .start { _, data ->
                 main_tv?.text = data?.joinToString {
                     "\n path = ${it.path} \n" + " original = ${it.useOriginalImages} | \n"
                 }

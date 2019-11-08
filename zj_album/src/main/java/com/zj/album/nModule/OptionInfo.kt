@@ -11,7 +11,10 @@ import kotlin.collections.ArrayList
 internal data class OptionInfo(
     internal val appName: String = "",
     internal var maxSelectSize: Int = Int.MAX_VALUE,
-    internal var minSize: Long = 0,
+    internal var imgMinSize: Long = 0,
+    internal var imgMaxSize: Long = Long.MAX_VALUE,
+    internal var videoMinSize: Long = 0,
+    internal var videoMaxSize: Long = Long.MAX_VALUE,
     internal var simultaneousSelection: Boolean = false,
     internal var sortWithDesc: Boolean = true,
     internal var useOriginDefault: Boolean = false,

@@ -13,17 +13,17 @@ internal object GraphDataHelper {
 
     var isRunning = false; private set
 
-    fun init(enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, selectedPaths: Collection<SimpleSelectInfo>? = null, ignorePaths: ArrayList<String>?) {
+    fun init(enumSet: EnumSet<MimeType>?, useDesc: Boolean, imgMinSize: Long, imgMaxSize: Long, vMinSize: Long, vMaxSize: Long, selectedPaths: Collection<SimpleSelectInfo>? = null, ignorePaths: ArrayList<String>?) {
         DataProxy.init(selectedPaths)
-        initData(enumSet, useDesc, minSize, ignorePaths)
+        initData(enumSet, useDesc, imgMinSize, imgMaxSize, vMinSize, vMaxSize, ignorePaths)
     }
 
-    private fun initData(enumSet: EnumSet<MimeType>?, useDesc: Boolean, minSize: Long, ignorePaths: List<String>? = arrayListOf(), e: ExecutorService? = null) {
+    private fun initData(enumSet: EnumSet<MimeType>?, useDesc: Boolean, imgMinSize: Long, imgMaxSize: Long, vMinSize: Long, vMaxSize: Long, ignorePaths: List<String>? = arrayListOf(), e: ExecutorService? = null) {
         if (isRunning) return
         var executors = e
         isRunning = true
         if (executors != null && !executors.isShutdown && !executors.isTerminated) {
-            executors.execute(LocalDataExecute(enumSet, useDesc, minSize, ignorePaths) {
+            executors.execute(LocalDataExecute(enumSet, useDesc, imgMinSize, imgMaxSize, vMinSize, vMaxSize, ignorePaths) {
                 Handler(Looper.getMainLooper()).post {
                     isRunning = false
                     DataProxy.setLocalData(it)
@@ -33,7 +33,7 @@ internal object GraphDataHelper {
             isRunning = false
             executors?.shutdown()
             executors = Executors.newSingleThreadExecutor()
-            initData(enumSet, useDesc, minSize, ignorePaths, executors)
+            initData(enumSet, useDesc, imgMinSize, imgMaxSize, vMinSize, vMaxSize, ignorePaths, executors)
         }
     }
 }
