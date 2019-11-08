@@ -1,23 +1,23 @@
 <p align="center" >
-   <font size = "20" color ="#afcfcf" name ="title">ZAblum</font>
+   <font size = 10px color ="#afcfcf" name ="title">ZAblum</font>
    <br>
    <font size = 1px color = "#aaa">Android Universal Album Solution,for cityFruit</font>
    <br>
    <br>
-   <a href = "http://cityfruit.io/">
-   <img src = "https://img.shields.io/static/v1?label=By&message=CityFruit.io&color=2af"/>
+   <a herf = "http://cityfruit.io/">
+      <img src = "https://img.shields.io/static/v1?label=By&message=CityFruit.io&color=2af"/>
    </a>
-   <a href = "https://github.com/ZBL-Kiven/album">
+   <a herf = "https://github.com/ZBL-Kiven/album">
       <img src = "https://img.shields.io/static/v1?label=platform&message=Android&color=6bf"/>
    </a>
-   <a href = "https://github.com/ZBL-Kiven">
-      <img src = "https://img.shields.io/static/v1?label=author&message=ZJJ&color=9cf"/>
+   <a herf = "https://github.com/ZBL-Kiven">
+      <img src = "https://img.shields.io/static/v1?label=Author&message=ZJJ&color=9cf"/>
   </a>
-  <a href = "https://developer.android.google.cn/jetpack/androidx">
+  <a herf = "https://developer.android.google.cn/jetpack/androidx">
       <img src = "https://img.shields.io/static/v1?label=supported&message=AndroidX&color=8ce"/>
   </a>
-  <a href = "https://www.android-doc.com/guide/components/android7.0.html">
-  <img src = "https://img.shields.io/static/v1?label=minVersion&message=7.0 Nougat&color=cce"/>
+  <a herf = "https://www.android-doc.com/guide/components/android7.0.html">
+      <img src = "https://img.shields.io/static/v1?label=MinVersion&message=7.0 Nougat&color=cce"/>
   </a>
  </p>
 
@@ -58,7 +58,7 @@
 - 支持 配置图片视频选择逻辑<a alt ="图片、视频是否可混选，图片、视频各选数量、视频是否仅允许单选等">[1]</a>
 - 支持 配置原图属性为‘共用’ 或 ‘独立’ <a alt ="选项为 共用 时，所有图片都对唯一原图选项值生效。反之每张图片都将具有各自的 ‘是否原图’ 属性">[2]</a>
 - 支持 配置换文案、换肤、换 iCon、换颜色、自定义布局<a alt ="Manifest 预处理，可直接覆盖 ID 实现换肤">[3]</a>
-- 支持 配置转场特效，Page 切换特效、图片缩放特效等<a href = "">[4]</a>
+- 支持 配置转场特效，Page 切换特效、图片缩放特效等<a herf = "">[4]</a>
 
 > 单元测试
 
@@ -112,19 +112,19 @@ AlbumIns.with(ctx)
 > #### 可选配置:<br>
 
 配置名|简介|默认
-:-:|:-:|:-:
-.maxSelectedcount(int) |最大可选数量，默认不限制。|Int.maxValue
-.ignorePaths(vararg String)|忽略目标文件或文件夹，可单传或多传，用逗号隔开。|null
-.mimeTypes(AlbumOptions.of * ) |可精确指定从手机 SD 卡查询数据的类型，默认为全部视频和图片。|null
-.imgSizeRange(longRange) |文件最小大小限制,单位为 B ,传人区间，如：10000, 20000000 ，小于 10KB 的和 大于 20M 的将被忽略。|0 .. Long.maxValue
-.videoSizeRange(longRange) | 同上|同上
-.selectedUris(uris:ArrayList<SimpleSelectInfo>)|配置默认选中项，相册初始化后默认选中项将被勾选，其中 SimpleSelectInfo(path,useOriginal)|null
-.setOriginalPolymorphism(Boolean)|true 多选原图 or false 统一原图|true
-.simultaneousSelection(Boolean)|图片视频是否允许同时选择|true
-.sortWithDesc(Boolean)|默认排序还是时间倒序|true
-.useOriginDefault(Boolean)|原图默认勾选|false
-.pagerTransitionEffect(TransitionEffect)|预览页页面切换动效|TransitionEffect.Zoom
-.imageScaleEffect(effect: ScaleEffect)|预览页图片缩放动效|ScaleEffect.CUBIC
+:-:|:-:|:-:|:-:
+|.maxSelectedcount(int) |最大可选数量，默认不限制。|Int.maxValue
+|.ignorePaths(vararg String)|忽略目标文件或文件夹，可单传或多传，用逗号隔开。|null
+|.mimeTypes(AlbumOptions.of * ) |可精确指定从手机 SD 卡查询数据的类型，默认为全部视频和图片。|null
+|.imgSizeRange(longRange) |文件最小大小限制,单位为 B ,传人区间，如：10000, 20000000 ，小于 10KB 的和 大于 20M 的将被忽略。|0 .. Long.maxValue
+|.videoSizeRange(longRange) | 同上|同上
+|.selectedUris(uris:ArrayList<SimpleSelectInfo>)|配置默认选中项，相册初始化后默认选中项将被勾选，其中 SimpleSelectInfo(path,useOriginal)|null
+|.setOriginalPolymorphism(Boolean)|true 多选原图 or false 统一原图|true
+|.simultaneousSelection(Boolean)|图片视频是否允许同时选择|true
+|.sortWithDesc(Boolean)|默认排序还是时间倒序|true
+|useOriginDefault(Boolean)|原图默认勾选|false
+|.pagerTransitionEffect(TransitionEffect)|预览页页面切换动效|TransitionEffect.Zoom
+|.imageScaleEffect(effect: ScaleEffect)|预览页图片缩放动效|ScaleEffect.CUBIC
 
 > #### 跳转并接收回调：
  
