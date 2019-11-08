@@ -163,18 +163,18 @@ AlbumIns.with(ctx).start { isOK , data ->
 
 ## Theme Custom
 
-* ZAlbum 允许使用者自定义页面 UI，<font color = "#a00"> 为防止使用者无意或随意更改 UI 导致相册框架不稳定，框架采取 UI & 逻辑完全分离的架构设计，故仅提供以下方式供使用者修改页面。</font>接入者在 App resource 中按给定 ID 自定义，运行时这些 ID 就会替换掉相册内的资源，以达到换肤、换字、换色、换资源图片等的效果，详细 ID 可直接在 [manifest](https://github.com/ZBL-Kiven/album/blob/master/demo/theme-manifest.txt) 中查看。
+* ZAlbum 允许使用者自定义页面 UI，<font color=red> 为防止使用者无意或随意更改 UI 导致相册框架不稳定，框架采取 UI & 逻辑完全分离的架构设计，故仅提供以下方式供使用者修改页面。</font>接入者在 App resource 中按给定 ID 自定义，运行时这些 ID 就会替换掉相册内的资源，以达到换肤、换字、换色、换资源图片等的效果，详细 ID 可直接在 [manifest](https://github.com/ZBL-Kiven/album/blob/master/demo/theme-manifest.txt) 中查看。
 
 * example：
 
-```
+```html
 <resource>
     <string name="pg_str_all">全部</string>
     <string name="pg_str_cancel">返回</string>
     <string name="pg_str_preview">預覽</string>
 </resource>
 ```
-###### 以上代码定义在 APP 资源文件后，相册默认的资源则会失效，运行时使用的资源文件即为 APP 定制的。不按给定 ID 覆盖的视为 <font color = "#a00"> 无效操作 </font>
+###### 以上代码定义在 APP 资源文件后，相册默认的资源则会失效，运行时使用的资源文件即为 APP 定制的。不按给定 ID 覆盖的视为 <font color=red> 无效操作 </font>
 
 ### Contributing
 
@@ -182,7 +182,7 @@ Contributions are very welcome 🎉
 
 ### Licence :  
 
-Copyright (c) 2019 CityFruit zjj0888@gmail.com
+Copyright (c) 2019 CityFruit zjj0888@gmail.com<br>
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.<br>
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
