@@ -21,12 +21,12 @@
   </a>
  </p>
 
-####Introduction：
+#### Introduction：
 --
-######Z-Ablum 是为 Android 应用设计的相册快速使用框架 ，使用 [java]() 和 [Kotlin]() 语言混合开发，支持广泛使用场景。并具备功能多、配置灵活、稳定性强、内存占用少、内存回收彻底、运行流畅等优点，另外，它的细节设计和交互设计也非常的多。
+###### Z-Ablum 是为 Android 应用设计的相册快速使用框架 ，使用 [java]() 和 [Kotlin]() 语言混合开发，支持广泛使用场景。并具备功能多、配置灵活、稳定性强、内存占用少、内存回收彻底、运行流畅等优点，另外，它的细节设计和交互设计也非常的多。
 
 ----
-###Features：
+### Features：
 --
 > 基本功能：
 
@@ -66,12 +66,12 @@
 
 ----
 
-###demo：
+### demo：
 --
 使用 Android 设备下载 [APK](https://github.com/ZBL-Kiven/album/raw/master/demo/album.apk) 安装包安装 demo 即可把玩。
 
 ----
-###Installation :
+### Installation :
 --
 ZAblum 已发布至私有仓库，你可以使用如下方式安装它：
 
@@ -101,15 +101,15 @@ implementation project(":zj_album")
 ```
 ----
 
-###Usage:
+### Usage:
 --
-> ####调用：<br>
+> #### 调用：<br>
 
 ```
 AlbumIns.with(ctx)
 ```
 
-> ####可选配置:<br>
+> #### 可选配置:<br>
 
 配置名|简介|默认
 :-:|:-:|:-:|:-:
@@ -126,15 +126,15 @@ AlbumIns.with(ctx)
 |.pagerTransitionEffect(TransitionEffect)|预览页页面切换动效|TransitionEffect.Zoom
 |.imageScaleEffect(effect: ScaleEffect)|预览页图片缩放动效|ScaleEffect.CUBIC
 
-> ####跳转并接收回调：
+> #### 跳转并接收回调：
  
 ```
 .start(call: (Boolean, List<FileInfo>?) -> Unit)
 ```
 ----
-###Example of usage
+### Example of usage
 --
-> ####示例：直接用：
+> #### 示例：直接用：
 
 ```
 AlbumIns.with(ctx).start { isOK , data ->
@@ -143,7 +143,7 @@ AlbumIns.with(ctx).start { isOK , data ->
 }
 ```
 
-> ####示例：全配置:
+> #### 示例：全配置:
 
 ```
  AlbumIns.with(ctx)
@@ -167,7 +167,7 @@ AlbumIns.with(ctx).start { isOK , data ->
 
 ----
 
-###Theme Custom
+### Theme Custom
 --
 * ZAlbum 允许使用者自定义页面 UI，<font color = "#a00"> 为防止使用者无意或随意更改 UI 导致相册框架不稳定，框架采取 UI & 逻辑完全分离的架构设计，故仅提供以下方式供使用者修改页面。</font>接入者在 App resource 中按给定 ID 自定义，运行时这些 ID 就会替换掉相册内的资源，以达到换肤、换字、换色、换资源图片等的效果，详细 ID 可直接在 [manifest](https://github.com/ZBL-Kiven/album/blob/master/demo/theme-manifest.txt) 中查看。
 
@@ -184,13 +184,13 @@ AlbumIns.with(ctx).start { isOK , data ->
 
 ----
 
-###Contributing
+### Contributing
 --
 Contributions are very welcome 🎉
 
 ----
 
-###Licence :  
+### Licence :  
 --
 Copyright (c) 2019 CityFruit zjj0888@gmail.com
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
