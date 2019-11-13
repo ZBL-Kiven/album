@@ -2,7 +2,7 @@ package com.zj.album.ui.preview
 
 import android.animation.ValueAnimator
 import android.content.Intent
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -15,8 +15,8 @@ import com.zj.album.ui.preview.player.SimpleVideoEventListener
 import com.zj.album.ui.preview.player.VideoView
 import android.animation.Animator
 import android.app.Activity
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.zj.album.nutils.AlbumConfig.simultaneousSelection
 import com.zj.album.R
 import com.zj.album.nHelpers.DataStore

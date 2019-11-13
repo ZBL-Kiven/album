@@ -1,6 +1,6 @@
 package com.zj.album.ui.preview.images.transformer
 
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 
 /**
  * @author ZJJ on 2019.10.24

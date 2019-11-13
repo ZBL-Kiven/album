@@ -1,6 +1,6 @@
 package com.zj.album.ui.base.list.adapters;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.zj.album.ui.base.list.holders.BaseViewHolder;
 import com.zj.album.ui.base.list.listeners.ItemClickListener;
 

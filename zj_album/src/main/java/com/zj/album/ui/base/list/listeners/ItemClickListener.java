@@ -1,6 +1,6 @@
 package com.zj.album.ui.base.list.listeners;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 /**

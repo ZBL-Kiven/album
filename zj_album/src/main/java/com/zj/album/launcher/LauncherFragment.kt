@@ -3,7 +3,7 @@ package com.zj.album.launcher
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nutils.Constance
 import com.zj.album.ui.photograph.PhotoGraphActivity

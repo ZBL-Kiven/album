@@ -21,8 +21,9 @@
  
 ## Introduction：
 
-###### Z-Ablum 是为 Android 应用设计的相册快速使用框架 ，使用 [java]() 和 [Kotlin]() 语言混合开发，支持广泛使用场景。并具备功能多、配置灵活、稳定性强、内存占用少、内存回收彻底、运行流畅等优点，另外，它的细节设计和交互设计也非常的多。
+###### Z-Album 是为 Android 应用设计的相册快速使用框架 ，使用 [java]() 和 [Kotlin]() 语言混合开发，支持广泛使用场景。并具备功能多、配置灵活、稳定性强、内存占用少、内存回收彻底、运行流畅等优点，另外，它的细节设计和交互设计也非常的多。
 
+> ZAlbum 已为 AndroidX 提供，请升级至 V1.0.1 版本。
 
 ## Features：
 
@@ -73,7 +74,7 @@ ZAblum 已发布至私有仓库，你可以使用如下方式安装它：
 
 > by dependencies:
 
-```kotlin
+```grovy
 repo{
      maven (url = "https://nexus.i-mocca.com/repository/cf_core")
 }
@@ -123,7 +124,7 @@ AlbumIns.with(ctx)
 
 > #### 跳转并接收回调：
  
-```kotlin
+```
 .start(call: (Boolean, List<FileInfo>?) -> Unit)
 ```
 
@@ -181,8 +182,8 @@ AlbumIns.with(ctx).start { isOK , data ->
 Contributions are very welcome 🎉
 
 ### Licence :  
-
+NTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON 
 Copyright (c) 2019 CityFruit zjj0888@gmail.com<br>
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.<br>
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRAINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
