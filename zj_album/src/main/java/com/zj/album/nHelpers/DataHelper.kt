@@ -189,7 +189,7 @@ internal object DataProxy : DataHelper() {
             val isSelectedAccess = selectedAccessKey != curSelectedAccessKey
             val selectedCount = getSelectedCount()
             if (isDataAccess) eventHub.onDataGot(it.files, curDataAccessKey)
-            if (isSelectedAccess && selectedCount > 0) {
+            if (isSelectedAccess) {
                 eventHub.onSelectedChanged(selectedCount, curSelectedAccessKey)
             }
         } ?: eventHub.onDataGot(null, accessKey)
