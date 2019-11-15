@@ -140,6 +140,7 @@ internal class PreviewActivity : BaseActivity() {
         previewSelectedAdapter?.setOnItemClickListener(object : ItemClickListener<FileInfo>() {
             override fun onItemClick(position: Int, v: View?, m: FileInfo?) {
                 m?.path?.let {
+                    mVideoView?.stop()
                     initPreviewBanner()
                     setPreviewData(it)
                 }
