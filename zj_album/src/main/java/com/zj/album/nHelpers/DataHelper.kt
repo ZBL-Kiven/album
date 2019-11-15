@@ -122,10 +122,8 @@ internal object DataProxy : DataHelper() {
             it.value.onDataGot(data?.files, if (data != null) curDataAccessKey else "")
         }
         val selectedCount = getSelectedCount()
-        if (selectedCount > 0) {
-            dataListeners?.forEach {
-                it.value.onSelectedChanged(selectedCount, curSelectedAccessKey)
-            }
+        dataListeners?.forEach {
+            it.value.onSelectedChanged(selectedCount, curSelectedAccessKey)
         }
     }
 

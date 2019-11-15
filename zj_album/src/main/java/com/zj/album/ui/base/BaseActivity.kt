@@ -13,7 +13,6 @@ import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nutils.AlbumConfig
-import com.zj.album.nutils.log
 import java.util.*
 
 /**
