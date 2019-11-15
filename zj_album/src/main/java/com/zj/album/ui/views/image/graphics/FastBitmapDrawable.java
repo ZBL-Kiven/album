@@ -52,6 +52,7 @@ public class FastBitmapDrawable extends Drawable implements IBitmapDrawable {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public int getOpacity() {
 		return PixelFormat.TRANSLUCENT;
@@ -62,6 +63,7 @@ public class FastBitmapDrawable extends Drawable implements IBitmapDrawable {
 		mPaint.setAlpha( alpha );
 	}
 
+	@Deprecated
 	@Override
 	public void setColorFilter( ColorFilter cf ) {
 		mPaint.setColorFilter( cf );
