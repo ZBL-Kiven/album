@@ -6,10 +6,8 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import com.zj.album.AlbumIns
-import com.zj.album.nModule.SimpleSelectInfo
 import com.zj.album.nutils.AlbumOptions
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 import com.zj.album.ui.views.image.easing.ScaleEffect
@@ -47,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    fun startAlbum(v: View?) {
+    fun startAlbum(@Suppress("UNUSED_PARAMETER") v: View?) {
         val i = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
         if (i != PackageManager.PERMISSION_GRANTED) {
             start()
