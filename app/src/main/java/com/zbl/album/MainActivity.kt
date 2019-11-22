@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private fun start() {
         AlbumIns.with(this)
             .setOriginalPolymorphism(true)
-            .simultaneousSelection(false)
+            .simultaneousSelection(true)
             .maxSelectedCount(9)
 
             .mutableTypeSize()
