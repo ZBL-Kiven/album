@@ -2,7 +2,7 @@
 
 package com.zj.album.nHelpers
 
-import com.zj.album.nutils.AlbumConfig
+import com.zj.album.options.AlbumConfig
 import com.zj.album.R
 import com.zj.album.interfaces.EventHub
 import com.zj.album.nModule.FileInfo
@@ -19,6 +19,12 @@ private var curSelectedAccessKey: String = "init"
 private var mData: MutableList<FolderInfo>? = null
     get() {
         if (field == null) field = mutableListOf()
+        return field
+    }
+
+private var maxMutableSelectSize: MutableMap<String, Int>? = null
+    get() {
+        if (field == null) field = mutableMapOf()
         return field
     }
 
@@ -59,6 +65,24 @@ internal sealed class DataHelper {
             selectedPaths?.add(info)
             selectedPaths?.sortBy { it.lastModifyTs }
         }
+    }
+
+    protected fun mutableSizeFilter(info: FileInfo): Triple<String, Int, Boolean> {
+        var typeName = ""
+        return AlbumConfig.maxSelectSizeWithType?.let {
+            it.firstOrNull { d ->
+                d.types.firstOrNull { mt ->
+                    mt.mMimeTypeName.equals(info.mimeType, true)
+                } != null
+            }?.let { mi ->
+                val selectedSize = selectedPaths?.filter { fInfo ->
+                    mi.types.mapTo(arrayListOf()) { t -> t.mMimeTypeName }.contains(fInfo.mimeType)
+                }?.size ?: 0
+                val canSelect = selectedSize < mi.size
+                if (!canSelect) typeName = mi.name
+                Triple(typeName, mi.size, canSelect)
+            } ?: Triple("", 0, false)
+        } ?: Triple("", 0, false)
     }
 
     private fun removeFormSelectedPaths(path: String) {
@@ -129,7 +153,18 @@ internal object DataProxy : DataHelper() {
 
     fun onSelectedChanged(select: Boolean, info: FileInfo, ignoreMaxCount: Boolean): Boolean {
         val selectedCount = getSelectedCount()
-        val isNotMaxSized = selectedCount < AlbumConfig.maxSelectSize
+        val mutableSize = AlbumConfig.maxSelectSizeWithType
+        val isMutableSize = !mutableSize.isNullOrEmpty()
+        var typeName = ""
+        var maxCount = AlbumConfig.maxSelectSize
+        val isNotMaxSized = if (isMutableSize) {
+            val filterSet = mutableSizeFilter(info)
+            typeName = filterSet.first
+            maxCount = filterSet.second
+            filterSet.third
+        } else {
+            selectedCount < AlbumConfig.maxSelectSize
+        }
         val isVideoSelected = info.isVideo
         fun toast(id: Int, vararg args: Any) {
             if (!ignoreMaxCount) AlbumConfig.toastLong(id, *args)
@@ -137,7 +172,12 @@ internal object DataProxy : DataHelper() {
 
         val canSelect = when {
             !select -> true
-            AlbumConfig.simultaneousSelection -> isNotMaxSized // not supported simultaneous selection
+            AlbumConfig.simultaneousSelection -> {
+                if (!isNotMaxSized && isMutableSize) {
+                    toast(R.string.pg_str_at_best, typeName, maxCount)
+                }
+                isNotMaxSized
+            } // not supported simultaneous selection
             selectedCount <= 0 -> true
             isNotMaxSized -> {
                 val selectedHasVideo = (selectedPaths?.firstOrNull { it.isVideo } != null)
@@ -156,7 +196,7 @@ internal object DataProxy : DataHelper() {
                 }
             }
             else -> {
-                toast(R.string.pg_str_at_best, AlbumConfig.maxSelectSize)
+                toast(R.string.pg_str_at_best, typeName, maxCount)
                 false
             }
         }

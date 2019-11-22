@@ -8,10 +8,12 @@ import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import com.zj.album.AlbumIns
-import com.zj.album.nutils.AlbumOptions
+import com.zj.album.nutils.MimeType
+import com.zj.album.options.AlbumOptions
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 import com.zj.album.ui.views.image.easing.ScaleEffect
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,13 +29,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun start() {
         AlbumIns.with(this)
-            .setOriginalPolymorphism(false)
+            .setOriginalPolymorphism(true)
             .simultaneousSelection(false)
             .maxSelectedCount(9)
-            .ignorePaths("QQ")
+
+            .mutableTypeSize()
+            .addNewRule("Image",3,AlbumOptions.ofStaticImage())
+            .addNewRule("Gif", 1, EnumSet.of(MimeType.GIF))
+            .addNewRule("Video",2,AlbumOptions.ofVideo())
+            .set()
+
             .mimeTypes(AlbumOptions.pairOf(AlbumOptions.ofImage(), AlbumOptions.ofVideo()))
             .sortWithDesc(true)
-            .useOriginDefault(true)
+            .useOriginDefault(false)
             .imgSizeRange(1, 20000000)
             .videoSizeRange(1, 200000000)
             .imageScaleEffect(ScaleEffect.QUAD)

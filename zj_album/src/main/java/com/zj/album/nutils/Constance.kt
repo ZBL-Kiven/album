@@ -27,4 +27,6 @@ internal object Constance {
 
     /** ----  intent keys ----*/
     const val I_OPTIONS_INFO = "option_info"
+
+    const val ALBUM_SCHEMA = "album://"
 }

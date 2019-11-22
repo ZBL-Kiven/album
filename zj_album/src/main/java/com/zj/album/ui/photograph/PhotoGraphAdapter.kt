@@ -12,7 +12,7 @@ import com.zj.album.ui.base.list.holders.BaseViewHolder
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageView
-import com.zj.album.nutils.AlbumConfig
+import com.zj.album.options.AlbumConfig
 import com.zj.album.imageloader.impl.GlideLoader
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.Constance

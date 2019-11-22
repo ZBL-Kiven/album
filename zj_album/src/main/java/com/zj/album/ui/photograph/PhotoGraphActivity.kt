@@ -12,7 +12,7 @@ import com.zj.album.nHelpers.DataStore
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.OptionInfo
 import com.zj.album.nutils.*
-import com.zj.album.nutils.AlbumConfig
+import com.zj.album.options.AlbumConfig
 import com.zj.album.ui.base.BaseActivity
 import com.zj.album.ui.base.list.listeners.ItemClickListener
 import com.zj.album.ui.folders.FolderActivity
@@ -50,6 +50,7 @@ internal class PhotoGraphActivity : BaseActivity() {
         vOk = findViewById(R.id.photo_tv_done)
         cbOriginal = findViewById(R.id.photo_cb_original)
         loadingView = findViewById(R.id.photo_loading)
+
     }
 
     override fun initData() {

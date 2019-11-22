@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.zj.album.launcher.LauncherFragment
-import com.zj.album.nutils.AlbumOptions
+import com.zj.album.options.AlbumOptions
 import com.zj.album.nutils.Constance
 
 @Suppress("unused")

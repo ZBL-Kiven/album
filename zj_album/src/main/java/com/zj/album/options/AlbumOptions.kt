@@ -1,14 +1,14 @@
-package com.zj.album.nutils
+package com.zj.album.options
 
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.OptionInfo
 import com.zj.album.nModule.SimpleSelectInfo
+import com.zj.album.nutils.MimeType
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 import com.zj.album.ui.views.image.easing.ScaleEffect
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.min
 
@@ -89,6 +89,19 @@ class AlbumOptions internal constructor(internal val onStart: (OptionInfo, call:
 
     fun imageScaleEffect(effect: ScaleEffect): AlbumOptions {
         options.imageScaleEffect = effect
+        return this
+    }
+
+    /**
+     * set the size with a mime type
+     * */
+    fun mutableTypeSize(): MutableSizeOption {
+        return MutableSizeOption(this)
+    }
+
+    internal fun setMaxSizeForType(op: ArrayList<MutableSizeOption.MutableInfo>?): AlbumOptions {
+        op?.sortBy { it.size }
+        this.options.mutableSizeInfo = op
         return this
     }
 

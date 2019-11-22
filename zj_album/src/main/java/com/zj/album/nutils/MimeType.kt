@@ -37,5 +37,5 @@ internal fun isVideo(mimeType: String?): Boolean {
 }
 
 internal fun isGif(mimeType: String?): Boolean {
-    return if (mimeType == null) false else mimeType == MimeType.GIF.toString()
+    return mimeType == MimeType.GIF.mMimeTypeName
 }

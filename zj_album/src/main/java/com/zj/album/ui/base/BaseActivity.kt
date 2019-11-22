@@ -12,7 +12,7 @@ import com.zj.album.interfaces.EventHub
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nModule.FileInfo
-import com.zj.album.nutils.AlbumConfig
+import com.zj.album.options.AlbumConfig
 import java.util.*
 
 /**

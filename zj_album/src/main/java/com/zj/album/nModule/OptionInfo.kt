@@ -1,12 +1,13 @@
 package com.zj.album.nModule
 
-import com.zj.album.nutils.AlbumOptions
+import android.content.Intent
+import com.zj.album.options.AlbumOptions
 import com.zj.album.nutils.MimeType
+import com.zj.album.options.MutableSizeOption
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 import com.zj.album.ui.views.image.easing.ScaleEffect
 import java.io.Serializable
 import java.util.*
-import kotlin.collections.ArrayList
 
 internal data class OptionInfo(
     internal val appName: String = "",
@@ -22,5 +23,6 @@ internal data class OptionInfo(
     internal var selectedUris: ArrayList<SimpleSelectInfo>? = null,
     internal var ignorePaths: ArrayList<String>? = arrayListOf(),
     internal var mimeType: EnumSet<MimeType>? = AlbumOptions.pairOf(AlbumOptions.ofImage(), AlbumOptions.ofVideo()),
-    internal var pagerEffect : TransitionEffect = TransitionEffect.Zoom,
-    internal var imageScaleEffect: ScaleEffect = ScaleEffect.CUBIC) : Serializable
+    internal var pagerEffect: TransitionEffect = TransitionEffect.Zoom,
+    internal var imageScaleEffect: ScaleEffect = ScaleEffect.CUBIC,
+    internal var mutableSizeInfo: ArrayList<MutableSizeOption.MutableInfo>? = null): Serializable

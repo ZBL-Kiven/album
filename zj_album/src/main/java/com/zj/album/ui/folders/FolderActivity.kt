@@ -3,7 +3,7 @@ package com.zj.album.ui.folders
 import android.view.View
 
 import android.widget.ImageView
-import com.zj.album.nutils.AlbumConfig
+import com.zj.album.options.AlbumConfig
 import com.zj.album.R
 import com.zj.album.imageloader.impl.GlideLoader
 import com.zj.album.nHelpers.DataProxy

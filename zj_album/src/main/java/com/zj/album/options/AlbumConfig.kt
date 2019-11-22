@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package com.zj.album.nutils
+package com.zj.album.options
 
 import android.app.Application
 import android.content.ContentResolver
@@ -12,6 +12,7 @@ import com.zj.album.nHelpers.GraphDataHelper
 import com.zj.album.nModule.OptionInfo
 import com.zj.album.ui.preview.images.transformer.TransitionEffect
 import com.zj.album.ui.views.image.easing.ScaleEffect
+import java.util.ArrayList
 
 /**
  * @author ZJJ on 2019.10.24
@@ -22,7 +23,8 @@ internal object AlbumConfig {
 
     fun setOptions(appCtx: Application, options: OptionInfo) {
         appContext = appCtx
-        this.options = options
+        AlbumConfig.options = options
+        maxSelectSizeWithType = options.mutableSizeInfo
         appName = options.appName
         maxSelectSize = options.maxSelectSize
         useOriginalPolymorphism = options.originalPolymorphism
@@ -49,6 +51,8 @@ internal object AlbumConfig {
     @JvmStatic
     internal var maxSelectSize = Int.MAX_VALUE
     @JvmStatic
+    internal var maxSelectSizeWithType: ArrayList<MutableSizeOption.MutableInfo>? = null
+    @JvmStatic
     internal var simultaneousSelection = false
     @JvmStatic
     internal var useOriginalPolymorphism = false
@@ -56,7 +60,6 @@ internal object AlbumConfig {
     internal var pageTransformer: TransitionEffect = TransitionEffect.Zoom
     @JvmStatic
     internal var imageScaleEffect: ScaleEffect = ScaleEffect.CUBIC
-
 
     private var appContext: Context? = null
 

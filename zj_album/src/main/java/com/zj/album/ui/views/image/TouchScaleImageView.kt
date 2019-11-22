@@ -2,7 +2,7 @@ package com.zj.album.ui.views.image
 
 import android.content.Context
 import android.util.AttributeSet
-import com.zj.album.nutils.AlbumConfig
+import com.zj.album.options.AlbumConfig
 import com.zj.album.ui.views.image.easing.ScaleEffect
 
 internal class TouchScaleImageView : ImageViewTouch {

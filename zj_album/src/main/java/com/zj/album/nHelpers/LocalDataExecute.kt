@@ -5,7 +5,7 @@ import android.provider.MediaStore
 import com.zj.album.*
 import com.zj.album.nModule.FileInfo
 import com.zj.album.nModule.FolderInfo
-import com.zj.album.nutils.AlbumConfig
+import com.zj.album.options.AlbumConfig
 import com.zj.album.nutils.MimeType
 import com.zj.album.nutils.TYPE_IMG
 import com.zj.album.nutils.TYPE_VIDEO

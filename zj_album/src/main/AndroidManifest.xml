@@ -11,7 +11,13 @@
                 android:launchMode="singleTask">
         </activity>
         <activity android:name="com.zj.album.ui.folders.FolderActivity"/>
-        <activity android:name="com.zj.album.ui.preview.PreviewActivity"/>
+        <activity android:name="com.zj.album.ui.preview.PreviewActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:scheme="album"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

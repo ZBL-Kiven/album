@@ -54,6 +54,7 @@
 - 支持 配置初始默认选择文件
 - 支持 配置原图选项默认值
 - 支持 配置最大选择数量
+- 支持 配置每种类型（MimeType）各自的最大选择数量
 - 支持 配置图片视频选择逻辑
 - 支持 配置原图属性为‘共用’ 或 ‘独立’ 
 - 支持 配置换文案、换肤、换 iCon、换颜色、自定义布局
@@ -70,7 +71,7 @@
 ## Installation :
 
 
-ZAblum 已发布至私有仓库，你可以使用如下方式安装它：
+ZAlbum 已发布至私有仓库，你可以使用如下方式安装它：
 
 > by dependencies:
 
@@ -109,12 +110,13 @@ AlbumIns.with(ctx)
 
 配置名|简介|默认
 :-:|:-:|:-:
-.maxSelectedcount(int) |最大可选数量，默认不限制。|Int.maxValue
+.maxSelectedCount(int) |最大可选数量，默认不限制。当 mutableTypeSize 生效时该配置无效。|Int.maxValue
+.mutableTypeSize() |每种类型的最大可选数量，不配置时跟随 maxSelectedCount 配置。|null 
 .ignorePaths(vararg String)|忽略目标文件或文件夹，可单传或多传，用逗号隔开。|null
 .mimeTypes(AlbumOptions.of * ) |可精确指定从手机 SD 卡查询数据的类型，默认为全部视频和图片。|null
 .imgSizeRange(longRange) |文件最小大小限制,单位为 B ,传人区间，如：10000, 20000000 ，小于 10KB 的和 大于 20M 的将被忽略。|0 .. Long.maxValue
 .videoSizeRange(longRange) | 同上|同上
-.selectedUris(uris:ArrayList<SimpleSelectInfo>)|配置默认选中项，相册初始化后默认选中项将被勾选，其中 SimpleSelectInfo(path,useOriginal)|null
+.selectedUris(uris:ArrayList<SimpleSelectInfo>)|配置默认选中项，相册初始化后默认选中项将被勾选，注：此选项与最大选择数配置冲突时，首次进入仍保持已选择状态，更改后按最大选择数配置生效。|null
 .setOriginalPolymorphism(Boolean)|true 多选原图 or false 统一原图|true
 .simultaneousSelection(Boolean)|图片视频是否允许同时选择|true
 .sortWithDesc(Boolean)|默认排序还是时间倒序|true
@@ -148,6 +150,13 @@ AlbumIns.with(ctx).start { isOK , data ->
        .useOriginDefault(false)
        .simultaneousSelection(true)
        .setOriginalPolymorphism(true)
+       /**--- 配置某种类型的文件可选数量 --- */
+       .mutableTypeSize()
+       .addNewRule("Image",3,AlbumOptions.ofStaticImage())
+       .addNewRule("Gif", 1, EnumSet.of(MimeType.GIF))
+       .addNewRule("Video",2,AlbumOptions.ofVideo())
+       .set()
+       /**------ */
        .selectedUris(arrayListOf("path1","path2"))
        .ignorePaths("QQ","wechat")
        .imgSizeRange(1, 10 * 1000 * 1000)
@@ -168,7 +177,7 @@ AlbumIns.with(ctx).start { isOK , data ->
 
 * example：
 
-```html
+```
 <resource>
     <string name="pg_str_all">全部</string>
     <string name="pg_str_cancel">返回</string>

@@ -17,10 +17,11 @@ import android.animation.Animator
 import android.app.Activity
 import androidx.viewpager.widget.ViewPager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.zj.album.nutils.AlbumConfig.simultaneousSelection
+import com.zj.album.options.AlbumConfig.simultaneousSelection
 import com.zj.album.R
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.*
+import com.zj.album.options.AlbumConfig
 import com.zj.album.ui.base.list.listeners.ItemClickListener
 import com.zj.album.ui.views.image.TouchScaleImageView
 import java.util.ArrayList

@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">ZJJ_album</string>
+
     <string name="loading_no_data">No picture fond</string>
     <string name="loading_progress">please wait…</string>
     <string name="loading_refresh">Tap the screen to try again</string>
@@ -6,7 +8,6 @@
     <string name="loading_video_error">Video load fail</string>
     <string name="loading_video_error_tint">file is damaged or the format is not supported</string>
 
-    <string name="app_name">ZJJ_album</string>
     <string name="pg_str_all">All</string>
     <string name="pg_str_cancel">Cancel</string>
     <string name="pg_str_album">Folders</string>
@@ -17,8 +18,8 @@
     <string name="pg_str_full_images_tip">Original</string>
     <string name="pg_str_images_choose_tip_message">Cannot select both image and video</string>
     <string name="pg_str_video_choose_tip_message">Video can only choose one</string>
-    <string name="pg_str_at_best">Can only select up to %1$d files</string>
-    <string name="pg_permission_request_fail">%s permissions denied!</string>
+    <string name="pg_str_at_best">%1$s can only select up to %2$d files</string>
     <string name="pv_str_default_time">00:00</string>
+    <string name="pg_permission_request_fail">%s permissions denied!</string>
 
 </resources>
