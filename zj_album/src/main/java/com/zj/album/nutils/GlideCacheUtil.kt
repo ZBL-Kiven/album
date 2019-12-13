@@ -23,7 +23,6 @@ internal object GlideCacheUtil {
             if (Looper.myLooper() == Looper.getMainLooper()) {
                 Thread(Runnable {
                     Glide.get(context).clearDiskCache()
-                    // BusUtil.getBus().post(new GlideCacheClearSuccessEvent());
                 }).start()
             } else {
                 Glide.get(context).clearDiskCache()
