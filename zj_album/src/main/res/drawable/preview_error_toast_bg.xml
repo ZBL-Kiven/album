@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:bottom="2dp"
+        android:right="2dp">
+
+        <shape android:tintMode="add">
+            <solid android:color="@color/pg_color_blue_pale" />
+            <size
+                android:width="240dp"
+                android:height="40dp" />
+            <corners android:radius="10dp" />
+            <padding
+                android:bottom="10dp"
+                android:left="10dp"
+                android:right="10dp"
+                android:top="10dp" />
+        </shape>
+    </item>
+
+    <item>
+        <bitmap
+            android:gravity="center_vertical|left"
+            android:src="@mipmap/video_loading_fail"
+            android:tileMode="disabled" />
+    </item>
+
+</layer-list>

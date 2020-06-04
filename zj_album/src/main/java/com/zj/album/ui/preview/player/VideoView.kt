@@ -22,7 +22,11 @@ class VideoView : FrameLayout, PlayerEvent {
 
     constructor(context: Context, attributes: AttributeSet?) : this(context, attributes, 0)
 
-    constructor(context: Context, attributes: AttributeSet?, defStyleAttr: Int) : super(context, attributes, defStyleAttr) {
+    constructor(context: Context, attributes: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attributes,
+        defStyleAttr
+    ) {
         init()
         initListener()
     }
@@ -217,6 +221,9 @@ class VideoView : FrameLayout, PlayerEvent {
     }
 
     fun playOrResume(path: String) {
+        if (loadingView?.visibility != View.GONE) {
+            loadingView?.visibility = View.GONE
+        }
         if (path == getPath()) {
             exoPlayer?.play()
         } else {

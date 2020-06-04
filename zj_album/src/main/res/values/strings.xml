@@ -5,7 +5,7 @@
     <string name="loading_progress">请稍候…</string>
     <string name="loading_refresh">轻触屏幕以再次尝试</string>
     <string name="loading_video_progress">视频加载中…</string>
-    <string name="loading_video_error">V视频加载失败</string>
+    <string name="loading_video_error">视频加载失败</string>
     <string name="loading_video_error_tint">文件损坏或不支持的格式</string>
 
     <string name="pg_str_all">全部</string>

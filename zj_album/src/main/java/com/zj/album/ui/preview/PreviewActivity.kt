@@ -15,6 +15,7 @@ import com.zj.album.ui.preview.player.SimpleVideoEventListener
 import com.zj.album.ui.preview.player.VideoView
 import android.animation.Animator
 import android.app.Activity
+import android.view.Gravity
 import androidx.viewpager.widget.ViewPager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zj.album.options.AlbumConfig.simultaneousSelection
@@ -165,56 +166,79 @@ internal class PreviewActivity : BaseActivity() {
         if (hasData && selectedRv?.visibility != View.VISIBLE || !hasData && selectedRv?.visibility != View.GONE) {
             val start = if (hasData) 0.0f else 1.0f
             val end = if (hasData) 1.0f else 0.0f
-            showOrHideView(selectedRv, hasData, floatArrayOf(start, end), Constance.ANIMATE_DURATION)
+            showOrHideView(
+                selectedRv,
+                hasData,
+                floatArrayOf(start, end),
+                Constance.ANIMATE_DURATION
+            )
         }
         updateSelectState()
     }
 
     private fun setPreviewData(curPath: String) {
-        previewBanner?.setData(curPreviewData, (curPreviewData?.indexOfFirst { it.path == curPath }) ?: 0)
+        previewBanner?.setData(
+            curPreviewData,
+            (curPreviewData?.indexOfFirst { it.path == curPath }) ?: 0
+        )
     }
 
     private fun initPreviewBanner() {
-        previewBanner?.init(R.layout.preview_item_base, 0, AlbumConfig.pageTransformer, object : OnPageChange<FileInfo> {
-            override fun onBindData(data: FileInfo?, view: View) {
-                data?.let {
-                    val iv = view.findViewById<TouchScaleImageView>(R.id.preview_base_iv_img)
-                    val vPlay = view.findViewById<ImageView>(R.id.preview_base_btn_video_play)
-                    val flContainer = view.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
-                    initViewsWithPagerItemInit(flContainer, data, vPlay, iv)
-                }
-            }
-
-            override fun onFocusChange(v: View?, data: FileInfo?, focus: Boolean) {
-                if (v != null && data != null) {
-                    val iv = v.findViewById<TouchScaleImageView>(R.id.preview_base_iv_img)
-                    if (!focus && data.isVideo) {
-                        iv.visibility = View.VISIBLE
+        previewBanner?.init(
+            R.layout.preview_item_base,
+            0,
+            AlbumConfig.pageTransformer,
+            object : OnPageChange<FileInfo> {
+                override fun onBindData(data: FileInfo?, view: View) {
+                    data?.let {
+                        val iv = view.findViewById<TouchScaleImageView>(R.id.preview_base_iv_img)
+                        val vPlay = view.findViewById<ImageView>(R.id.preview_base_btn_video_play)
+                        val flContainer =
+                            view.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
+                        initViewsWithPagerItemInit(flContainer, data, vPlay, iv)
                     }
-                    previewBanner?.setAllowUserScrollable {
-                        if (!focus) {
-                            true
-                        } else {
-                            val ivCanScroll = iv.canScroll(1) && iv.canScroll(-1)
-                            data.isVideo || !ivCanScroll
+                }
+
+                override fun onFocusChange(v: View?, data: FileInfo?, focus: Boolean) {
+                    if (v != null && data != null) {
+                        val iv = v.findViewById<TouchScaleImageView>(R.id.preview_base_iv_img)
+                        if (!focus && data.isVideo) {
+                            iv.visibility = View.VISIBLE
                         }
+                        previewBanner?.setAllowUserScrollable {
+                            if (!focus) {
+                                true
+                            } else {
+                                val ivCanScroll = iv.canScroll(1) && iv.canScroll(-1)
+                                data.isVideo || !ivCanScroll
+                            }
+                        }
+                        onCurDataChanged(v, data, focus)
                     }
-                    onCurDataChanged(v, data, focus)
                 }
-            }
 
-            override fun onScrollStateChanged(interval: Float, state: Int) {
-                setViewsEnable(state == ViewPager.SCROLL_STATE_IDLE)
-            }
-        })
+                override fun onScrollStateChanged(interval: Float, state: Int) {
+                    setViewsEnable(state == ViewPager.SCROLL_STATE_IDLE)
+                }
+            })
     }
 
-    private fun initViewsWithPagerItemInit(container: ViewGroup, data: FileInfo, play: View, iv: TouchScaleImageView) {
+    private fun initViewsWithPagerItemInit(
+        container: ViewGroup,
+        data: FileInfo,
+        play: View,
+        iv: TouchScaleImageView
+    ) {
         iv.setScaleEnabled(!data.isVideo)
         iv.doubleTapEnabled = !data.isVideo
         iv.setDoubleTapListener(null)
         GlideLoader().loadImage(iv, iv.measuredWidth, iv.measuredHeight, data.path)
-        if (iv.visibility != View.VISIBLE) showOrHideView(iv, true, floatArrayOf(0.0f, 1.0f), Constance.ANIMATE_DURATION)
+        if (iv.visibility != View.VISIBLE) showOrHideView(
+            iv,
+            true,
+            floatArrayOf(0.0f, 1.0f),
+            Constance.ANIMATE_DURATION
+        )
         play.setOnClickListener(null)
         play.isSelected = false
         play.visibility = if (data.isVideo) View.VISIBLE else View.GONE
@@ -354,14 +378,21 @@ internal class PreviewActivity : BaseActivity() {
         override fun onPlay(path: String): Boolean {
             val iv = curContainerView?.findViewById<TouchScaleImageView>(R.id.preview_base_iv_img)
             val vPlay = curContainerView?.findViewById<ImageView>(R.id.preview_base_btn_video_play)
-            val flContainer = curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
+            val flContainer =
+                curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
             showOrHidePlayBtn(vPlay, false)
             val parent = mVideoView?.parent
             when {
                 parent == flContainer -> {
                 }
                 parent != null -> (parent as? ViewGroup)?.removeAllViews()
-                else -> flContainer?.addView(mVideoView, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+                else -> flContainer?.addView(
+                    mVideoView,
+                    FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                    )
+                )
             }
             iv?.postDelayed({ if (mVideoView?.isPlaying() == true) iv.visibility = View.GONE }, 100)
             return true
@@ -378,6 +409,11 @@ internal class PreviewActivity : BaseActivity() {
             return true
         }
 
+        override fun onError(e: Exception?): Boolean {
+            showErrorToast("")
+            return true
+        }
+
         override fun onCompleting(path: String): Boolean {
             val iv = curContainerView?.findViewById<TouchScaleImageView>(R.id.preview_base_iv_img)
             iv?.visibility = View.VISIBLE
@@ -385,7 +421,8 @@ internal class PreviewActivity : BaseActivity() {
         }
 
         override fun onCompleted(path: String): Boolean {
-            val flContainer = curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
+            val flContainer =
+                curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
             flContainer?.removeAllViews()
             return false
         }
@@ -398,7 +435,8 @@ internal class PreviewActivity : BaseActivity() {
 
         override fun onStop(path: String): Boolean {
             val iv = curContainerView?.findViewById<TouchScaleImageView>(R.id.preview_base_iv_img)
-            val flContainer = curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
+            val flContainer =
+                curContainerView?.findViewById<FrameLayout>(R.id.preview_base_fl_video_container)
             iv?.visibility = View.VISIBLE
             flContainer?.removeAllViews()
             return true
@@ -430,5 +468,14 @@ internal class PreviewActivity : BaseActivity() {
     override fun onDestroy() {
         mVideoView?.release()
         super.onDestroy()
+    }
+
+    private fun showErrorToast(s: String) {
+        val t = Toast.makeText(this, s, Toast.LENGTH_SHORT)
+        val gravity = Gravity.BOTTOM.or(Gravity.CENTER_HORIZONTAL)
+        val offset = (resources.displayMetrics.density * 80 + 0.5f).toInt()
+        t.setGravity(gravity, 0, offset)
+        t.view = View.inflate(this, R.layout.preview_error_toast, null)
+        t.show()
     }
 }
