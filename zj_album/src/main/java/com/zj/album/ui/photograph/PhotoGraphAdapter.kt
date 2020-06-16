@@ -34,7 +34,7 @@ internal class PhotoGraphAdapter(private val isOriginalSupport: () -> Boolean) :
         tvNum.setBackgroundResource(if (isVideo && !simultaneousSelection) R.drawable.bg_choose_local_video else R.drawable.bg_choose_local_media)
         tvNum.isSelected = isSelected
         tvOriginal.isSelected = data.isOriginal()
-        tvOriginal?.visibility = if (isOriginalSupport() && isSelected) VISIBLE else GONE
+        tvOriginal?.visibility = if (isOriginalSupport() && isSelected && !isVideo) VISIBLE else GONE
         val index = DataStore.indexOfSelected(data.path)
         if (!isVideo || simultaneousSelection) {
             tvNum.text = if (index >= 0) "${(index + 1)}" else ""
