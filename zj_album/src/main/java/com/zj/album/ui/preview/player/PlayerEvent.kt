@@ -1,6 +1,7 @@
 package com.zj.album.ui.preview.player
 
 import android.content.Context
+import android.net.Uri
 import com.google.android.exoplayer2.ui.PlayerView
 
 /**
@@ -8,19 +9,19 @@ import com.google.android.exoplayer2.ui.PlayerView
 * */
 interface PlayerEvent {
 
-    fun onLoading(path: String)
+    fun onLoading(path: Uri?)
 
-    fun onPrepare(path: String, videoSize: Long)
+    fun onPrepare(path: Uri?, videoSize: Long)
 
-    fun onPlay(path: String)
+    fun onPlay(path: Uri?)
 
-    fun onPause(path: String)
+    fun onPause(path: Uri?)
 
-    fun onStop(path: String)
+    fun onStop(path: Uri?)
 
-    fun completing(path: String)
+    fun completing(path: Uri?)
 
-    fun onCompleted(path: String)
+    fun onCompleted(path: Uri?)
 
     fun onSeekChanged(seek: Int, fromUser: Boolean, videoSize: Long)
 

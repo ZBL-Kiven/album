@@ -2,6 +2,7 @@
 
 package com.zj.album.ui.preview
 
+import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import com.zj.album.R
@@ -20,7 +21,8 @@ internal class PreviewSelectedAdapter : BaseAdapter<FileInfo>(R.layout.preview_p
             val tag = holder?.getView<ImageView>(R.id.preview_selected_video_tag)
             tag?.visibility = if (it.isVideo) View.VISIBLE else View.GONE
             iv?.let { imageView ->
-                GlideLoader().loadThumbnail(iv, imageView.measuredWidth / 2, 0, it.path)
+                val path: Any? = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) data.path else data.getContentUri()
+                GlideLoader().loadThumbnail(iv, imageView.measuredWidth / 2, 0, path)
             }
         }
     }

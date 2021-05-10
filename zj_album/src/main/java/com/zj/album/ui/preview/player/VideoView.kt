@@ -1,6 +1,7 @@
 package com.zj.album.ui.preview.player
 
 import android.content.Context
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -22,11 +23,7 @@ class VideoView : FrameLayout, PlayerEvent {
 
     constructor(context: Context, attributes: AttributeSet?) : this(context, attributes, 0)
 
-    constructor(context: Context, attributes: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attributes,
-        defStyleAttr
-    ) {
+    constructor(context: Context, attributes: AttributeSet?, defStyleAttr: Int) : super(context, attributes, defStyleAttr) {
         init()
         initListener()
     }
@@ -90,14 +87,14 @@ class VideoView : FrameLayout, PlayerEvent {
         })
     }
 
-    override fun onLoading(path: String) {
+    override fun onLoading(path: Uri?) {
         seekBar?.isEnabled = false
         if (simpleVideoEventListener?.onLoading(path) == false) {
             if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
         }
     }
 
-    override fun onPrepare(path: String, videoSize: Long) {
+    override fun onPrepare(path: Uri?, videoSize: Long) {
         seekBar?.isEnabled = true
         if (simpleVideoEventListener?.onPrepare(path, videoSize) == false) {
             if (!autoPlay) loadingView?.setMode(BaseLoadingView.DisplayMode.DISMISS)
@@ -106,7 +103,7 @@ class VideoView : FrameLayout, PlayerEvent {
         }
     }
 
-    override fun onPlay(path: String) {
+    override fun onPlay(path: Uri?) {
         seekBar?.isSelected = true
         seekBar?.isEnabled = true
         if (simpleVideoEventListener?.onPlay(path) == false) {
@@ -115,14 +112,14 @@ class VideoView : FrameLayout, PlayerEvent {
         }
     }
 
-    override fun onPause(path: String) {
+    override fun onPause(path: Uri?) {
         seekBar?.isSelected = false
         if (simpleVideoEventListener?.onPause(path) == false) {
             showOrHidePlayBtn(true)
         }
     }
 
-    override fun onStop(path: String) {
+    override fun onStop(path: Uri?) {
         seekBar?.isSelected = false
         seekBar?.isEnabled = false
         onSeekChanged(0, false, 0)
@@ -131,13 +128,13 @@ class VideoView : FrameLayout, PlayerEvent {
         }
     }
 
-    override fun completing(path: String) {
+    override fun completing(path: Uri?) {
         if (simpleVideoEventListener?.onCompleting(path) == false) {
             showOrHidePlayBtn(true)
         }
     }
 
-    override fun onCompleted(path: String) {
+    override fun onCompleted(path: Uri?) {
         if (simpleVideoEventListener?.onCompleted(path) == false) {
             seekBar?.isSelected = false
             seekBar?.isEnabled = false
@@ -187,7 +184,7 @@ class VideoView : FrameLayout, PlayerEvent {
         }
     }
 
-    fun setData(url: String) {
+    fun setData(url: Uri?) {
         exoPlayer?.setData(url)
     }
 
@@ -212,15 +209,15 @@ class VideoView : FrameLayout, PlayerEvent {
         initSeekBar()
     }
 
-    fun getPath(): String {
-        return exoPlayer?.currentPlayPath() ?: ""
+    fun getPath(): Uri? {
+        return exoPlayer?.currentPlayPath()
     }
 
     fun onFullScreenPlay(isFull: Boolean) {
         bottomToolsBar?.visibility = if (isFull) VISIBLE else GONE
     }
 
-    fun playOrResume(path: String) {
+    fun playOrResume(path: Uri?) {
         if (loadingView?.visibility != View.GONE) {
             loadingView?.visibility = View.GONE
         }

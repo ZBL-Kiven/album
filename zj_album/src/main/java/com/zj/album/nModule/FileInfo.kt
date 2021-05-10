@@ -1,12 +1,14 @@
 package com.zj.album.nModule
 
 import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
-import com.zj.album.nutils.isVideo
 import com.zj.album.nHelpers.DataProxy
 import com.zj.album.nHelpers.DataStore
 import com.zj.album.nutils.isGif
 import com.zj.album.nutils.isImage
+import com.zj.album.nutils.isVideo
 import com.zj.album.nutils.runWithTryCatch
 import java.io.Serializable
 
@@ -14,17 +16,18 @@ import java.io.Serializable
  * @author ZJJ on 2019.10.24
  * */
 @Suppress("unused")
-data class FileInfo internal constructor(val path: String, val mimeType: String, var size: Long, var useOriginalImages: Boolean = false) : Serializable {
+data class FileInfo internal constructor(val path: String, val mimeType: String, var size: Long, var mediaColumnId: Int, var useOriginalImages: Boolean = false) : Serializable {
     var lastModifyTs: Long = 0; private set
-
-    var duration: Long = 0
-        internal set(value) {
-            field = value
-        }
-
+    var duration: Long = 0; internal set
     val isVideo: Boolean; get() = isVideo(mimeType)
     val isImage: Boolean; get() = isImage(mimeType)
     val isGif: Boolean; get() = isGif(mimeType)
+
+    fun getContentUri(): Uri {
+        val mediaPath = if (isVideo) "video" else "images"
+        val baseUri = Uri.parse("content://media/external/${mediaPath}/media")
+        return Uri.withAppendedPath(baseUri, "$mediaColumnId")
+    }
 
     internal fun isSelected(): Boolean {
         return DataStore.isSelected(path)
@@ -53,14 +56,15 @@ data class FileInfo internal constructor(val path: String, val mimeType: String,
             @Suppress("DEPRECATION") val uri = runWithTryCatch {
                 cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA))
             } ?: ""
+            val id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID))
             val mime = runWithTryCatch {
                 cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE))
             } ?: ""
             val size = runWithTryCatch {
                 cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE))
             } ?: 0
-            val fInfo = FileInfo(uri, mime, size)
-            if (isVideo(mime)) {
+            val fInfo = FileInfo(uri, mime, size, id)
+            if (isVideo(mime) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 fInfo.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION))
             }
             return fInfo

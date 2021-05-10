@@ -1,5 +1,6 @@
 package com.zj.album.nModule
 
+import android.net.Uri
 import java.util.*
 
 /**
@@ -12,5 +13,6 @@ internal data class FolderInfo(
     var parentName: String = ""
     var imageCounts: Int = 0
     var topImgUri: String? = null
+    var topImgContentUri: Uri? = null
     var files: List<FileInfo>? = null
 }

@@ -1,5 +1,7 @@
 package com.zj.album.ui.preview.player
 
+import android.net.Uri
+
 /**
  * @author ZJJ on 2019.10.24
  *
@@ -11,31 +13,31 @@ package com.zj.album.ui.preview.player
 @Suppress("unused")
 open class SimpleVideoEventListener {
 
-    open fun onLoading(path: String): Boolean {
+    open fun onLoading(path: Uri?): Boolean {
         return false
     }
 
-    open fun onPrepare(path: String, videoSize: Long): Boolean {
+    open fun onPrepare(path: Uri?, videoSize: Long): Boolean {
         return false
     }
 
-    open fun onPlay(path: String): Boolean {
+    open fun onPlay(path: Uri?): Boolean {
         return false
     }
 
-    open fun onPause(path: String): Boolean {
+    open fun onPause(path: Uri?): Boolean {
         return false
     }
 
-    open fun onStop(path: String): Boolean {
+    open fun onStop(path: Uri?): Boolean {
         return false
     }
 
-    open fun onCompleting(path: String): Boolean {
+    open fun onCompleting(path: Uri?): Boolean {
         return false
     }
 
-    open fun onCompleted(path: String): Boolean {
+    open fun onCompleted(path: Uri?): Boolean {
         return false
     }
 

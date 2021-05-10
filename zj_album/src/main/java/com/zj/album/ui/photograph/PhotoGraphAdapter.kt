@@ -1,5 +1,6 @@
 package com.zj.album.ui.photograph
 
+import android.os.Build
 import android.view.View
 import android.widget.TextView
 
@@ -52,7 +53,8 @@ internal class PhotoGraphAdapter(private val isOriginalSupport: () -> Boolean) :
         val tvDuration = holder.getView<TextView>(R.id.graph_item_tv_duration)
         tvDuration.visibility = if (isVideo) VISIBLE else GONE
         val iv = holder.getView<ImageView>(R.id.graph_item_iv_img)
-        GlideLoader().loadThumbnail(iv, iv.measuredWidth / 2, R.drawable.loading_corner_bg, data.path)
+        val path: Any? = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) data.path else data.getContentUri()
+        GlideLoader().loadThumbnail(iv, iv.measuredWidth / 2, R.drawable.loading_corner_bg, path)
         if (isVideo) tvDuration.text = getDuration(data.duration)
         vSelect.setOnClickListener {
             val nextStatus = !data.isSelected()

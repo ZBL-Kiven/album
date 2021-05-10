@@ -10,7 +10,6 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.zj.album.nutils.runWithTryCatch
-import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
@@ -18,7 +17,7 @@ import kotlin.math.min
 class ExoPlayer(private var event: PlayerEvent?) {
 
     private var player: SimpleExoPlayer? = null
-    private var playPath: String = ""
+    private var playPath: Uri? = null
     private var duration = 0L
     private var handler: Handler? = null
 
@@ -49,7 +48,7 @@ class ExoPlayer(private var event: PlayerEvent?) {
         return curState.pri == State.DESTROY.pri
     }
 
-    fun currentPlayPath(): String {
+    fun currentPlayPath(): Uri? {
         return playPath
     }
 
@@ -146,10 +145,9 @@ class ExoPlayer(private var event: PlayerEvent?) {
     private fun loadingData() {
         event?.onLoading(playPath)
         handler = Handler(Looper.getMainLooper())
-        val uri = Uri.fromFile(File(playPath))
         val context = event?.getContext() ?: return
         val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, context.applicationContext?.packageName), DefaultBandwidthMeter())
-        val videoSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
+        val videoSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(playPath)
         player = ExoPlayerFactory.newSimpleInstance(context, DefaultTrackSelector())
         runWithPlayer {
             event?.getPlayerView()?.player = it
@@ -158,6 +156,7 @@ class ExoPlayer(private var event: PlayerEvent?) {
         }
     }
 
+    @Suppress("SameParameterValue")
     private fun resetAndStop(notifyStop: Boolean = false) {
         runWithPlayer {
             it.removeListener(eventListener)
@@ -166,7 +165,7 @@ class ExoPlayer(private var event: PlayerEvent?) {
         if (notifyStop) event?.onStop(playPath)
         handler = null
         player = null
-        playPath = ""
+        playPath = null
     }
 
     private fun setPlayerState(state: State) {
@@ -176,7 +175,7 @@ class ExoPlayer(private var event: PlayerEvent?) {
         }
     }
 
-    fun setData(path: String) {
+    fun setData(path: Uri?) {
         playPath = path
         setPlayerState(State.LOADING)
     }

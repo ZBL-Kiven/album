@@ -1,5 +1,6 @@
 package com.zj.album.ui.folders
 
+import android.os.Build
 import android.view.View
 
 import android.widget.ImageView
@@ -63,7 +64,8 @@ internal class FolderActivity : BaseActivity() {
                 holder.setText(R.id.folder_item_tv_name, data.parentName)
                 holder.setText(R.id.folder_item_tv_count, AlbumConfig.getString(R.string.pg_str_picture_count, data.imageCounts))
                 val iv = holder.getView<ImageView>(R.id.folder_item_iv_img)
-                GlideLoader().loadThumbnail(iv, iv.measuredWidth, R.mipmap.photo_nodata, data.topImgUri ?: "")
+                val path: Any? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) data.topImgContentUri else data.topImgUri
+                GlideLoader().loadThumbnail(iv, iv.measuredWidth, R.mipmap.photo_nodata, path)
             }
 
             override fun onItemClick(position: Int, v: View, m: FolderInfo?) {

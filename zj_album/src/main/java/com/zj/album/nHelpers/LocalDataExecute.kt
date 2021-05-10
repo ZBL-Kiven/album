@@ -1,6 +1,7 @@
 package com.zj.album.nHelpers
 
 import android.database.Cursor
+import android.os.Build
 import android.provider.MediaStore
 import com.zj.album.*
 import com.zj.album.nModule.FileInfo
@@ -31,8 +32,13 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
 
     private val sortOrder: String; get() = MediaStore.Files.FileColumns.DATE_MODIFIED + if (isDesc) " DESC " else " ASC "
     private val searchUri = MediaStore.Files.getContentUri("external")
-    @Suppress("DEPRECATION")
-    private val projection = arrayOf(MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DATE_MODIFIED, MediaStore.Files.FileColumns.MIME_TYPE, MediaStore.Files.FileColumns.SIZE, MediaStore.Video.VideoColumns.DURATION)
+
+    @Suppress("DEPRECATION") private val projection: Array<String>
+        get() {
+            val lst = mutableListOf(MediaStore.Video.Media._ID, MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DATE_MODIFIED, MediaStore.Files.FileColumns.MIME_TYPE, MediaStore.Files.FileColumns.SIZE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) lst.add(MediaStore.Video.VideoColumns.DURATION)
+            return lst.toTypedArray()
+        }
 
     override fun run() {
         onDataGot(running())
@@ -62,7 +68,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
             while (cursor.moveToNext()) {
                 val media = FileInfo.valueOf(cursor)
                 val file = File(media.path)
-                if (!file.exists() || file.isDirectory || !file.canRead()) {
+                if (!file.exists() || file.isDirectory) {
                     continue
                 }
                 allInfo.add(media)
@@ -89,6 +95,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
         allInfo.files = files
         allInfo.imageCounts = allInfo.files?.size ?: 0
         allInfo.topImgUri = allInfo.files?.get(0)?.path ?: ""
+        allInfo.topImgContentUri = allInfo.files?.get(0)?.getContentUri()
         allInfo.parentName = AlbumConfig.getString(R.string.pg_str_all)
         list.add(allInfo)
         groupData.forEach { (s, lst) ->
@@ -102,6 +109,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
         return list
     }
 
+    @Suppress("SameParameterValue")
     private fun getRange(limit: Int, offset: Int): String {
         val builder = StringBuilder()
         if (limit != 0) {
@@ -125,16 +133,10 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
             selection.append(" (")
             when (it) {
                 TYPE_IMG -> {
-                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE)
-                        .append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE} ").append("AND ")
-                        .append(MediaStore.Files.FileColumns.SIZE)
-                        .append(" BETWEEN $fileImgMinSize AND $fileImgMaxSize ")
+                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE} ").append("AND ").append(MediaStore.Files.FileColumns.SIZE).append(" BETWEEN $fileImgMinSize AND $fileImgMaxSize ")
                 }
                 TYPE_VIDEO -> {
-                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE)
-                        .append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO} ").append("AND ")
-                        .append(MediaStore.Files.FileColumns.SIZE)
-                        .append(" BETWEEN $fileVideoMinSize AND $fileVideoMaxSize ")
+                    selection.append(MediaStore.Files.FileColumns.MEDIA_TYPE).append("=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO} ").append("AND ").append(MediaStore.Files.FileColumns.SIZE).append(" BETWEEN $fileVideoMinSize AND $fileVideoMaxSize ")
                 }
             }
             selection.append(") ")

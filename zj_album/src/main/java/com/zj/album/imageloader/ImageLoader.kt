@@ -12,7 +12,7 @@ internal interface ImageLoader {
      * @param defaultDrawable the default if loading or fail
      * @param path            resource url
      */
-    fun loadThumbnail(imageView: ImageView, resize: Int, defaultDrawable: Int, path: String)
+    fun loadThumbnail(imageView: ImageView, resize: Int, defaultDrawable: Int, path: Any?)
 
 
     /**
@@ -23,5 +23,5 @@ internal interface ImageLoader {
      * @param resizeH   resize bitmap height
      * @param path      resource url
      */
-    fun loadImage(imageView: ImageView, resizeW: Int, resizeH: Int, path: String)
+    fun loadImage(imageView: ImageView, resizeW: Int, resizeH: Int, path: Any?)
 }

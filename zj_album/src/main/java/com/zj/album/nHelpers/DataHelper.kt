@@ -121,7 +121,7 @@ internal object DataProxy : DataHelper() {
     fun init(selected: Collection<SimpleSelectInfo>?) {
         selectedPaths?.clear()
         selected?.forEach {
-            putSelectedPath(FileInfo(it.path, "", 0, it.useOriginal))
+            putSelectedPath(FileInfo(it.path, "", 0, -1, it.useOriginal))
         }
     }
 

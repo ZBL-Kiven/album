@@ -137,7 +137,7 @@ internal class BaseLoadingView @JvmOverloads constructor(context: Context, attrs
         if (hintTextColor != 0) tvHint?.setTextColor(hintTextColor)
         if (refreshTextColor != 0) tvRefresh?.setTextColor(refreshTextColor)
         argbEvaluator = ArgbEvaluator()
-        disPlayViews = EnumMap(com.zj.album.ui.views.BaseLoadingView.DisplayMode::class.java)
+        disPlayViews = EnumMap(DisplayMode::class.java)
         disPlayViews?.put(DisplayMode.LOADING, 0.0f)
         tvHint?.text = loadingHint
         resetUi()
