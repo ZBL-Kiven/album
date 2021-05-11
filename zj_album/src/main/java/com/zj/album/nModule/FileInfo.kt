@@ -66,6 +66,8 @@ data class FileInfo internal constructor(val path: String, val mimeType: String,
             val fInfo = FileInfo(uri, mime, size, id)
             if (isVideo(mime) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 fInfo.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION))
+            } else {
+                fInfo.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.SIZE))
             }
             return fInfo
         }

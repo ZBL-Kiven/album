@@ -36,7 +36,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
     @Suppress("DEPRECATION") private val projection: Array<String>
         get() {
             val lst = mutableListOf(MediaStore.Video.Media._ID, MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DATE_MODIFIED, MediaStore.Files.FileColumns.MIME_TYPE, MediaStore.Files.FileColumns.SIZE)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) lst.add(MediaStore.Video.VideoColumns.DURATION)
+            lst.add(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.Video.VideoColumns.DURATION else MediaStore.Video.VideoColumns.SIZE)
             return lst.toTypedArray()
         }
 
