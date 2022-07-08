@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">ZJJ_album</string>
+
+    <string name="loading_no_data">暂无数据</string>
+    <string name="loading_progress">请稍候…</string>
+    <string name="loading_refresh">轻触屏幕以再次尝试</string>
+    <string name="loading_video_progress">视频加载中…</string>
+    <string name="loading_video_error">视频加载失败</string>
+    <string name="loading_video_error_tint">文件损坏或不支持的格式</string>
+    <string name="loading_video_net_error_tint">网络异常，轻触屏幕以重新尝试</string>
+
+    <string name="pg_str_all">全部</string>
+    <string name="pg_str_cancel">取消</string>
+    <string name="pg_str_album">文件夹</string>
+    <string name="pg_str_all_files">全部</string>
+    <string name="pg_str_picture_count">共 %1$d 个文件</string>
+    <string name="pg_str_preview">预览</string>
+    <string name="pg_str_send">完成</string>
+    <string name="pg_str_full_images_tip">原图</string>
+    <string name="pg_str_images_choose_tip_message">不能同时选择图像和视频</string>
+    <string name="pg_str_video_choose_tip_message">视频只能选择一个</string>
+    <string name="pg_str_at_best">%1$s 最多只能选择 %2$d 项</string>
+    <string name="pv_str_default_time">00:00</string>
+    <string name="pg_permission_request_fail">%s 未授权!</string>
+
+</resources>

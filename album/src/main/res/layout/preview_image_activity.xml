@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical">
+
+    <com.zj.album.ui.preview.images.BannerViewPager
+        android:id="@+id/preview_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <FrameLayout
+        android:id="@+id/preview_ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/pg_color_primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16">
+
+        <TextView
+            android:id="@+id/preview_tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start|center_vertical"
+            android:drawableStart="@mipmap/ic_back_white"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:text="@string/pg_str_cancel"
+            android:textColor="@color/pg_color_white"
+            android:textSize="@dimen/small_text_size" />
+
+        <TextView
+            android:id="@+id/preview_tv_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_margin="3dp"
+            android:background="@drawable/bg_choose_local_media"
+            android:gravity="center"
+            android:minWidth="24dp"
+            android:minHeight="24dp"
+            android:textColor="@color/pg_color_primary"
+            android:textSize="@dimen/x_small_text_size" />
+
+        <TextView
+            android:id="@+id/preview_tv_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/pg_str_preview"
+            android:textColor="@color/pg_color_white"
+            android:textSize="@dimen/medium_text_size" />
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/preview_ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/preview_rv_select"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/pg_color_black_d"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/media_choose_bottom_bar_height"
+            android:background="@color/pg_color_blue_pale">
+
+            <LinearLayout
+                android:id="@+id/preview_tools_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:layout_toStartOf="@id/preview_tv_done"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingEnd="@dimen/dp_10">
+
+                <TextView
+                    android:id="@+id/preview_tv_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pv_str_default_time"
+                    android:textColor="@color/pg_color_primary" />
+
+                <SeekBar
+                    android:id="@+id/preview_sb"
+                    style="@style/CustomSeekBarStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    tools:progress="20" />
+
+                <TextView
+                    android:id="@+id/preview_tv_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pv_str_default_time"
+                    android:textColor="@color/pg_color_primary" />
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/preview_cb_original"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/preview_cb_original"
+                android:text="@string/pg_str_full_images_tip"
+                android:textColor="@drawable/photo_enabled_text"
+                android:textSize="@dimen/medium_text_size" />
+
+            <TextView
+                android:id="@+id/preview_tv_done"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:background="@color/pg_color_blue_pale"
+                android:enabled="false"
+                android:gravity="center"
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/pg_str_send"
+                android:textColor="@drawable/photo_enabled_text"
+                android:textSize="@dimen/medium_text_size" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>

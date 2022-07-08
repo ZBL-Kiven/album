@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pg_color_primary">#36485E</color>
+    <color name="pg_color_white">#FFFFFF</color>
+    <color name="pg_color_blue_pale">#EDF0F7</color>
+    <color name="pg_color_gray">#A4A4A4</color>
+    <color name="pg_color_gray_5">#F5F5F5</color>
+    <color name="pg_color_black">#181F2A</color>
+    <color name="pg_color_black_50">#7f181F2A</color>
+    <color name="pg_color_black_d">#df000000</color>
+
+    <color name="pg_color_loading_background_float">#30000000</color>
+    <color name="pg_color_loading_color_background">#fff4f4f4</color>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zj.album">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application>
+        <activity
+            android:name="com.zj.album.ui.photograph.PhotoGraphActivity"
+            android:exported="true"
+            android:launchMode="singleTask" />
+        <activity android:name="com.zj.album.ui.folders.FolderActivity" />
+        <activity
+            android:name="com.zj.album.ui.preview.PreviewActivity"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="album" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

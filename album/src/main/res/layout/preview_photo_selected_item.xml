@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:paddingStart="3dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="3dp"
+    android:paddingBottom="5dp">
+
+    <com.zj.album.ui.views.SquareImageView
+        android:id="@+id/preview_selected_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:squareRatio="102%"
+        app:squareWith="vertical"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/preview_selected_video_tag"
+        android:layout_width="16dp"
+        android:layout_height="10dp"
+        android:src="@mipmap/preview_selected_video_tag"
+        tools:ignore="ContentDescription" />
+</FrameLayout>

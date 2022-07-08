@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:orientation="vertical">
+
+    <com.zj.album.ui.views.image.TouchScaleImageView
+        android:id="@+id/preview_base_iv_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="5dp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/preview_base_btn_video_play"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@drawable/video_btn_bg"
+        android:padding="10dp"
+        android:src="@drawable/video_btn_play"
+        android:translationZ="10dp"
+        android:visibility="gone"
+        tools:ignore="ContentDescription"
+        tools:visibility="visible" />
+
+    <com.zj.album.ui.views.BaseLoadingView
+        android:id="@+id/video_preview_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="15dp"
+        android:visibility="gone"
+        app:backgroundFill="@color/pg_color_loading_background_float"
+        app:hintColor="@color/pg_color_primary"
+        app:loadingRes="@drawable/loading_progressbar"
+        app:loadingText="@string/loading_video_progress"
+        app:networkErrorText="@string/loading_video_error"
+        app:noDataRes="@mipmap/video_loading_fail"
+        app:noDataText="@string/loading_video_error"
+        app:noNetworkRes="@mipmap/video_loading_fail"
+        app:refreshText="@string/loading_video_error_tint"
+        app:refreshTextColor="@color/pg_color_gray" />
+
+</FrameLayout>
