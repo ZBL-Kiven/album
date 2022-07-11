@@ -46,7 +46,7 @@ internal object AlbumConfig {
     @JvmStatic
     internal var appName = ""
         get() {
-            return if (field.isEmpty()) getString(R.string.app_name) else field
+            return field.ifEmpty { getString(R.string.app_name) }
         }
     @JvmStatic
     internal var maxSelectSize = Int.MAX_VALUE

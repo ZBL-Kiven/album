@@ -140,7 +140,9 @@ class AlbumOptions internal constructor(internal val onStart: (OptionInfo, call:
             if (types.isEmpty()) return null
             var requestSet: EnumSet<MimeType>? = null
             types.forEach {
-                requestSet?.addAll(it) ?: { requestSet = EnumSet.copyOf(it) }.invoke()
+                requestSet?.addAll(it) ?: run {
+                    requestSet = EnumSet.copyOf(it)
+                }
             }
             return requestSet
         }

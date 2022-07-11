@@ -33,7 +33,7 @@ private var selectedPaths: ArrayList<FileInfo>? = null
         if (field == null) field = arrayListOf();return field
     }
 
-private val dataListeners: MutableMap<String, EventHub>? = mutableMapOf()
+private val dataListeners: MutableMap<String, EventHub> = mutableMapOf()
 
 private var curDisplayFolder: FolderInfo? = null
 
@@ -104,7 +104,7 @@ internal sealed class DataHelper {
             removeFormSelectedPaths(info.path)
         }
         curSelectedAccessKey = UUID.randomUUID().toString()
-        dataListeners?.forEach {
+        dataListeners.forEach {
             it.value.onSelectedChanged(getSelectedCount(), curSelectedAccessKey)
         }
     }
@@ -142,11 +142,11 @@ internal object DataProxy : DataHelper() {
         }
         curDisplayFolder = data
         curDataAccessKey = UUID.randomUUID().toString()
-        dataListeners?.forEach {
+        dataListeners.forEach {
             it.value.onDataGot(data?.files, if (data != null) curDataAccessKey else "")
         }
         val selectedCount = getSelectedCount()
-        dataListeners?.forEach {
+        dataListeners.forEach {
             it.value.onSelectedChanged(selectedCount, curSelectedAccessKey)
         }
     }
@@ -223,7 +223,7 @@ internal object DataProxy : DataHelper() {
     }
 
     fun register(regKey: String, accessKey: String, selectedAccessKey: String, eventHub: EventHub) {
-        dataListeners?.put(regKey, eventHub)
+        dataListeners[regKey] = eventHub
         curDisplayFolder?.let {
             val isDataAccess = accessKey != curDataAccessKey
             val isSelectedAccess = selectedAccessKey != curSelectedAccessKey
@@ -236,7 +236,7 @@ internal object DataProxy : DataHelper() {
     }
 
     fun unregister(regKey: String) {
-        dataListeners?.remove(regKey)
+        dataListeners.remove(regKey)
     }
 
     fun setUseOriginal(useOrigin: Boolean) {

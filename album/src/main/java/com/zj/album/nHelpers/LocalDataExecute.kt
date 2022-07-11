@@ -83,6 +83,9 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
 
     private fun getFoldersData(mData: List<FileInfo>?): ArrayList<FolderInfo>? {
         val files = ArrayList(mData ?: return null)
+        val groupByType = files.groupByTo(mutableMapOf()) {
+            it.isVideo
+        }
         val groupData = files.groupByTo(mutableMapOf()) {
             val file = File(it.path)
             if (file.exists()) {
@@ -91,7 +94,7 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
                 "other"
             }
         }
-        if (groupData.isNullOrEmpty()) return null
+        if (groupByType.isNullOrEmpty() && groupData.isNullOrEmpty()) return null
         val list = ArrayList<FolderInfo>()
         val allInfo = FolderInfo(true)
         allInfo.files = files
@@ -100,6 +103,14 @@ internal class LocalDataExecute(private val enumSet: EnumSet<MimeType>?, useDesc
         allInfo.topImgContentUri = allInfo.files?.get(0)?.getContentUri()
         allInfo.parentName = AlbumConfig.getString(R.string.pg_str_all)
         list.add(allInfo)
+        groupByType.forEach { (b, lst) ->
+            val fInfo = FolderInfo(false)
+            fInfo.files = lst
+            fInfo.imageCounts = fInfo.files?.size ?: 0
+            fInfo.topImgUri = fInfo.files?.get(0)?.path ?: ""
+            fInfo.parentName = AlbumConfig.getString(if (b) R.string.pg_str_all_videos else R.string.pg_str_all_images)
+            list.add(fInfo)
+        }
         groupData.forEach { (s, lst) ->
             val fInfo = FolderInfo(false)
             fInfo.files = lst

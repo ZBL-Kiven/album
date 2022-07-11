@@ -13,6 +13,8 @@
     <string name="pg_str_cancel">取消</string>
     <string name="pg_str_album">文件夹</string>
     <string name="pg_str_all_files">全部</string>
+    <string name="pg_str_all_videos">所有视频</string>
+    <string name="pg_str_all_images">所有图片</string>
     <string name="pg_str_picture_count">共 %1$d 个文件</string>
     <string name="pg_str_preview">预览</string>
     <string name="pg_str_send">完成</string>
